@@ -91,6 +91,12 @@
                     width:'auto'
                 });
             }
+            $(".dateValue2").datepicker({
+                numberOfMonths: 2,
+                showButtonPanel: true
+            });
+
+            $($("[name='s_code_melli']")[0]).focus();
         });
      </script>
 </body>

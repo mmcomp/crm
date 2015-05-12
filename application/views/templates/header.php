@@ -17,8 +17,12 @@
      <link rel="stylesheet" href="<?php echo asset_url(); ?>css/bootstrap-select.min.css" type="text/css" />
      <link rel="stylesheet" href="<?php echo asset_url(); ?>css/select2.css" type="text/css" />
      <link rel="stylesheet" href="<?php echo asset_url(); ?>css/xgrid.min.css" type="text/css" />
+     <!--<link rel="stylesheet" href="<?php echo asset_url(); ?>css/bootstrap.min.css" />-->
+     <link rel="stylesheet" href="<?php echo asset_url(); ?>css/bootstrap-datepicker.min.css" />
      <script src=" <?php echo asset_url().'js/jquery-1.11.1.min.js' ?>" ></script>
      <script src=" <?php echo asset_url().'js/grid.min.js' ?>" ></script>
+     <script src=" <?php echo asset_url().'js/bootstrap-datepicker.min.js' ?>"></script>
+     <script src=" <?php echo asset_url().'js/bootstrap-datepicker.fa.min.js' ?>"></script>
     <?php
         if(isset($has_ckeditor) && $has_ckeditor) // if in edit_content ckedotr is activeted
         {    
@@ -77,12 +81,16 @@
                     }
                     ?>
                 </ul>
+                <?php if($is_logged){ ?>
                 <form class="navbar-form navbar-left" action="<?php echo site_url(); ?>home" id="frm1">
                   <div class="form-group">
                     <input type="text" class="form-control" placeholder="جستجوی کد ملی" name="s_code_melli">
                   </div>
                     <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
                 </form>
+                <?php
+                }
+                ?>
             </div>   
         </nav>
         </div>
