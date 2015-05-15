@@ -97,7 +97,14 @@
             $parvaz2['chd']= (int)$this->input->post('chd');
             $parvaz2['inf']= (int)$this->input->post('inf');
             $parvaz2['airline']= ($this->input->post('airline_b'));
-            $parvaz2['tarikh']=hamed_jalalitomiladi(perToEn($this->input->post('tarikh_parvaz_b')));// $this->inc_model->jalaliToMiladi($this->input->post('tarikh_parvaz_b'));
+            if($this->input->post('two_way')!==FALSE)
+            {    
+                $parvaz2['tarikh']=hamed_jalalitomiladi(perToEn($this->input->post('tarikh_parvaz_b')));// $this->inc_model->jalaliToMiladi($this->input->post('tarikh_parvaz_b'));
+            }
+            else
+            {
+                $parvaz2['tarikh']='0000-00-00 00:00:00';
+            }
             $parvaz2['airplain']= ($this->input->post('airplain_b'));
             $parvaz2['saat']= (int)$this->input->post('hour_b').':'.(int)$this->input->post('minute_b');
             $parvaz2['saat_vorood']= (int)$this->input->post('hour_v_b').':'.(int)$this->input->post('minute_v_b');
@@ -190,7 +197,6 @@
     if($next)
     {
         redirect('khadamat_2/'.$p1);        //$my->ex_sql("select id from khadamat_factor where factor_id=$factor_id and khadamat_id=1",$q);
-
     }    
     if((int)$p1==0)
     {
@@ -228,7 +234,7 @@
     if(isset($hot->az_tarikh))
     {
         $tshab = strtotime($hot->ta_tarikh)- strtotime($hot->az_tarikh);
-        echo $hot->az_tarikh;
+        //echo $hot->az_tarikh;
         $shab = floor($tshab/(60*60*24));
     }    
     for($j=0;$j<count($hot_room);$j++)

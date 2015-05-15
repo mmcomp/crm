@@ -56,6 +56,27 @@
         //var_dump($array_vars);
         return($body1);
     }
+    function hamed_jalalitomiladi($str)
+    {
+            $s=explode('/',$str);
+            $out = "";
+            if(count($s)==3){
+                    $y = (int)$s[0];
+                    $m = (int)$s[1];
+                    $d = (int)$s[2];
+                    if($d > $y)
+                    {
+                            $tmp = $d;
+                            $d = $y;
+                            $y = $tmp;
+                    }
+                    $y = (($y<1000)?$y+1300:$y);
+                    $miladi=jalali_to_jgregorian($y,$m,$d);
+                    $out=$miladi[0]."-".$miladi[1]."-".$miladi[2];
+            }
+            return $out;
+            //jalali_to_gregorian()
+    }
     $factor_id = -1;
     if(trim($p1)!='')
         $factor_id = (int)$p1;
@@ -144,7 +165,7 @@ HAM;
         $body1 = str_replace("#lname1#", $lname1, $body1);
         $body1 = str_replace("#pedar_name#", $u->pedar_name,$body1);
         $body1 = str_replace("#pedar_name#", $u->pedar_name,$body1);
-        $body1 = str_replace("#tarikh_tavalod#", jdate("d / m / Y", $u->tarikh_tavalod) ,$body1);
+        $body1 = str_replace("#tarikh_tavalod#", jdate("d / m / Y", strtotime($u->tarikh_tavalod)) ,$body1);
         $body1 = str_replace("#address#", $u->address,$body1);
         $body1 = str_replace("#tell#", $u->tell,$body1);
         $body1 = str_replace("#mob#", $u->mob,$body1);
