@@ -272,6 +272,58 @@
         }
         
     }
+    if(isset($_REQUEST['visamelli_mosafer_id']))
+    {
+        $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
+        $this->form_validation->set_rules('visamelli_fname[]','هتل : ' . 'نام ', 'required|min_length[3]|max_length[200]');
+        $this->form_validation->set_rules('visamelli_lname[]', 'هتل : ' . 'نام خانوادگی ', 'required|min_length[3]|max_length[500]');
+        $this->form_validation->set_rules('visamelli_code_melli[]','هتل : ' .  'کد ملی ', 'required|min_length[10]|max_length[20]');
+        $gender = $_REQUEST['visamelli_gender'];
+        $sex = $_REQUEST['visamelli_sex'];
+        $mosafer_id = $_REQUEST['visamelli_mosafer_id'];
+        $fname = $_REQUEST['visamelli_fname'];
+        $lname = $_REQUEST['visamelli_lname'];
+        $code_melli = $_REQUEST['visamelli_code_melli'];
+        $khadamat_factor_id = $_REQUEST['khadamat_factor_id-4'];
+        if($this->form_validation->run()==FALSE)
+        {
+            $valid = FALSE;
+        }
+        else
+        {
+            foreach ($mosafer_id as $i=>$mosafer_id0)
+            {
+                mosafer_class::add($fname[$i], $lname[$i], $code_melli[$i], '', '', $sex[$i], $gender[$i], '', $khadamat_factor_id,$mosafer_id0,'');
+            }
+        }
+        
+    }
+    if(isset($_REQUEST['visapass_mosafer_id']))
+    {
+        $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
+        $this->form_validation->set_rules('visapass_fname[]','هتل : ' . 'نام ', 'required|min_length[3]|max_length[200]');
+        $this->form_validation->set_rules('visapass_lname[]', 'هتل : ' . 'نام خانوادگی ', 'required|min_length[3]|max_length[500]');
+        $this->form_validation->set_rules('visapass_passport[]','هتل : ' .  'پاسپورت', 'required|min_length[10]|max_length[30]');
+        $gender = $_REQUEST['visapass_gender'];
+        $sex = $_REQUEST['visapass_sex'];
+        $mosafer_id = $_REQUEST['visapass_mosafer_id'];
+        $fname = $_REQUEST['visapass_fname'];
+        $lname = $_REQUEST['visapass_lname'];
+        $passport = $_REQUEST['visapass_passport'];
+        $khadamat_factor_id = $_REQUEST['khadamat_factor_id-5'];
+        if($this->form_validation->run()==FALSE)
+        {
+            $valid = FALSE;
+        }
+        else
+        {
+            foreach ($mosafer_id as $i=>$mosafer_id0)
+            {
+                mosafer_class::add($fname[$i], $lname[$i], '', $passport[$i], '', $sex[$i], $gender[$i], '', $khadamat_factor_id,$mosafer_id0,'');
+            }
+        }
+        
+    }
     if(isset($_REQUEST['hotel_room_id']))
     {
         $my = new mysql_class;
@@ -1220,7 +1272,7 @@ PAR2;
                     <input name="visamelli_fname[]" class="form-control same same_fname#pindex#" placeholder="نام *" value="#fname#">
                 </div>
                 <div class="col-sm-5">
-                    <input name="visamelli_name[]" class="form-control same same_lname#pindex#" placeholder="نام خانوادگی *" value="#lname#">
+                    <input name="visamelli_lname[]" class="form-control same same_lname#pindex#" placeholder="نام خانوادگی *" value="#lname#">
                 </div>
                 <div class="col-sm-2">
                     <input name="visamelli_code_melli[]" class="form-control same same_codemelli#pindex#" placeholder="کد ملی *" value="#code_melli#">
