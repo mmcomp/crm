@@ -222,20 +222,36 @@ HAM;
 
 </div>
 <script>
+    var can_save=true;
+    $(document).ready(function(){
+        $("input").keypress(function(){
+            can_save = false;
+        });
+        $("textarea").keypress(function(){
+            can_save = false;
+        });
+    });
     function prin()
     { 
-        var b = $(".visa_input").css("border");
-        $(".gasht_input").css("border","none");
-        $(".gasht_textarea").css("border","none");
-        $(".list_table input").css("width","100%");
-        $(".gasht_textarea").css("width","100%");
-        $(".gasht_textarea").css("height","50px");
-        var pageNo = 'چاپ';
-        var headElements =  '<meta charset="utf-8" >,<meta http-equiv="X-UA-Compatible" content="IE=edge" >' ;
-        var options = { mode : 'popup', popClose :true, extraCss : '', retainAttr : ["class", "id", "style", "on"], extraHead : headElements ,popHt: 500,popWd: 700,popTitle:pageNo};
-        //$("#ifr").css("width","21cm");
-        $("#ifr").printArea(options);
-        $(".gasht_input").css("border",b);
-        $(".gasht_textarea").css("border",b);
+        if(can_save)
+        { 
+            var b = $(".visa_input").css("border");
+            $(".gasht_input").css("border","none");
+            $(".gasht_textarea").css("border","none");
+            $(".list_table input").css("width","100%");
+            $(".gasht_textarea").css("width","100%");
+            $(".gasht_textarea").css("height","50px");
+            var pageNo = 'چاپ';
+            var headElements =  '<meta charset="utf-8" >,<meta http-equiv="X-UA-Compatible" content="IE=edge" >' ;
+            var options = { mode : 'popup', popClose :true, extraCss : '', retainAttr : ["class", "id", "style", "on"], extraHead : headElements ,popHt: 500,popWd: 700,popTitle:pageNo};
+            //$("#ifr").css("width","21cm");
+            $("#ifr").printArea(options);
+            $(".gasht_input").css("border",b);
+            $(".gasht_textarea").css("border",b);
+        }
+        else
+        {
+            alert("قبل از چاپ فرم را ثبت نمایید");
+        }
     }
 </script>
