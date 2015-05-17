@@ -1,5 +1,4 @@
 <?php
-<<<<<<< HEAD
     function generateOption($inp,$start,$order,$selected=-1)
     {
         $ou='';
@@ -19,8 +18,6 @@
 	}
         return($ou);
     }
-=======
->>>>>>> 53eeea5db37db1b41ca684e859f55d7762ec88a9
     if ( ! defined('BASEPATH')) exit('No direct script access allowed');
     $msg = '';
     $user_id1 = $user_id;
@@ -46,11 +43,7 @@
         $active = ($active & $active2);
         $menu_links .= "<li role='presentation'".(($active)?" class='active'":"")."><a href='$href'>$title</a></li>";
     }
-<<<<<<< HEAD
     $cur_sh_sal = $this->inc_model->perToEnNums(jdate("Y"));
-=======
-       
->>>>>>> 53eeea5db37db1b41ca684e859f55d7762ec88a9
 ?>
 <div class="row" >
     <div class="col-sm-2" >
@@ -67,13 +60,10 @@
     </div>
     <form action="khadamat_3">
     <div class="col-sm-10" >
-<<<<<<< HEAD
         <div class="row hs-border hs-padding hs-margin-up-down hs-gray pointer" onclick="$('#flight_div').toggle();">
             پرواز
         </div>
         <div id="flight_div">
-=======
->>>>>>> 53eeea5db37db1b41ca684e859f55d7762ec88a9
         <div class="row hs-border hs-padding mm-letter-vaziat-0 hs-margin-up-down">
             <div class="col-sm-1">
                 ردیف
@@ -116,7 +106,6 @@
                 </select>
             </div>
             <div class="col-sm-2">
-<<<<<<< HEAD
                 <input name="fname[]" class="form-control same same_fname same_master" placeholder="نام *">
             </div>
             <div class="col-sm-2">
@@ -138,18 +127,6 @@
                     <option>سال</option>
                     <?php echo generateOption($cur_sh_sal, 1300, -1)?>
                 </select>
-=======
-                <input name="fname[]" class="form-control" placeholder="نام *">
-            </div>
-            <div class="col-sm-3">
-                <input name="lname[]" class="form-control" placeholder="نام خانوادگی *">
-            </div>
-            <div class="col-sm-2">
-                <input name="code_melli[]" class="form-control" placeholder="کد ملی *">
-            </div>
-            <div class="col-sm-2">
-                <input name="tarikh_tavalod[]" class="form-control dateValue2" placeholder="تاریخ تولد *">
->>>>>>> 53eeea5db37db1b41ca684e859f55d7762ec88a9
             </div>
         </div>
         <div class="row hs-border hs-padding mm-letter-vaziat-0 hs-margin-up-down">
@@ -169,18 +146,12 @@
             <div class="col-sm-2">
                 <input name="fname[]" class="form-control" placeholder="نام *">
             </div>
-<<<<<<< HEAD
             <div class="col-sm-2">
                 <input name="lname[]" class="form-control same same_lname" placeholder="نام خانوادگی *">
-=======
-            <div class="col-sm-3">
-                <input name="lname[]" class="form-control" placeholder="نام خانوادگی *">
->>>>>>> 53eeea5db37db1b41ca684e859f55d7762ec88a9
             </div>
             <div class="col-sm-2">
                 <input name="code_melli[]" class="form-control" placeholder="کد ملی *">
             </div>
-<<<<<<< HEAD
             <div class="col-sm-3">
                 <select name="tarikh_tavalod-rooz[]" style="width:50px;">
                     <option>روز</option>
@@ -194,10 +165,6 @@
                     <option>سال</option>
                     <?php echo generateOption($cur_sh_sal, 1300, -1)?>
                 </select>
-=======
-            <div class="col-sm-2">
-                <input name="tarikh_tavalod[]" class="form-control dateValue2" placeholder="تاریخ تولد *">
->>>>>>> 53eeea5db37db1b41ca684e859f55d7762ec88a9
             </div>
         </div>
         <div class="row hs-border hs-padding mm-letter-vaziat-0 hs-margin-up-down">
@@ -217,18 +184,12 @@
             <div class="col-sm-2">
                 <input name="fname[]" class="form-control" placeholder="نام *">
             </div>
-<<<<<<< HEAD
             <div class="col-sm-2">
                 <input name="lname[]" class="form-control same same_lname" placeholder="نام خانوادگی *">
-=======
-            <div class="col-sm-3">
-                <input name="lname[]" class="form-control" placeholder="نام خانوادگی *">
->>>>>>> 53eeea5db37db1b41ca684e859f55d7762ec88a9
             </div>
             <div class="col-sm-2">
                 <input name="code_melli[]" class="form-control" placeholder="کد ملی *">
             </div>
-<<<<<<< HEAD
             <div class="col-sm-3">
                 <select name="tarikh_tavalod-rooz[]" style="width:50px;">
                     <option>روز</option>
@@ -242,10 +203,6 @@
                     <option>سال</option>
                     <?php echo generateOption($cur_sh_sal, 1300, -1)?>
                 </select>
-=======
-            <div class="col-sm-2">
-                <input name="tarikh_tavalod[]" class="form-control dateValue2" placeholder="تاریخ تولد *">
->>>>>>> 53eeea5db37db1b41ca684e859f55d7762ec88a9
             </div>
         </div>
         <div class="row hs-border hs-padding mm-letter-vaziat-0 hs-margin-up-down">
@@ -265,18 +222,12 @@
             <div class="col-sm-2">
                 <input name="fname[]" class="form-control" placeholder="نام *">
             </div>
-<<<<<<< HEAD
             <div class="col-sm-2">
                 <input name="lname[]" class="form-control same same_lname" placeholder="نام خانوادگی *">
-=======
-            <div class="col-sm-3">
-                <input name="lname[]" class="form-control" placeholder="نام خانوادگی *">
->>>>>>> 53eeea5db37db1b41ca684e859f55d7762ec88a9
             </div>
             <div class="col-sm-2">
                 <input name="code_melli[]" class="form-control" placeholder="کد ملی *">
             </div>
-<<<<<<< HEAD
             <div class="col-sm-3">
                 <select name="tarikh_tavalod-rooz[]" style="width:50px;">
                     <option>روز</option>
@@ -290,10 +241,6 @@
                     <option>سال</option>
                     <?php echo generateOption($cur_sh_sal, 1300, -1)?>
                 </select>
-=======
-            <div class="col-sm-2">
-                <input name="tarikh_tavalod[]" class="form-control dateValue2" placeholder="تاریخ تولد *">
->>>>>>> 53eeea5db37db1b41ca684e859f55d7762ec88a9
             </div>
         </div>
         <div class="row hs-border hs-padding mm-letter-vaziat-0 hs-margin-up-down">
@@ -310,7 +257,6 @@
                 <input name="email" class="form-control" placeholder="ایمیل" value="hscomp2002@gmail.com">
             </div>
         </div>
-<<<<<<< HEAD
         </div>
     </div>
     <div class="col-sm-10" >
@@ -374,8 +320,6 @@
             </div>
         </div>
         </div>
-=======
->>>>>>> 53eeea5db37db1b41ca684e859f55d7762ec88a9
     </div>
     <div class="hs-float-left hs-margin-up-down">
         <button href="" class="btn hs-btn-default btn-lg" >
@@ -394,9 +338,5 @@
         else
             $("#arrow_div").html('<span class="glyphicon glyphicon-chevron-up" ></span>');
         $("#profile_div").toggle('fast');
-<<<<<<< HEAD
     }
-=======
-    }  
->>>>>>> 53eeea5db37db1b41ca684e859f55d7762ec88a9
 </script>
