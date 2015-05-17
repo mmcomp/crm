@@ -95,7 +95,7 @@ class Profile_model extends CI_Model {
         $menu_and_paper = array(
             1 => array(
                 "صفحه اصلی" => site_url()."home",
-                "ثبت مشتری جدید" => site_url()."new_user",
+                "ثبت مشتری جدید" => site_url()."register",
                 "کارتابل" => site_url()."paper_cartable/normal",
                 "ثبت نامه جدید" => site_url()."paper_new",
                 "نامه های ارسالی" => site_url()."paper_cartable/sent",
@@ -128,7 +128,7 @@ class Profile_model extends CI_Model {
         $menu_no_paper = array(
             1 => array(
                 "صفحه اصلی" => site_url()."home",
-                "ثبت مشتری جدید" => site_url()."new_user",
+                "ثبت مشتری جدید" => site_url()."register",
                 "پروفایل" => site_url()."profile",
                 "گزارش فروش" => "sale_report",
                 "مدیریت کاربران"=> site_url()."user_edit"

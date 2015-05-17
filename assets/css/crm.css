@@ -55,6 +55,10 @@ body{
 .hs-padding1{
     padding: 1px;
 }
+.hs-no-margin-side{
+    margin-right: 0px !important;
+    margin-left: 0px !important;
+}
 .hs-margin{
     margin: 10px;
 }
@@ -313,4 +317,7 @@ hr.custom1 {
 .mm-negative-margin{
     margin-left: -15px;
     margin-right :-15px;
+}
+.mm-font-red{
+    color:red;
 }

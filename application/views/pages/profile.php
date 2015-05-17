@@ -39,7 +39,8 @@
         $active = ($active & $active2);
         $menu_links .= "<li role='presentation'".(($active)?" class='active'":"")."><a href='$href'>$title</a></li>";
     }
-       
+    $khadamat_back = isset($_REQUEST['khadamat_back'])?explode(",", $_REQUEST['khadamat_back']):array();
+    $khadamats = khadamat_class::loadAll($khadamat_back);
 ?>
 <div class="row" >
     <div class="col-sm-2" >
@@ -61,130 +62,170 @@
         فرم ثبت نام
     </div>
     -->
-    <?php echo form_open('',array('id'=>'frm_profile'))  ?>
     <div class="col-sm-10" >
-        <div  class="hs-margin-up-down hs-gray hs-padding hs-border mm-negative-margin" >
-            پروفایل
+        <div class="hs-margin-up-down">
+            <form id="kh_frm_1" action="khadamat_1">
+                انتخاب خدمات : 
+                <select name="khadamat[]" id="khadamat123" multiple="multiple" style="width:70%;" >
+                    <?php echo $khadamats; ?>
+                </select>
+                <a class="btn btn-lg hs-btn-default" href="#" onclick="$('#kh_frm_1').submit();">
+                ادامه
+                <span class="glyphicon glyphicon-chevron-left"></span>
+                </a>
+            </form>
         </div>
-        <?php echo $msg.validation_errors(); ?>
-        <div class="col-sm-6  hs-margin-up-down" >
-            نام:
-            <input class="form-control" name="fname" id="fname" placeholder="نام" value="<?php echo $user_obj->fname; ?>" >
-        </div>
-        <div class="col-sm-6 hs-margin-up-down" >
-            نام خانوادگی:
-            <input class="form-control" name="lname" id="lname" placeholder="نام خانوادگی" value="<?php echo $user_obj->lname; ?>" >
-        </div>
+    <?php echo form_open('',array('id'=>'frm_profile'))  ?>
 
-        <div class="col-sm-6  hs-margin-up-down" >
-            کد ملی (نام کاربری):
-            <input readonly="readonly" class="form-control" name="code_melli" id="code_melli" placeholder="کد ملی (نام کاربری)" value="<?php echo $user_obj->code_melli; ?>" >
-        </div>
-        <div class="col-sm-6  hs-margin-up-down datetime" >
-            <div>
-                تاریخ تولد:
+        <div  class="hs-margin-up-down hs-gray hs-padding hs-border mm-negative-margin pointer" onclick="toggle_profile();" >
+            کاربر: 
+            <?php echo $user_obj->fname.' '.$user_obj->lname; ?>
+            شماره ملی:
+            <?php echo $user_obj->code_melli; ?>
+            <div class="hs-float-left" id="arrow_div" >
+                <span class="glyphicon glyphicon-chevron-down" ></span>
             </div>
-            <select class="form-inline hs-little-select" name="rooz" id="rooz"  >
-                <option value="0" >
-                    روز
-                </option>
-                <?php
-                    echo $this->inc_model->genOption(1,31,$user_obj->rooz);
-                ?>
-            </select>
-            /
-            <select class="form-inline hs-little-select" name="mah" id="mah" >
-                <option value="0" >
-                    ماه
-                </option>
-                <?php
-                    echo $this->inc_model->genOption(1,12,$user_obj->mah);
-                ?>
-            </select>
-            /
-            <select class="form-inline hs-little-select" name="sal" id="sal" style="width:62px">
-                <option value="0" >
-                    سال
-                </option>
-                <?php
-                    echo $this->inc_model->genOption(1300,95,$user_obj->sal);
-                ?>
-            </select>
         </div>
-        <div class="hs-margin-up-down" style="margin-right:15px;" >
-            درصورت خالی گذاشتن ، رمز عبور بدون تغییر باقی خواهد ماند
-        </div>
-        <div class="col-sm-6 hs-margin-up-down" >
-            رمز عبور:
-            <input type="password" class="form-control" name="pass" id="pass" placeholder="رمز عبور" >
-        </div>
-        <div class="col-sm-6  hs-margin-up-down" >
-            تکرار رمز عبور:
-            <input type="password" class="form-control" name="pass2" id="pass2" placeholder="تکرار رمز عبور" >
-        </div>
-        <div class="hs-margin-up-down" style="margin-right:15px;" >
-            درصورت خالی گذاشتن ، رمز امضای دیجیتال بدون تغییر باقی خواهد ماند
-        </div>
-        <div class="col-sm-6 hs-margin-up-down" >
-            رمز امضا دیجیتال :
-            <input type="password" class="form-control" name="pass_emza" id="pass" placeholder="رمز امضا دیجیتال" >
-        </div>
-        <div class="col-sm-6  hs-margin-up-down" >
-            تکرار رمز امضا دیجیتال :
-            <input type="password" class="form-control" name="pass_emza2" id="pass2" placeholder="تکرار رمز امضا دیجیتال" >
-        </div>
-        <div class="col-sm-6  hs-margin-up-down" >
-            شغل:
-            <select class="form-control" name="shoghl_id" id="shoghl_id" >
-                <option value="0" >
-                    انتخاب شغل
-                </option>
-                <?php
-                    echo shoghl_class::loadAll(TRUE,$user_obj->shoghl_id);
-                ?>
-            </select>
-        </div>
-        <div class="col-sm-6  hs-margin-up-down datetime" >
-            تحصیلات:
-            <select class="form-control" name="tahsilat_id" id="tahsilat_id" >
-                <option value="0" >
-                    انتخاب تحصیلات
-                </option>
-                <?php
-                    echo tahsilat_class::loadAll(TRUE,$user_obj->tahsilat_id);
-                ?>
-            </select>    
-        </div>
-        <div class="col-sm-6  hs-margin-up-down" >
-            گروه خونی:
-            <select class="form-control" name="grooh_khooni_id" id="grooh_khooni_id"  >
-                <option value="0" >
-                    گروه خونی
-                </option>
-                <?php
-                    echo grooh_khooni_class::loadAll(TRUE,$user_obj->grooh_khooni_id);
-                ?>
-            </select>
-        </div>
-        <div class="col-sm-6  hs-margin-up-down" >
-            تلفن ثابت:
-            <input type="number" class="form-control" name="tell" id="tell" placeholder="تلفن ثابت" value="<?php echo $user_obj->tell; ?>">
-        </div>
-        <div class="col-sm-6 hs-margin-up-down" >
-            تلفن همراه:
-            <input type="number" class="form-control" name="mob" id="mob" placeholder="تلفن همراه" value="<?php echo $user_obj->mob; ?>">
-        </div>
-        <div class="col-sm-6 hs-margin-up-down" >
-            نشانی ایمیل:
-            <input class="form-control" name="email" id="email" placeholder="نشانی ایمیل" value="<?php echo $user_obj->email; ?>">
-        </div>
-        <div class="col-sm-12 hs-margin-up-down" >
-            نشانی:
-            <textarea class="form-control" rows="5" name="address" id="address" placeholder="نشانی" ><?php echo $user_obj->address; ?></textarea>
-        </div>
-        <div class="col-sm-6  hs-margin-up-down" >
-            <button class="btn hs-btn-default" >ویرایش</button>
-        </div>
+        <div id="profile_div" style="display: none;" >
+            <?php echo $msg.validation_errors(); ?>
+            <div class="col-sm-6  hs-margin-up-down" >
+                نام:
+                <input class="form-control" name="fname" id="fname" placeholder="نام" value="<?php echo $user_obj->fname; ?>" >
+            </div>
+            <div class="col-sm-6 hs-margin-up-down" >
+                نام خانوادگی:
+                <input class="form-control" name="lname" id="lname" placeholder="نام خانوادگی" value="<?php echo $user_obj->lname; ?>" >
+            </div>
+
+            <div class="col-sm-6  hs-margin-up-down" >
+                کد ملی (نام کاربری):
+                <input readonly="readonly" class="form-control" name="code_melli" id="code_melli" placeholder="کد ملی (نام کاربری)" value="<?php echo $user_obj->code_melli; ?>" >
+            </div>
+            <div class="col-sm-6  hs-margin-up-down datetime" >
+                <div>
+                    تاریخ تولد:
+                </div>
+                <select class="form-inline hs-little-select" name="rooz" id="rooz"  >
+                    <option value="0" >
+                        روز
+                    </option>
+                    <?php
+                        echo $this->inc_model->genOption(1,31,$user_obj->rooz);
+                    ?>
+                </select>
+                /
+                <select class="form-inline hs-little-select" name="mah" id="mah" >
+                    <option value="0" >
+                        ماه
+                    </option>
+                    <?php
+                        echo $this->inc_model->genOption(1,12,$user_obj->mah);
+                    ?>
+                </select>
+                /
+                <select class="form-inline hs-little-select" name="sal" id="sal" style="width:62px">
+                    <option value="0" >
+                        سال
+                    </option>
+                    <?php
+                        echo $this->inc_model->genOption(1300,95,$user_obj->sal);
+                    ?>
+                </select>
+            </div>
+            <div class="hs-margin-up-down" style="margin-right:15px;" >
+                درصورت خالی گذاشتن ، رمز عبور بدون تغییر باقی خواهد ماند
+            </div>
+            <div class="col-sm-6 hs-margin-up-down" >
+                رمز عبور:
+                <input type="password" class="form-control" name="pass" id="pass" placeholder="رمز عبور" >
+            </div>
+            <div class="col-sm-6  hs-margin-up-down" >
+                تکرار رمز عبور:
+                <input type="password" class="form-control" name="pass2" id="pass2" placeholder="تکرار رمز عبور" >
+            </div>
+            <div class="hs-margin-up-down" style="margin-right:15px;" >
+                درصورت خالی گذاشتن ، رمز امضای دیجیتال بدون تغییر باقی خواهد ماند
+            </div>
+            <div class="col-sm-6 hs-margin-up-down" >
+                رمز امضا دیجیتال :
+                <input type="password" class="form-control" name="pass_emza" id="pass" placeholder="رمز امضا دیجیتال" >
+            </div>
+            <div class="col-sm-6  hs-margin-up-down" >
+                تکرار رمز امضا دیجیتال :
+                <input type="password" class="form-control" name="pass_emza2" id="pass2" placeholder="تکرار رمز امضا دیجیتال" >
+            </div>
+            <div class="col-sm-6  hs-margin-up-down" >
+                شغل:
+                <select class="form-control" name="shoghl_id" id="shoghl_id" >
+                    <option value="0" >
+                        انتخاب شغل
+                    </option>
+                    <?php
+                        echo shoghl_class::loadAll(TRUE,$user_obj->shoghl_id);
+                    ?>
+                </select>
+            </div>
+            <div class="col-sm-6  hs-margin-up-down datetime" >
+                تحصیلات:
+                <select class="form-control" name="tahsilat_id" id="tahsilat_id" >
+                    <option value="0" >
+                        انتخاب تحصیلات
+                    </option>
+                    <?php
+                        echo tahsilat_class::loadAll(TRUE,$user_obj->tahsilat_id);
+                    ?>
+                </select>    
+            </div>
+            <div class="col-sm-6  hs-margin-up-down" >
+                گروه خونی:
+                <select class="form-control" name="grooh_khooni_id" id="grooh_khooni_id"  >
+                    <option value="0" >
+                        گروه خونی
+                    </option>
+                    <?php
+                        echo grooh_khooni_class::loadAll(TRUE,$user_obj->grooh_khooni_id);
+                    ?>
+                </select>
+            </div>
+            <div class="col-sm-6  hs-margin-up-down" >
+                تلفن ثابت:
+                <input type="number" class="form-control" name="tell" id="tell" placeholder="تلفن ثابت" value="<?php echo $user_obj->tell; ?>">
+            </div>
+            <div class="col-sm-6 hs-margin-up-down" >
+                تلفن همراه:
+                <input type="number" class="form-control" name="mob" id="mob" placeholder="تلفن همراه" value="<?php echo $user_obj->mob; ?>">
+            </div>
+            <div class="col-sm-6 hs-margin-up-down" >
+                نشانی ایمیل:
+                <input class="form-control" name="email" id="email" placeholder="نشانی ایمیل" value="<?php echo $user_obj->email; ?>">
+            </div>
+            <div class="col-sm-12 hs-margin-up-down" >
+                نشانی:
+                <textarea class="form-control" rows="5" name="address" id="address" placeholder="نشانی" ><?php echo $user_obj->address; ?></textarea>
+            </div>
+            <div class="col-sm-6  hs-margin-up-down" >
+                <button class="btn hs-btn-default" >ویرایش</button>
+            </div>
+        </div>        
     </div>
     <?php echo form_close(); ?>
 </div>
+<script>
+    function toggle_profile()
+    {
+        var is_visible = ($("#profile_div:visible").length>0);
+        if(is_visible!==false)
+            $("#arrow_div").html('<span class="glyphicon glyphicon-chevron-down" ></span>');
+        else
+            $("#arrow_div").html('<span class="glyphicon glyphicon-chevron-up" ></span>');
+        $("#profile_div").toggle('fast');
+    }
+    $(document).ready(function(){
+        setTimeout(function(){
+            $("#khadamat123").select2({
+                placeholder:" انتخاب خدمات",
+                dir : 'rtl'
+            });
+        },100);
+    });
+</script>

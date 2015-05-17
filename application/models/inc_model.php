@@ -91,4 +91,23 @@ class Inc_model extends CI_Model {
         }
         return $out;
     }
+    public function generateOption($inp,$start,$order,$selected=-1)
+    {
+        $ou='';
+	if($order == 1)
+	{
+		for($i=$start;$i<=$inp;$i++)
+		{
+		    $ou.='<option '.($i==$selected?'selected="selected"':'').' value="'.$i.'">'.$i.'</option>';
+		}
+	}
+	else
+	{
+		for($i=$inp;$i>$start;$i--)
+		{
+		    $ou.='<option '.($i==$selected?'selected="selected"':'').' value="'.$i.'">'.$i.'</option>';
+		}
+	}
+        return($ou);
+    }
 }

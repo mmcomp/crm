@@ -54,19 +54,4 @@
         ?>
         </div>
     </div>
-    <!--
-    <div class="col-sm-2"  >
-        <div class="hs-margin-up-down hs-gray hs-padding hs-border" >
-            ورود کد ملی
-        </div>
-        <div>
-            <?php echo form_open('home',array('id'=>'frm1'));  ?>
-            <input type="number" name="s_code_melli" class="form-control" >
-            <button class="form-control btn btn-default hs-margin-up-down" >
-                جستجوی سریع
-            </button>
-            <?php echo form_close(); ?>
-        </div>
-    </div>
-    -->
 </div>
