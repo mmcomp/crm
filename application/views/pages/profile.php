@@ -66,8 +66,21 @@
         <div class="hs-margin-up-down">
             <form id="kh_frm_1" action="khadamat_1">
                 انتخاب خدمات : 
+<<<<<<< HEAD
                 <select name="khadamat[]" id="khadamat123" multiple="multiple" style="width:70%;" >
                     <?php echo $khadamats; ?>
+=======
+                <select name="khadamat[]" id="khadamat" multiple="multiple" style="width:70%;" >
+                    <option value="1">ویزای شینگن</option>
+                    <option value="2">ویزای آسیا</option>
+                    <option value="3">ویزای اروپا </option>
+                    <option value="4">ویزای متفرقه</option>
+                    <option value="5">هتل</option>
+                    <option value="6">پرواز داخلی</option>
+                    <option value="7">پرواز خارجی</option>
+                    <option value="8">تور داخلی</option>
+                    <option value="9">تور خارجی</option>
+>>>>>>> 53eeea5db37db1b41ca684e859f55d7762ec88a9
                 </select>
                 <a class="btn btn-lg hs-btn-default" href="#" onclick="$('#kh_frm_1').submit();">
                 ادامه
@@ -220,6 +233,7 @@
             $("#arrow_div").html('<span class="glyphicon glyphicon-chevron-up" ></span>');
         $("#profile_div").toggle('fast');
     }
+<<<<<<< HEAD
     $(document).ready(function(){
         setTimeout(function(){
             $("#khadamat123").select2({
@@ -228,4 +242,6 @@
             });
         },100);
     });
+=======
+>>>>>>> 53eeea5db37db1b41ca684e859f55d7762ec88a9
 </script>

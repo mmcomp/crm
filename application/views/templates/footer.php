@@ -95,6 +95,7 @@
                 numberOfMonths: 2,
                 showButtonPanel: true
             });
+<<<<<<< HEAD
             $(".same").each(function(id,feild){
                 $(feild).blur(function(e){
                     var str = $(feild).val();
@@ -113,6 +114,8 @@
                         $(".same_"+frase).val(str);
                 });
             });
+=======
+>>>>>>> 53eeea5db37db1b41ca684e859f55d7762ec88a9
 
             $($("[name='s_code_melli']")[0]).focus();
         });

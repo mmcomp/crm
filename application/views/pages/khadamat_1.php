@@ -50,9 +50,24 @@
                     <option value="-1">
                         انتخاب مبدأ
                     </option>
+<<<<<<< HEAD
                     <?php
                         echo city_class::loadAll();
                     ?>
+=======
+                    <option value="1">
+                        مشهد
+                    </option>
+                    <option value="2">
+                        تهران
+                    </option>
+                    <option value="3">
+                        شیراز
+                    </option>
+                    <option value="4">
+                        تبریز
+                    </option>
+>>>>>>> 53eeea5db37db1b41ca684e859f55d7762ec88a9
                 </select>
             </div>
             <div class="col-sm-6 hs-margin-up-down" >
@@ -60,9 +75,24 @@
                     <option value="-1">
                         انتخاب مقصد
                     </option>
+<<<<<<< HEAD
                     <?php
                         echo city_class::loadAll();
                     ?>
+=======
+                    <option value="1">
+                        مشهد
+                    </option>
+                    <option value="2">
+                        تهران
+                    </option>
+                    <option value="3">
+                        شیراز
+                    </option>
+                    <option value="4">
+                        تبریز
+                    </option>
+>>>>>>> 53eeea5db37db1b41ca684e859f55d7762ec88a9
                 </select>
             </div>
             <div class="col-sm-6 hs-margin-up-down"  >
@@ -71,6 +101,7 @@
             <div class="col-sm-6 hs-margin-up-down"  >
                 <input class="dateValue2 form-control" placeholder="تا تاریخ" >
             </div>
+<<<<<<< HEAD
             <div class="col-sm-4 hs-margin-up-down" >
                 تعداد بزرگسال: 
                 <select name="adl" style="width: 50px;" >
@@ -115,6 +146,8 @@
             <div class="col-sm-2" >
                 <input type="text" placeholder="ایرلاین"  >
             </div>
+=======
+>>>>>>> 53eeea5db37db1b41ca684e859f55d7762ec88a9
             <div class="col-sm-6 offset6 hs-margin-up-down"  >
                 <a class="btn hs-btn-default" onclick="$('#flight_results').toggle()">
                     جستجو
@@ -232,11 +265,16 @@
             <div class="col-sm-6 hs-margin-up-down"  >
                 <input class="dateValue2 form-control" placeholder="تا تاریخ" >
             </div>
+<<<<<<< HEAD
             <div class="col-sm-6 hs-margin-up-down"  onclick="$('#hotel_results').toggle()" >
+=======
+            <div class="col-sm-6 hs-margin-up-down"  >
+>>>>>>> 53eeea5db37db1b41ca684e859f55d7762ec88a9
                 <a class="btn hs-btn-default" >
                     جستجو
                 </a>
             </div>
+<<<<<<< HEAD
             <div class="col-sm-12" id="hotel_results" style="display: none;"  >
                 <table class="table table-bordered table-responsive">
                     <tr>
@@ -319,6 +357,12 @@
                     </tr>
                 </table>
             </div>        </div>
+=======
+            <div class="col-sm-12" id="hotel_results"  >
+                
+            </div>
+        </div>
+>>>>>>> 53eeea5db37db1b41ca684e859f55d7762ec88a9
     </div>
     <div class="hs-float-left hs-margin-up-down">
         <button href="" class="btn hs-btn-default btn-lg" >
@@ -327,6 +371,7 @@
         </button>
     </div>
 </form>
+<<<<<<< HEAD
     <form action="profile">
         <input type="hidden" name="khadamat_back" value="<?php echo implode(',',$_REQUEST["khadamat"]);  ?>" />
     <div class="hs-float-right hs-margin-up-down">
@@ -336,6 +381,8 @@
         </button>
     </div>
     </form>
+=======
+>>>>>>> 53eeea5db37db1b41ca684e859f55d7762ec88a9
 </div>
 <script>
     function toggle_profile()
