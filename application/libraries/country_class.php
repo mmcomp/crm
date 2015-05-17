@@ -1,12 +1,12 @@
 <?php
-class city_class
+class country_class
 {
     public function __construct($id=-1)
     {
         if((int)$id > 0)
         {
             $mysql = new mysql_class;
-            $mysql->ex_sql("select * from `city` where `id` = $id",$q);
+            $mysql->ex_sql("select * from `country` where `id` = $id",$q);
             if(isset($q[0]))
             {
                 $r = $q[0];
@@ -15,15 +15,14 @@ class city_class
             }
         }
     }
-    public static function loadAll($country_id=0)
+    public static function loadAll($selected)
     {
         $out='';
         $my = new mysql_class;
-        $wer = $country_id==0?'':" where country_id=$country_id";
-        $my->ex_sql("select id,name from city $wer order by name", $q);
+        $my->ex_sql("select id,name from country order by name", $q);
         foreach($q as $r)
         {
-            $out.='<option value="'.$r['id'].'" >'.$r['name'].'</option>';
+            $out.='<option '.($r['id']==$selected ?'selected="selected"':'').' value="'.$r['id'].'" >'.$r['name'].'</option>';
         }
         return ($out);
     }        

@@ -53,8 +53,22 @@ class Profile_model extends CI_Model {
         }
         return($out);
     }
-    public function edit($user_id,$data)
+    public function edit($user_id,$data,$files)
     {
+        
+        
+        $config['upload_path'] = './upload/';
+        $config['allowed_types'] = 'pdf|jpg|png|doc|docx|xls|xlsx';
+        $config['max_size']	= '10000';
+        $config['file_name'] = "profile_".date("Y-m-d-H-i-s");
+        $this->load->library('upload', $config);
+       
+        if($this->upload->do_upload('pic'))
+        {
+            $udata = $this->upload->data();
+            $data['pic'] = $udata['file_name'];
+        }
+        
         $my = new mysql_class;
         $update_qu='';
         foreach($data as $key=>$value)

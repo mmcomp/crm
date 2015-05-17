@@ -1,5 +1,37 @@
 <?php
     if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+    $factor_id = isset($_REQUEST['factor_id'])?(int)$_REQUEST['factor_id']:-1;
+    $khadamat_back = khadamat_factor_class::loadKhadamats($factor_id);
+    if(isset($_REQUEST['user_id1']))
+    {
+        $m = new mysql_class;
+        if($factor_id<=0)
+        {
+            $f = new factor_class();
+            $tarikh = date("Y-m-d H:i:s");
+            $id = $f->add($_REQUEST['user_id1'], $user_id, $tarikh);
+        }
+        else
+        {
+            $id = $factor_id;
+        }
+        if(isset($_REQUEST['khadamat']))
+        {
+            foreach($_REQUEST['khadamat'] as $kh)
+            {
+                if(!in_array($kh, $khadamat_back))
+                {
+                    $m->ex_sqlx("insert into `khadamat_factor` (`factor_id`,`khadamat_id`) values ($id,$kh)");
+                }
+            }
+            $m->ex_sqlx("delete from `khadamat_factor` where `factor_id` = $factor_id and not `khadamat_id` in (".implode(',',$_REQUEST['khadamat']).")");
+            redirect('khadamat_1/'.$id);
+        }
+        else
+        {
+            $m->ex_sqlx("delete from `khadamat_factor` where `factor_id` = $factor_id");
+        }
+    }
     $msg = '';
     $user_id1 = $user_id;
     if(trim($p1)!='')
@@ -18,7 +50,7 @@
         $this->form_validation->set_rules('tell', 'تلفن ثابت', 'required|is_natural');
         if($this->form_validation->run()!==FALSE)
         {
-            $this->profile_model->edit($user_id1,$_REQUEST);
+            $this->profile_model->edit($user_id1,$_REQUEST,$_FILES);
             $msg="<div class='alert alert-success' >
                 ذخیره سازی با موفقیت انجام شد
                   </div>";
@@ -39,7 +71,7 @@
         $active = ($active & $active2);
         $menu_links .= "<li role='presentation'".(($active)?" class='active'":"")."><a href='$href'>$title</a></li>";
     }
-    $khadamat_back = isset($_REQUEST['khadamat_back'])?explode(",", $_REQUEST['khadamat_back']):array();
+    //$khadamat_back = isset($_REQUEST['khadamat_back'])?explode(",", $_REQUEST['khadamat_back']):array();
     $khadamats = khadamat_class::loadAll($khadamat_back);
 ?>
 <div class="row" >
@@ -63,19 +95,24 @@
     </div>
     -->
     <div class="col-sm-10" >
+        <?php
+            echo $this->inc_model->loadProgress(0);
+        ?>
         <div class="hs-margin-up-down">
-            <form id="kh_frm_1" action="khadamat_1">
+            <form id="kh_frm_1" method="post">
                 انتخاب خدمات : 
                 <select name="khadamat[]" id="khadamat123" multiple="multiple" style="width:70%;" >
                     <?php echo $khadamats; ?>
                 </select>
+                <input type="hidden" name="user_id1" value="<?php echo $user_id1; ?>" />
+                <input type="hidden" name="factor_id" value="<?php echo $factor_id; ?>" />
                 <a class="btn btn-lg hs-btn-default" href="#" onclick="$('#kh_frm_1').submit();">
                 ادامه
                 <span class="glyphicon glyphicon-chevron-left"></span>
                 </a>
             </form>
         </div>
-    <?php echo form_open('',array('id'=>'frm_profile'))  ?>
+    <?php echo form_open_multipart('',array('id'=>'frm_profile'))  ?>
 
         <div  class="hs-margin-up-down hs-gray hs-padding hs-border mm-negative-margin pointer" onclick="toggle_profile();" >
             کاربر: 
@@ -199,6 +236,17 @@
                 نشانی ایمیل:
                 <input class="form-control" name="email" id="email" placeholder="نشانی ایمیل" value="<?php echo $user_obj->email; ?>">
             </div>
+            <div class="col-sm-6 hs-margin-up-down" >
+              شماره پاسپورت  :
+                <input type="text" class="form-control" name="passport" id="passport" placeholder="پاسپورت" value="<?php echo $user_obj->passport; ?>">
+            </div>
+            <div class="col-sm-6 hs-margin-up-down pointer" onclick="editPic(<?php echo $user_obj->id; ?>);">
+                <span class="glyphicon glyphicon-pencil"></span>
+                <?php echo ((trim($user_obj->pic)!=''))?"<img width='100px' src='".  site_url()."upload/".$user_obj->pic."' />":''; ?>
+            </div>
+            <div class="col-sm-12 pic_upload">
+                <input id="input-1" type="file" class="file" name="pic">
+            </div>
             <div class="col-sm-12 hs-margin-up-down" >
                 نشانی:
                 <textarea class="form-control" rows="5" name="address" id="address" placeholder="نشانی" ><?php echo $user_obj->address; ?></textarea>
@@ -211,6 +259,10 @@
     <?php echo form_close(); ?>
 </div>
 <script>
+    function editPic(uid)
+    {
+        $(".pic_upload").toggle();
+    }
     function toggle_profile()
     {
         var is_visible = ($("#profile_div:visible").length>0);
@@ -221,6 +273,7 @@
         $("#profile_div").toggle('fast');
     }
     $(document).ready(function(){
+        $(".pic_upload").hide();
         setTimeout(function(){
             $("#khadamat123").select2({
                 placeholder:" انتخاب خدمات",

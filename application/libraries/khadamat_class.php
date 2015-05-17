@@ -25,7 +25,23 @@ class khadamat_class
             $out.='<option '.(in_array($r['id'],$inp)?'selected="selected"':'').'  value="'.$r['id'].'" >'.$r['name'].'</option>';
         }
         return ($out);
-    }        
+    }
+    public static function loadTypes($inp)
+    {
+        $out=array();
+        if(count($inp)>0)
+        {    
+            $kh_ids = implode(',',$inp);
+            $my = new mysql_class;
+            $my->ex_sql("select typ from khadamat where id in ($kh_ids)",$q);
+            if(count($q)>0)
+            {    
+                foreach($q as $r)
+                    $out[] = $r['typ'];    
+            }    
+        }
+        return($out);
+    }
 }
 
 /* 

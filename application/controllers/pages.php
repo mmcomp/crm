@@ -26,6 +26,10 @@ class Pages extends CI_Controller {
         $this->load->library('attach_type_class');
         $this->load->library('khadamat_class');
         $this->load->library('city_class');
+        $this->load->library('factor_class');
+        $this->load->library('mosafer_class');
+        $this->load->library('khadamat_factor_class');
+        $this->load->library('country_class');
         $this->load->library('xgrid');
         $this->load->view('modir/libs/jdf');
         $this->load->view('modir/libs/simplejson');

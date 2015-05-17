@@ -110,4 +110,20 @@ class Inc_model extends CI_Model {
 	}
         return($ou);
     }
+    function loadProgress($index)
+    {
+        $marhale = array(
+            "مرحله یک",
+            "مرحله دو",
+            "مرحله سه",
+            "مرحله چهار",
+            "مرحله پنج",
+            "مرحله شش"
+        );
+        $out = '<div class="row hs-margin-up-down">';
+        for($i = 0;$i < count($marhale);$i++)
+            $out .= (($i>0)?'<div class="col-sm-1 mm-center hs-padding">-------</div>':'').'<div class="col-sm-1 hs-border hs-padding mm-center'.(($index==$i)?' hs-green2':'').'">'.$marhale[$i].'</div>';
+        $out .= '</div>';
+        return($out);
+    }
 }

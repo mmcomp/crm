@@ -27,7 +27,11 @@
         if(isset($has_ckeditor) && $has_ckeditor) // if in edit_content ckedotr is activeted
         {    
             echo '<script src="'.asset_url().'js/ckeditor/ckeditor.js"></script>'."\n";
-        }    
+        }
+        if($page_addr=='profile')
+        {
+            echo '<script src="'.asset_url().'js/fileinput.min.js"></script>'."\n".'<link rel="stylesheet" href="'.asset_url().'css/fileinput.min.css" type="text/css" />'."\n";
+        }
     ?>
 </head>
 <body>

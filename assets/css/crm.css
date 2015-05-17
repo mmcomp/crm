@@ -321,3 +321,7 @@ hr.custom1 {
 .mm-font-red{
     color:red;
 }
+.mm-center{
+    text-align: center;
+    vertical-align: middle;
+}
