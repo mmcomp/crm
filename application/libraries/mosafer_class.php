@@ -15,7 +15,7 @@
                 }
             }
         }
-        public function add($fname,$lname,$code_melli,$passport, $passport_engheza, $gender, $age, $tarikh_tavalod, $khadamat_factor_id)
+        public static function add($fname,$lname,$code_melli,$passport, $passport_engheza, $gender, $age, $tarikh_tavalod, $khadamat_factor_id)
         {
             $mysql = new mysql_class;
             $ln = $mysql->ex_sqlx("insert into `mosafer` (`fname`, `lname`, `code_melli`, `passport`, `passport_engheza`, `gender`, `age`, `tarikh_tavalod`, `khadamat_factor_id`) values ('$fname','$lname','$code_melli','$passport', '$passport_engheza', $gender, '$age', '$tarikh_tavalod', $khadamat_factor_id)",FALSE);

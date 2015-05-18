@@ -25,6 +25,8 @@ class Pages extends CI_Controller {
         $this->load->library('type_class');
         $this->load->library('attach_type_class');
         $this->load->library('khadamat_class');
+        $this->load->library('parvaz_class');
+        $this->load->library('hotel_class');
         $this->load->library('city_class');
         $this->load->library('factor_class');
         $this->load->library('mosafer_class');
