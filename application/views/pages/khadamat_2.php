@@ -174,12 +174,6 @@
         $factor_id = (int)$p1;
 //----------UPDATING Start--------
     //var_dump($_REQUEST);
-    if(isset($_REQUEST['mob']))
-    {
-        $m = new mysql_class;
-        $m->ex_sqlx("update `factor` set `mob` = '".$_REQUEST['mob']."' , `email` = '".$_REQUEST['email']."' where id = $factor_id");
-        
-    }
     if(isset($_REQUEST['parvaz_mosafer_id']))
     {
         $gender = $_REQUEST['parvaz_gender'];
@@ -249,7 +243,15 @@
                 $qq[$idx] .=(($qq[$idx]!='')?',':'') . " `vasat_city` = ".(int)$rc." , `vasat_airline` = ".(int)$vasat_airline[$idx]." , `vasat_shomare` = '".$vasat_shomare[$idx]."' , `vasat_saat_vorood` = '".$vasat_vorood[$idx]."', `vasat_saat_khorooj` = '".$vasat_khorooj[$idx]."'";
         }
         foreach($hotel_room_id as $indx=>$hrid)
+        {
             $my->ex_sqlx("update `hotel_room` set ".$qq[$indx]." where `id` = $hrid");
+        }
+    }
+    if(isset($_REQUEST['mob']))
+    {
+        $m = new mysql_class;
+        $m->ex_sqlx("update `factor` set `mob` = '".$_REQUEST['mob']."' , `email` = '".$_REQUEST['email']."' where id = $factor_id");
+        redirect('khadamat_3/'.$factor_id);
     }
 //----------UPDATING End----------    
     $msg = '';
@@ -356,11 +358,11 @@
 
 PARDET;
         $parvaz1 = <<<PAR
-        <div class="row hs-border hs-padding hs-margin-up-down hs-gray pointer" onclick="$('#flight_div').toggle();">
+        <div class="row hs-border hs-padding hs-margin-up-down hs-gray pointer" onclick="divTog('flight_div');">
             <div class="col-sm-2 hs-padding">
                 #khadamat_name#
             </div>
-            $tit <input type="hidden" name="khadamat_factor_id-1" value="$khadamat_factor_id" />
+            $tit <input type="hidden" name="khadamat_factor_id-1" value="$khadamat_factor_id" /><div class="hs-float-left hs-margin-up-down"><span id="flight_div_gly" class="glyphicon glyphicon-chevron-up"></span></div>
         </div>
         <div id="flight_div">
             <div class="row hs-border hs-padding mm-letter-vaziat-0 hs-margin-up-down">
@@ -421,11 +423,28 @@ PAR2;
         $hot_obj->shab = dateDif($hot_obj->ta_tarikh, $hot_obj->az_tarikh);
         $tmp = new city_class($hot_obj->maghsad_id);
         $maghsad = $tmp->name;
-        
-        $tit = '<div class="col-sm-2 hs-padding">'.$maghsad.'</div>';
-        $tit .='<div class="col-sm-2 hs-padding">'.$hot_obj->name.'</div>';
-        $tit .='<div class="col-sm-2 hs-padding">'.$hot_obj->shab.'شب'.'</div>';
+        $hr = hotel_room_class::loadByFactorId($factor_id);
+        $extra = 0;
+        $extra_chd = 0;
+        foreach($hr as $h)
+        {
+            $extra+=(int)$h['extra_service'];
+            $extra_chd+=(int)$h['extra_service_chd'];
+        }
+        $extr = '';
+        if($extra+$extra_chd>0)
+        {
+            $extr = 'سرویس اضافه : ';
+            if($extra>0)
+                $extr .= $extra.' بزرگسال';
+            if($extra_chd>0)
+                $extr .= (($extra>0)?' و ':''). $extra_chd.' کودک';
+        }
+        $tit = '<div class="col-sm-1 hs-padding">'.$maghsad.'</div>';
+        $tit .='<div class="col-sm-1 hs-padding">'.$hot_obj->name.'</div>';
+        $tit .='<div class="col-sm-1 hs-padding">'.$hot_obj->shab.'شب'.'</div>';
         $tit .= '<div class="col-sm-2 hs-padding">'.'تاریخ:'.jdate("d-m-Y",strtotime($hot_obj->az_tarikh)).'</div>';
+        $tit .= '<div class="col-sm-4 hs-padding">'.$extr.'</div>';
         $ho_det = <<<HODET
             <div class="row hs-border hs-padding mm-letter-vaziat-0 hs-margin-up-down">
                 <div class="col-sm-1">
@@ -459,8 +478,9 @@ PAR2;
             </div>
 HODET;
         $hotel1 = <<<HOT1
-            <div class="row hs-border hs-padding hs-margin-up-down hs-gray pointer" onclick="$('#hotel_div').toggle();">
+            <div class="row hs-border hs-padding hs-margin-up-down hs-gray pointer" onclick="divTog('hotel_div');">
                 <div class="col-sm-2 hs-padding">#khadamat_name#</div>$tit <input type="hidden" name="khadamat_factor_id-2" value="$khadamat_factor_id" />
+                <div class="hs-float-left hs-margin-up-down"><span id="hotel_div_gly" class="glyphicon glyphicon-chevron-up"></span></div>
             </div>
             <div id="hotel_div">
                 <div class="row hs-border hs-padding mm-letter-vaziat-0 hs-margin-up-down">
@@ -504,15 +524,15 @@ HOT1;
 HOT2;
 
         $tra1 = <<<TR1
-        <div class="row hs-border hs-padding hs-margin-up-down hs-gray pointer" onclick="$('#hotel_room_div').toggle();">
-            ترانسفر فرودگاهی
+        <div class="row hs-border hs-padding hs-margin-up-down hs-gray pointer" onclick="divTog('hotelroom_div');">
+           <div class="col-sm-9" style="line-height:50px;"> ترانسفر فرودگاهی</div><div class="hs-float-left hs-margin-up-down"><span id="hotelroom_div_gly" class="glyphicon glyphicon-chevron-up"></span></div>
         </div>
-        <div id="hotel_room_div">
+        <div id="hotelroom_div">
                 #hoty#
         </div>
 TR1;
         $tra3_raft = <<<RAFT
-                    <div class="row">
+                    <div class="row hs-padding">
                         <div class="col-sm-2">
                             رفت
                         </div>
@@ -541,7 +561,7 @@ TR1;
 
 RAFT;
         $tra3_vasat = <<<RAFT
-                    <div class="row">
+                    <div class="row hs-padding">
                         <div class="col-sm-2">
                             وسط
                         </div>
@@ -570,12 +590,12 @@ RAFT;
 
 RAFT;
         $tra3_bargasht = <<<BRG
-                    <div class="row">
+                    <div class="row hs-padding">
                         <div class="col-sm-2">
                             برگشت
                         </div>
                         <div class="col-sm-2">
-                            <select name="hotel_trans_bragasht_city[#indx#]" style="width: 80px;"> 
+                            <select name="hotel_trans_bargasht_city[#indx#]" style="width: 80px;"> 
                                 <option>شهر</option>
                                 #city#
                             </select>
@@ -633,13 +653,12 @@ BRG;
             </div>
 TR2;
         $tra = '';
-        $hr = hotel_room_class::loadByFactorId($factor_id);
         foreach($hr as $i=>$hrr)
         {
             $tr2_tmp = $tra2;
-            $hei = 50;
+            $hei = 100;
             $r=(int)$hrr['transfer_raft']+(int)$hrr['transfer_vasat']+(int)$hrr['transfer_bargasht'];
-            if($r-2>0)
+            if($r-3>0)
                 $hei = $hei*($r-1);
             if((int)$hrr['transfer_raft']==1)
             {
@@ -751,8 +770,8 @@ TR2;
 
 PARDET;
         $parvaz1 = <<<PAR
-        <div class="row hs-border hs-padding hs-margin-up-down hs-gray pointer" onclick="$('#flight_div').toggle();">
-            <div class="col-sm-2 hs-padding">#khadamat_name#</div>$tit <input type="hidden" name="khadamat_factor_id-3" value="$khadamat_factor_id" />
+        <div class="row hs-border hs-padding hs-margin-up-down hs-gray pointer" onclick="divTog('flight_div');">
+            <div class="col-sm-2 hs-padding">#khadamat_name#</div>$tit <input type="hidden" name="khadamat_factor_id-3" value="$khadamat_factor_id" /><div class="hs-float-left hs-margin-up-down"><span id="flight_div_gly" class="glyphicon glyphicon-chevron-up"></span></div>
         </div>
         <div id="flight_div">
             <div class="row hs-border hs-padding mm-letter-vaziat-0 hs-margin-up-down">
@@ -832,10 +851,10 @@ PAR2;
             </div>
 HODET;
         $hotel1 = <<<HOT1
-            <div class="row hs-border hs-padding hs-margin-up-down hs-gray pointer" onclick="$('#hotel_div').toggle();">
-                #khadamat_name#<input type="hidden" name="khadamat_factor_id-4" value="$khadamat_factor_id" />
+            <div class="row hs-border hs-padding hs-margin-up-down hs-gray pointer" onclick="divTog('visam_div');">
+                #khadamat_name#<input type="hidden" name="khadamat_factor_id-4" value="$khadamat_factor_id" /><div class="hs-float-left hs-margin-up-down"><span id="visam_div_gly" class="glyphicon glyphicon-chevron-up"></span></div>
             </div>
-            <div id="hotel_div">
+            <div id="visam_div">
                 <div class="row hs-border hs-padding mm-letter-vaziat-0 hs-margin-up-down">
                     <div class="col-sm-1">
                         ردیف
@@ -907,10 +926,10 @@ HOT2;
             </div>
 HODET;
         $hotel1 = <<<HOT1
-            <div class="row hs-border hs-padding hs-margin-up-down hs-gray pointer" onclick="$('#hotel_div').toggle();">
-                #khadamat_name#<input type="hidden" name="khadamat_factor_id-5" value="$khadamat_factor_id" />
+            <div class="row hs-border hs-padding hs-margin-up-down hs-gray pointer" onclick="divTog('visap_div');">
+                #khadamat_name#<input type="hidden" name="khadamat_factor_id-5" value="$khadamat_factor_id" /><div class="hs-float-left hs-margin-up-down"><span id="visap_div_gly" class="glyphicon glyphicon-chevron-up"></span></div>
             </div>
-            <div id="hotel_div">
+            <div id="visap_div">
                 <div class="row hs-border hs-padding mm-letter-vaziat-0 hs-margin-up-down">
                     <div class="col-sm-1">
                         ردیف
@@ -972,7 +991,7 @@ HOT2;
     <form method="post">
     <div class="col-sm-10" >
         <?php
-            echo $this->inc_model->loadProgress(2);
+            echo $this->inc_model->loadProgress(2,$factor_id);
         ?>
 
         <?php echo $parvaz; ?>
@@ -1004,5 +1023,18 @@ HOT2;
         else
             $("#arrow_div").html('<span class="glyphicon glyphicon-chevron-up" ></span>');
         $("#profile_div").toggle('fast');
+    }
+    function divTog(inp)
+    {
+        if($("#"+inp).is(":visible")===true)
+        {
+            $("#"+inp+"_gly").removeClass("glyphicon-chevron-up").addClass("glyphicon-chevron-down");
+            $("#"+inp).slideUp();
+        }
+        else
+        {
+            $("#"+inp+"_gly").removeClass("glyphicon-chevron-down").addClass("glyphicon-chevron-up");
+            $("#"+inp).slideDown();
+        }
     }
 </script>

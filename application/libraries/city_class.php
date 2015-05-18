@@ -15,18 +15,18 @@ class city_class
             }
         }
     }
-    public static function loadAll($country_id=0)
+    public static function loadAll($selected=0)
     {
         $out='';
         $my = new mysql_class;
-        $wer = $country_id==0?'':" where country_id=$country_id";
-        $my->ex_sql("select id,name from city $wer order by name", $q);
+        //$wer = $country_id==0?'':" where country_id=$country_id";
+        $my->ex_sql("select id,name from city order by name", $q);
         foreach($q as $r)
         {
-            $out.='<option value="'.$r['id'].'" >'.$r['name'].'</option>';
+            $out.='<option '.($selected==$r['id']?'selected="selected"':'').' value="'.$r['id'].'" >'.$r['name'].'</option>';
         }
         return ($out);
-    }        
+    }          
     public static function loadAllSel($selected,$country_id=0)
     {
         $out='';
@@ -38,7 +38,7 @@ class city_class
             $out.='<option value="'.$r['id'].'" '.(($selected==(int)$r['id'])?'selected':'').'>'.$r['name'].'</option>';
         }
         return ($out);
-    }        
+    }       
 }
 
 

@@ -46,6 +46,7 @@
     }
     if($this->input->post('city_to_hotel')!==FALSE)
     {
+        var_dump($_REQUEST);
         $hotel['maghsad_id'] = (int)$this->input->post('city_to_hotel');
         $hotel['az_tarikh'] = $this->inc_model->jalaliToMiladi($this->input->post('az_tarikh_hotel'));
         $hotel['ta_tarikh'] = $this->inc_model->jalaliToMiladi($this->input->post('ta_tarikh_hotel'));
@@ -57,7 +58,27 @@
         $hotel['room_count'] = (int)$this->input->post('room_count');
         $hotel['factor_id'] = (int)$p1;
         $hotel['khadamat_factor_id'] = hotel_class::loadKhadamat_factor_id((int)$p1);
-        hotel_class::add($hotel);
+        //
+        $hotel_room_count = (int)$this->input->post('hotel_room_count');
+        $hotel_room=array();
+        for($i=0;$i<$hotel_room_count;$i++)
+        {
+            $hotel_room[$i]['adl'] = (int)$this->input->post('hotel_adl')[$i];
+            $hotel_room[$i]['chd'] = (int)$this->input->post('hotel_chd')[$i];
+            $hotel_room[$i]['inf'] = (int)$this->input->post('hotel_inf')[$i];
+            $hotel_room[$i]['name'] = trim($this->input->post('room_name')[$i]);
+            $hotel_room[$i]['zarfiat'] = (int)$this->input->post('zarfiat')[$i];
+            $hotel_room[$i]['extra_service'] =(int) $this->input->post('extra_service')[$i];
+            $hotel_room[$i]['extra_service_chd'] =(int) $this->input->post('extra_service_chd')[$i];
+            $hotel_room[$i]['gasht'] = $this->input->post('gasht')!==FALSE ? (isset($this->input->post('gasht')[$i])?'1':'0') :'0';
+            $hotel_room[$i]['transfer_raft'] = $this->input->post('transfer_raft')!==FALSE ? (isset($this->input->post('transfer_raft')[$i])?'1':'0') :'0';
+            $hotel_room[$i]['transfer_vasat'] = $this->input->post('transfer_vasat')!==FALSE ? (isset($this->input->post('transfer_vasat')[$i])?'1':'0') :'0';
+            $hotel_room[$i]['transfer_bargasht'] = $this->input->post('transfer_bargasht')!==FALSE ? (isset($this->input->post('transfer_bargasht')[$i])?'1':'0') :'0';
+            $hotel_room[$i]['paziraii'] = $this->input->post('paziraii')!==FALSE ? (isset($this->input->post('paziraii')[$i])?'1':'0') :'0';            
+            $hotel_room[$i]['factor_id'] = (int)$p1;
+            $hotel_room[$i]['khadamat_factor_id'] = $hotel['khadamat_factor_id'];
+        }
+        hotel_class::add($hotel,$hotel_room);
     } 
     if((int)$p1==0)
     {
@@ -84,7 +105,86 @@
         $active = ($active & $active2);
         $menu_links .= "<li role='presentation'".(($active)?" class='active'":"")."><a href='$href'>$title</a></li>";
     }
-       
+    $hot = new hotel_class;
+    $hot->loadByFactor_id($p1);
+    $hot_room = hotel_room_class::loadByFactorId($p1);
+    $hot_det = '';
+    $nafarat = '';
+    for($j=0;$j<count($hot_room);$j++)
+    {
+        $hot_det .= "
+                <div class='col-sm-2 hs-margin-up-down text-center' >
+               نام اتاق       
+                    <input type='text' class='form-control' name='room_name[]' value='".($hot_room[$j]['name'])."'>
+                </div>
+                <div class='col-sm-1 hs-margin-up-down text-center' >
+                    <small>ظرفیت </small>
+                    <select name='zarfiat[]' class='hotel_extra' title='ظرفیت' style='width: 100%' >".str_replace('"','\"',$this->inc_model->generateOption(5,0,1,$hot_room[$j]['zarfiat']))."
+                    </select> 
+                </div>
+                <div class='col-sm-2 hs-margin-up-down text-center' >
+                    <small>
+                        سرویس اضافه بزرگسال </small>
+                    <select name='extra_service[]' class='hotel_extra' title='سرویس اضافه بزرگسال' style='width: 100%' >".str_replace('"','\"',$this->inc_model->generateOption(5,0,1,$hot_room[$j]['extra_service']))."
+                    </select> 
+                </div>
+                <div class='col-sm-2 hs-margin-up-down text-center' >
+                    <small>
+                        سرویس اضافه کودک </small>
+                    <select name='extra_service_chd[]' class='hotel_extra' title='سرویس اضافه کودک' style='width: 100%' >".str_replace('"','\"',$this->inc_model->generateOption(5,0,1,$hot_room[$j]['extra_service_chd']))."
+                    </select>
+                </div>
+                <div class='col-sm-1 hs-margin-up-down text-center' >
+                    <small>
+                    گشت
+                    </small>
+                    <input class='form-control' type='checkbox' name='gasht[$j]' ".((int)$hot_room[$j]['gasht']>0?'checked="checked"':'')." >
+                </div>
+                <div class='col-sm-1 hs-margin-up-down text-center' >
+                    <small>
+                    ت. رفت
+                    </small>
+                    <input class='form-control' type='checkbox' name='transfer_raft[$j]' ".((int)$hot_room[$j]['transfer_raft']>0?'checked="checked"':'')." >
+                </div>
+                <div class='col-sm-1 hs-margin-up-down text-center' >
+                    <small>
+                    ت. میانی
+                    </small>
+                    <input class='form-control' type='checkbox' name='transfer_vasat[$j]' ".((int)$hot_room[$j]['transfer_vasat']>0?'checked="checked"':'')." >
+                </div>
+                <div class='col-sm-1 hs-margin-up-down text-center' >
+                    <small>
+                    ت. برگشت
+                    </small>
+                    <input class='form-control' type='checkbox' name='transfer_bargasht[$j]' ".((int)$hot_room[$j]['transfer_bargasht']>0?'checked="checked"':'')." >
+                </div>
+                <div class='col-sm-1 hs-margin-up-down text-center' >
+                    <small>
+                    پذیرایی
+                    </small>
+                    <input class='form-control' type='checkbox' name='paziraii[$j]' ".((int)$hot_room[$j]['paziraii']>0?'checked="checked"':'')." >
+                </div>
+                ";
+        $nafarat.='<div class="col-sm-4 hs-margin-up-down" > 
+                تعداد بزرگسال: 
+                <select name="hotel_adl[]" style="width: 50px;" class="hotel_extra" >
+                    '.$this->inc_model->generateOption(9,1,1,(int)$hot_room[$j]['adl']).'
+                </select>
+            </div>
+            <div class="col-sm-4 hs-margin-up-down" >
+                تعداد کودک:
+                <select name="hotel_chd[]" style="width: 50px;" class="hotel_extra" >
+                    '.$this->inc_model->generateOption(9,1,1,(int)$hot_room[$j]['chd']).'
+                </select>
+            </div>
+            <div class="col-sm-4 hs-margin-up-down" >
+                تعداد نوزاد: 
+                <select name="hotel_inf[]" style="width: 50px;" class="hotel_extra" >
+                    '.$this->inc_model->generateOption(9,1,1,(int)$hot_room[$j]['inf']).'
+                </select>
+            </div>
+            ';
+    }     
 ?>
 <div class="row" >
     <div class="col-sm-2" >
@@ -98,6 +198,11 @@
             ?>
             </ul>
         </div>
+    </div>
+    <div class="col-sm-10" > 
+    <?php
+    echo $this->inc_model->loadProgress(1,$p1);
+    ?>
     </div>
     <form action="" method="POST" >
     <div class="col-sm-10" >
@@ -420,17 +525,20 @@
                         انتخاب مقصد
                     </option>
                     <?php
-                        echo city_class::loadAll();
+                        echo city_class::loadAll(isset($hot->maghsad_id)?$hot->maghsad_id:'');
                     ?>
                 </select>
             </div>
             <div class="col-sm-6 hs-margin-up-down"  >
-                <input class="dateValue2 form-control" placeholder="از تاریخ" name="az_tarikh_hotel" id="az_tarikh_hotel" onblur="fillHotel(this)" >
+                <input class="dateValue2 form-control" placeholder="از تاریخ" name="az_tarikh_hotel" id="az_tarikh_hotel" onblur="fillHotel(this)" value="<?php echo isset($hot->az_tarikh)?jdate("Y/m/d",strtotime($hot->az_tarikh)):'';?>" >
             </div>
             <div class="col-sm-6 hs-margin-up-down"  >
-                <input class="dateValue2 form-control" placeholder="تا تاریخ" name="ta_tarikh_hotel" id="ta_tarikh_hotel" onblur="fillShab(this)" >
+                <input class="dateValue2 form-control" placeholder="تا تاریخ" name="ta_tarikh_hotel" id="ta_tarikh_hotel" onblur="fillShab(this)" value="<?php echo isset($hot->ta_tarikh)?jdate("Y/m/d",strtotime($hot->ta_tarikh)):'';?>" >
             </div>
             <div id="nafarat_div" class="col-sm-12 hs-margin-up-down" >
+                <?php
+                    echo $nafarat;
+                ?>
             </div>
             <div class="col-sm-12 hs-margin-up-down"  onclick="$(\'#hotel_results\').toggle()" >
                 <a class="btn hs-btn-default" >
@@ -496,12 +604,12 @@
                 ثبت دستی
             </div>
             <div class="col-sm-6" >
-                <input class="form-control" name="hotel_name" placeholder="نام هتل" >
+                <input class="form-control" name="hotel_name" placeholder="نام هتل" value="<?php echo isset($hot->name)?$hot->name:''; ?>" >
             </div>
             <div class="col-sm-1 text-left" >
                 <select name="hotel_star" id="hotel_star" title="ستاره" style="width: 100%" >
                     <?php
-                        echo $this->inc_model->generateOption(5,1,-1);
+                        echo $this->inc_model->generateOption(5,1,-1,isset($hot->star)?$hot->star:-1);
                     ?>
                 </select>
             </div>
@@ -509,20 +617,16 @@
                 ستاره
             </div>
             <div class="col-sm-2" >
-                <input class="dateValue2 form-control" name="hotel_az_tarikh" id="hotel_az_tarikh" placeholder="از تاریخ" >
+                <input readonly="readonly" class="form-control" name="hotel_az_tarikh" id="hotel_az_tarikh" placeholder="از تاریخ" value="<?php echo isset($hot->az_tarikh)?jdate("Y/m/d",strtotime($hot->az_tarikh)):''; ?>" >
             </div>
             <div class="col-sm-2" >
-                <select class="form-control" name="hotel_shab" style="width: 100%">
-                    <option value="-1" >
-                        تعداد شب
-                    </option>
-                    <?php
-                        echo $this->inc_model->generateOption(9,1,1);
-                    ?>
-                </select>
+                <input readonly="readonly" class="form-control" name="hotel_shab" placeholder="تعداد شب" >
             </div>
-            
-            <div id="hotel_extra_div" ></div>
+            <div id="hotel_extra_div" >
+                <?php
+                    echo $hot_det;
+                ?>
+            </div>
         </div>
         <?php
         } endif;
@@ -629,49 +733,56 @@
     }
     function showHotelExtra()
     {
-        var tt = "<div class='col-sm-3 hs-margin-up-down text-center' >\
+        var tt = "<div class='col-sm-2 hs-margin-up-down text-center' >\
                     نام اتاق \
                     <input type='text' class='form-control' name='room_name[]' >\
                 </div>\
-                <div class='col-sm-2 hs-margin-up-down text-center' >\
-                    ظرفیت بزرگسال\
-                    <select name='extra_service[]' class='hotel_extra' title='سرویس اضافه' style='width: 100%' > <?php echo str_replace('"','\"',$this->inc_model->generateOption(5,0,1)); ?>\
+                <div class='col-sm-1 hs-margin-up-down text-center' >\
+                    <small>ظرفیت </small>\
+                    <select name='zarfiat[]' class='hotel_extra' title='ظرفیت' style='width: 100%' > <?php echo str_replace('"','\"',$this->inc_model->generateOption(5,0,1)); ?>\
                     </select> \
                 </div>\
                 <div class='col-sm-2 hs-margin-up-down text-center' >\
-                    ظرفیت کودک\
-                    <select name='extra_service[]' class='hotel_extra' title='سرویس اضافه' style='width: 100%' > <?php echo str_replace('"','\"',$this->inc_model->generateOption(5,0,1)); ?>\
+                    <small>\
+                        سرویس اضافه بزرگسال </small>\
+                    <select name='extra_service[]' class='hotel_extra' title='سرویس اضافه بزرگسال' style='width: 100%' > <?php echo str_replace('"','\"',$this->inc_model->generateOption(5,0,1)); ?>\
+                    </select> \
+                </div>\
+                <div class='col-sm-2 hs-margin-up-down text-center' >\
+                    <small>\
+                        سرویس اضافه کودک </small>\
+                    <select name='extra_service_chd[]' class='hotel_extra' title='سرویس اضافه کودک' style='width: 100%' > <?php echo str_replace('"','\"',$this->inc_model->generateOption(5,0,1)); ?>\
                     </select> \
                 </div>\
                 <div class='col-sm-1 hs-margin-up-down text-center' >\
                     <small>\
                     گشت\
                     </small>\
-                    <input class='form-control' type='checkbox' name='gasht[]' >\
+                    <input class='form-control' type='checkbox' name='gasht[#inx#]' >\
                 </div>\
                 <div class='col-sm-1 hs-margin-up-down text-center' >\
                     <small>\
                     ت. رفت\
                     </small>\
-                    <input class='form-control' type='checkbox' name='transfer_raft[]' >\
+                    <input class='form-control' type='checkbox' name='transfer_raft[#inx#]' >\
                 </div>\
                 <div class='col-sm-1 hs-margin-up-down text-center' >\
                     <small>\
                     ت. میانی\
                     </small>\
-                    <input class='form-control' type='checkbox' name='transfer_vasat[]' >\
+                    <input class='form-control' type='checkbox' name='transfer_vasat[#inx#]' >\
                 </div>\
                 <div class='col-sm-1 hs-margin-up-down text-center' >\
                     <small>\
                     ت. برگشت\
                     </small>\
-                    <input class='form-control' type='checkbox' name='transfer_bargasht[]' >\
+                    <input class='form-control' type='checkbox' name='transfer_bargasht[#inx#]' >\
                 </div>\
                 <div class='col-sm-1 hs-margin-up-down text-center' >\
                     <small>\
                     پذیرایی\
                     </small>\
-                    <input class='form-control' type='checkbox' name='paziraii[]' >\
+                    <input class='form-control' type='checkbox' name='paziraii[#inx#]' >\
                 </div>";
         var nafarat = '<div class="col-sm-4 hs-margin-up-down" > \
                 تعداد بزرگسال: \
@@ -693,11 +804,13 @@
             </div>\
             ';                
         var tedad = parseInt($("#hotel_room_count").val(),10);
+        var tmp1='';
         $("#hotel_extra_div").html('');
         $("#nafarat_div").html('');
         for(var i=0;i<tedad;i++)
         {
-            $("#hotel_extra_div").append(tt);
+            tmp1 = tt.replace(/#inx#/g,i);
+            $("#hotel_extra_div").append(tmp1);
             $("#nafarat_div").append(nafarat);
         }
         $(".hotel_extra") .select2({

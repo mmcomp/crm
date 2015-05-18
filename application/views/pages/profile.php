@@ -96,7 +96,7 @@
     -->
     <div class="col-sm-10" >
         <?php
-            echo $this->inc_model->loadProgress(0);
+            echo $this->inc_model->loadProgress(0,$factor_id);
         ?>
         <div class="hs-margin-up-down">
             <form id="kh_frm_1" method="post">

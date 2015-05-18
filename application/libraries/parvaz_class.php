@@ -52,5 +52,10 @@ class parvaz_class
         $my->ex_sql("select id from khadamat_factor where factor_id=$factor_id and khadamat_id=1",$q);
         return(count($q)>0?$q[0]['id']:-1);
     }        
+    public static function laodByFactor_id($factor_id)
+    {
+        //$my = new mysql_class;
+        //$my->ex_sql("select * from parvaz where factor_id=$factor_id", $q);
+    }        
 } 
 

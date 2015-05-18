@@ -110,19 +110,46 @@ class Inc_model extends CI_Model {
 	}
         return($ou);
     }
-    function loadProgress($index)
+    function loadProgress($index,$factor_id)
     {
         $marhale = array(
-            "مرحله یک",
-            "مرحله دو",
-            "مرحله سه",
-            "مرحله چهار",
-            "مرحله پنج",
-            "مرحله شش"
+            array(
+                "link" => "profile",
+                "name" => "مرحله یک"
+            ),
+            array(
+                "link" => "khadamat_1",
+                "name" => "مرحله دو"
+            ),
+            array(
+                "link" => "khadamat_2",
+                "name" => "مرحله سه"
+            ),
+            array(
+                "link" => "khadamat_3",
+                "name" => "مرحله چهار"
+            ),
+            array(
+                "link" => "khadamat_4",
+                "name" => "مرحله پنج"
+            ),
+            array(
+                "link" => "khadamat_5",
+                "name" => "مرحله شش"
+            )
         );
         $out = '<div class="row hs-margin-up-down">';
+        $factor_id = (int)$factor_id;
         for($i = 0;$i < count($marhale);$i++)
-            $out .= (($i>0)?'<div class="col-sm-1 mm-center hs-padding">-------</div>':'').'<div class="col-sm-1 hs-border hs-padding mm-center'.(($index==$i)?' hs-green2':'').'">'.$marhale[$i].'</div>';
+        {
+            if($i>0)
+                $hrf = site_url ().$marhale[$i]["link"].'/'.$factor_id;
+            else
+                $hrf = site_url ().$marhale[$i]["link"].'?factor_id='.$factor_id;
+            if($factor_id<=0)
+                $hrf = '#';
+            $out .= (($i>0)?'<div class="col-sm-1 mm-center hs-padding">-------</div>':'').'<div class="col-sm-1 hs-border hs-padding mm-center'.(($index==$i)?' hs-green2':'').'"><a href="'.$hrf.'" style="'.(($index==$i)?'color:white;':'').'">'.$marhale[$i]["name"].'</a></div>';
+        }
         $out .= '</div>';
         return($out);
     }
