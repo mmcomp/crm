@@ -95,24 +95,6 @@
                 numberOfMonths: 2,
                 showButtonPanel: true
             });
-            $(".same").each(function(id,feild){
-                $(feild).blur(function(e){
-                    var str = $(feild).val();
-                    var cName = $(feild).prop('class').split(' ');
-                    var frase = '';
-                    var is_master = false;
-                    for(var i = 0;i < cName.length;i++)
-                    {
-                        if($.trim(cName[i]).split('_')[0]==='same' && $.trim(cName[i]).split('_').length===2)
-                            if($.trim(cName[i]).split('_')[1]==='master')
-                                is_master = true;
-                            else
-                                frase = $.trim(cName[i]).split('_')[1];
-                    }
-                    if(is_master)
-                        $(".same_"+frase).val(str);
-                });
-            });
 
             $($("[name='s_code_melli']")[0]).focus();
         });

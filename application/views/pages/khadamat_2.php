@@ -32,20 +32,101 @@
 	}
         return($ou);
     }
-    function generateInputBlock($startStr,$endStr,$midStr,$inp,$factor,$cur_sh_sal)
+    function createFakeMosafer($adl,$chd,$inf,&$out)
+    {
+        for($i = 0;$i < $adl;$i++)
+        {
+            $out[] = array(
+                'gender' => 1,
+                'age' => 'adl',
+                'fname' => '',
+                'lname' => '',
+                'code_melli' => '',
+                'tarikh_tavalod' => '0000-00-00 00:00:00',
+                'id' => -1,
+                'khadamat_name' => '',
+                'passport' => ''
+            );
+        }
+        for($i = 0;$i < $chd;$i++)
+        {
+            $out[] = array(
+                'gender' => 1,
+                'age' => 'chd',
+                'fname' => '',
+                'lname' => '',
+                'code_melli' => '',
+                'tarikh_tavalod' => '0000-00-00 00:00:00',
+                'id' => -1,
+                'khadamat_name' => '',
+                'passport' => ''
+            );
+        }
+        for($i = 0;$i < $inf;$i++)
+        {
+            $out[] = array(
+                'gender' => 1,
+                'age' => 'inf',
+                'fname' => '',
+                'lname' => '',
+                'code_melli' => '',
+                'tarikh_tavalod' => '0000-00-00 00:00:00',
+                'id' => -1,
+                'khadamat_name' => '',
+                'passport' => ''
+            );
+        }
+    }
+    function generateInputBlock($startStr,$endStr,$midStr,$inp,$factor,$cur_sh_sal,$extra_obj=NULL)
     {
         $mob = $factor->mob;
         $email = $factor->email;
         $pdet = '';
         $pindex = 1;
-        foreach($inp as $mo)
+        $cadl=0;
+        $cchd = 0;
+        $cinf = 0;
+        foreach($inp as $ind=>$mo)
         {
-            $age = $mo['age'];
-            $gender_0 = ($mo['gender']==0)?' selected':'';
-            $gender_1 = ($mo['gender']==1)?' selected':'';
-            $age_adl = ($mo['age']=='adl')?' selected':'';
-            $age_chd = ($mo['age']=='chd')?' selected':'';
-            $age_inf = ($mo['age']=='inf')?' selected':'';
+            if($mo['age']=='adl' || $mo['age']==NULL)
+            {
+                $cadl++;
+                $inp[$ind]['age'] = 'adl';
+            }
+            if($mo['age']=='chd')
+                $cchd++;
+            if($mo['age']=='inf')
+                $cinf++;
+        }
+        if(isset($extra_obj->adl))
+            createFakeMosafer((int)$extra_obj->adl-$cadl, (int)$extra_obj->chd-$cchd, (int)$extra_obj->inf-$cinf, $inp);
+        //var_dump($inp);
+        foreach($inp as $ind=>$mo)
+        {
+            $age = trim($mo['age']);
+            $gender_0 = ((int)trim($mo['gender'])==0)?' selected':'';
+            $gender_1 = ((int)trim($mo['gender'])==1)?' selected':'';
+            $age_adl = '';
+            $age_chd = '';
+            $age_inf = '';
+            if($age=='adl')
+            {
+                $age_adl = ' selected';
+                $age_chd = '';
+                $age_inf = '';
+            }
+            else if($age=='chd')
+            {    
+                $age_adl = '';
+                $age_inf = '';
+                $age_chd = ' selected';
+            }
+            else if($age=='inf')
+            {
+                $age_adl = '';
+                $age_chd = '';
+                $age_inf = ' selected';
+            }
             $fname = $mo['fname'];
             $lname = $mo['lname'];
             $code_melli = $mo['code_melli'];
@@ -59,20 +140,20 @@
             $khadamat_name = $mo['khadamat_name'];
             $passport = $mo['passport'];
             $midStr = str_replace('#pindex#', $pindex, $midStr);
-            $midStr = str_replace('#age_adl#', $age_adl, $midStr);
-            $midStr = str_replace('#age_chd#', $age_chd, $midStr);
-            $midStr = str_replace('#age_inf#', $age_inf, $midStr);
-            $midStr = str_replace('#gender_0#', $gender_0, $midStr);
-            $midStr = str_replace('#gender_1#', $gender_1, $midStr);
-            $midStr = str_replace('#id#', $id, $midStr);
-            $midStr = str_replace('#fname#', $fname, $midStr);
-            $midStr = str_replace('#lname#', $lname, $midStr);
-            $midStr = str_replace('#code_melli#', $code_melli, $midStr);
-            $midStr = str_replace('#passport#', $passport, $midStr);
-            $midStr = str_replace('#tav_rooz#', $tav_rooz, $midStr);
-            $midStr = str_replace('#tav_mah#', $tav_mah, $midStr);
-            $midStr = str_replace('#tav_sal#', $tav_sal, $midStr);
-            $pdet .= $midStr;
+            $midStr1 = str_replace('#age_adl#', $age_adl, $midStr);
+            $midStr1 = str_replace('#age_chd#', $age_chd, $midStr1);
+            $midStr1 = str_replace('#age_inf#', $age_inf, $midStr1);
+            $midStr1 = str_replace('#gender_0#', $gender_0, $midStr1);
+            $midStr1 = str_replace('#gender_1#', $gender_1, $midStr1);
+            $midStr1 = str_replace('#id#', $id, $midStr1);
+            $midStr1 = str_replace('#fname#', $fname, $midStr1);
+            $midStr1 = str_replace('#lname#', $lname, $midStr1);
+            $midStr1 = str_replace('#code_melli#', $code_melli, $midStr1);
+            $midStr1 = str_replace('#passport#', $passport, $midStr1);
+            $midStr1 = str_replace('#tav_rooz#', $tav_rooz, $midStr1);
+            $midStr1 = str_replace('#tav_mah#', $tav_mah, $midStr1);
+            $midStr1 = str_replace('#tav_sal#', $tav_sal, $midStr1);
+            $pdet .= $midStr1;
             $pindex++;
         }
         $endStr = str_replace('#mob#', $mob, $endStr);
@@ -86,7 +167,8 @@
     $factor_id = -1;
     if(trim($p1)!='')
         $factor_id = (int)$p1;
-//----------UPDATING Start--------    
+//----------UPDATING Start--------
+    //var_dump($_REQUEST);
     if(isset($_REQUEST['mob']))
     {
         $m = new mysql_class;
@@ -101,10 +183,26 @@
         $fname = $_REQUEST['parvaz_fname'];
         $lname = $_REQUEST['parvaz_lname'];
         $code_melli = $_REQUEST['parvaz_code_melli'];
-        $tarikh_tavalod = $this->inc_model->jalaliToMiladi($_REQUEST['parvaz_tarikh_tavalod-sal'].'/'.$_REQUEST['parvaz_tarikh_tavalod-mah'].'/'.$_REQUEST['parvaz_tarikh_tavalod-rooz']);
-        foreach ($mosafer_id as $mosafer_id0)
+        $khadamat_factor_id = $_REQUEST['khadamat_factor_id-1'];
+        foreach ($mosafer_id as $i=>$mosafer_id0)
         {
-            mosafer_class::add($fname, $lname, $code_melli, '', '', $gender, $age, $tarikh_tavalod, $khadamat_factor_id);
+            $tarikh_tavalod = $this->inc_model->jalaliToMiladi($_REQUEST['parvaz_tarikh_tavalod-sal'][$i].'/'.$_REQUEST['parvaz_tarikh_tavalod-mah'][$i].'/'.$_REQUEST['parvaz_tarikh_tavalod-rooz'][$i]);
+            mosafer_class::add($fname[$i], $lname[$i], $code_melli[$i], '', '', $sex[$i], $gender[$i], $tarikh_tavalod, $khadamat_factor_id);
+            
+        }
+    }
+    if(isset($_REQUEST['hotel_mosafer_id']))
+    {
+        $sex = $_REQUEST['hotel_sex'];
+        $mosafer_id = $_REQUEST['hotel_mosafer_id'];
+        $fname = $_REQUEST['hotel_fname'];
+        $lname = $_REQUEST['hotel_lname'];
+        $code_melli = $_REQUEST['hotel_code_melli'];
+        $khadamat_factor_id = $_REQUEST['khadamat_factor_id-2'];
+        //$tarikh_tavalod = $this->inc_model->jalaliToMiladi($_REQUEST['parvaz_tarikh_tavalod-sal'].'/'.$_REQUEST['parvaz_tarikh_tavalod-mah'].'/'.$_REQUEST['parvaz_tarikh_tavalod-rooz']);
+        foreach ($mosafer_id as $i=>$mosafer_id0)
+        {
+            //mosafer_class::add($fname, $lname, $code_melli, '', '', $gender, $age, $tarikh_tavalod, $khadamat_factor_id);
         }
     }
 //----------UPDATING End----------    
@@ -144,19 +242,26 @@
         $typs[$mo['khadamat_type']][] = $mo;
     }
     $parvaz = '';
+    //var_dump($typs);
     if(isset($typs[1]))
     {
         $khadamat_factor_id = $typs[1][0]['khadamat_factor_id'];
         $par_obj = new parvaz_class();
         $par_obj->loadByKhadamatFactor($typs[1][0]['khadamat_factor_id']);
-        $tmp = new city_class($par_obj->mabda_id);
-        $mabda = $tmp->name;
-        $tmp = new city_class($par_obj->maghsad_id);
-        $maghsad = $tmp->name;
-        $tit = '<div class="col-sm-2 hs-padding">'.$mabda.'...'.$maghsad.'</div>';
-        $tit .= '<div class="col-sm-2 hs-padding">شماره:'.$par_obj->shomare.'</div>';
-        $tit .= '<div class="col-sm-2 hs-padding">تاریخ:'.jdate("d-m-Y",strtotime($par_obj->tarikh)).'</div>';
-        $tit .= '<div class="col-sm-2 hs-padding">ساعت:'.jdate("H:i",strtotime($par_obj->saat)).'</div>';
+        $mabda = '';
+        $maghsad = '';
+        $tit = '';
+        if(isset($par_obj->mabda_id))
+        {
+            $tmp = new city_class($par_obj->mabda_id);
+            $mabda = $tmp->name;
+            $tmp = new city_class($par_obj->maghsad_id);
+            $maghsad = $tmp->name;
+            $tit = '<div class="col-sm-2 hs-padding">'.$mabda.'...'.$maghsad.'</div>';
+            $tit .= '<div class="col-sm-2 hs-padding">شماره:'.$par_obj->shomare.'</div>';
+            $tit .= '<div class="col-sm-2 hs-padding">تاریخ:'.jdate("d-m-Y",strtotime($par_obj->tarikh)).'</div>';
+            $tit .= '<div class="col-sm-2 hs-padding">ساعت:'.jdate("H:i",strtotime($par_obj->saat)).'</div>';
+        }
         $par_det = <<<PARDET
         <div class="row hs-border hs-padding mm-letter-vaziat-0 hs-margin-up-down">
             <div class="col-sm-1">
@@ -165,7 +270,7 @@
             <div class="col-sm-1">
                 <select name="parvaz_gender[]" style="width:80px;">
                     <option>سن</option>
-                    <option value="adl"#age_adl#>Adult<option>
+                    <option value="adl"#age_adl#>Adult</option>
                     <option value="chd"#age_chd#>Child</option>
                     <option value="inf"#age_inf#>Infant</option>
                 </select>
@@ -173,7 +278,7 @@
             <div class="col-sm-1">
                 <select name="parvaz_sex[]" style="width:80px;">
                     <option>جنسیت</option>
-                    <option value="0"#gender_0#>مونث<option>
+                    <option value="0"#gender_0#>مونث</option>
                     <option value="1"#gender_1#>مذکر</option>
                 </select>
             </div>
@@ -209,7 +314,7 @@ PARDET;
             <div class="col-sm-2 hs-padding">
                 #khadamat_name#
             </div>
-            $tit <input type="hidden1" name="khadamat_factor_id" value="" />
+            $tit <input type="hidden" name="khadamat_factor_id-1" value="$khadamat_factor_id" />
         </div>
         <div id="flight_div">
             <div class="row hs-border hs-padding mm-letter-vaziat-0 hs-margin-up-down">
@@ -258,19 +363,21 @@ PAR;
             </div>
         </div>
 PAR2;
-        $parvaz = generateInputBlock($parvaz1, $parvaz2, $par_det, $typs[1], $f,$cur_sh_sal);
+        $parvaz = generateInputBlock($parvaz1, $parvaz2, $par_det, $typs[1], $f,$cur_sh_sal,$par_obj);
+        //$parvaz = $parvaz1.$par_det.$parvaz2;
     }
     $hotel = '';
     if(isset($typs[2]))
     {
         $hot_obj = new hotel_class();
+        $khadamat_factor_id = $typs[2][0]['khadamat_factor_id'];
         $hot_obj->loadByKhadamatFactor($typs[2][0]['khadamat_factor_id']);
         $tmp = new city_class($hot_obj->maghsad_id);
         $maghsad = $tmp->name;
         $tit = '<div class="col-sm-2 hs-padding">'.$maghsad.'</div>';
         $tit .='<div class="col-sm-2 hs-padding">'.$hot_obj->name.'</div>';
         $tit .='<div class="col-sm-2 hs-padding">'.$hot_obj->shab.'شب'.'</div>';
-        $tit .= '<div class="col-sm-2 hs-padding">'.'تاریخ:'.jdate("d-m-Y",strtotime($par_obj->tarikh)).'</div>';
+        $tit .= '<div class="col-sm-2 hs-padding">'.'تاریخ:'.jdate("d-m-Y",strtotime($hot_obj->tarikh)).'</div>';
         $ho_det = <<<HODET
             <div class="row hs-border hs-padding mm-letter-vaziat-0 hs-margin-up-down">
                 <div class="col-sm-1">
@@ -279,7 +386,7 @@ PAR2;
                 <div class="col-sm-1">
                     <select name="hotel_sex[]" style="width: 80px;">
                         <option>جنسیت</option>
-                        <option value="0"#gender_0#>مونث<option>
+                        <option value="0"#gender_0#>مونث</option>
                         <option value="1"#gender_1#>مذکر</option>
                     </select>
                 </div>
@@ -297,7 +404,7 @@ PAR2;
 HODET;
         $hotel1 = <<<HOT1
             <div class="row hs-border hs-padding hs-margin-up-down hs-gray pointer" onclick="$('#hotel_div').toggle();">
-                <div class="col-sm-2 hs-padding">#khadamat_name#</div>$tit
+                <div class="col-sm-2 hs-padding">#khadamat_name#</div>$tit <input type="hidden" name="khadamat_factor_id-2" value="$khadamat_factor_id" />
             </div>
             <div id="hotel_div">
                 <div class="row hs-border hs-padding mm-letter-vaziat-0 hs-margin-up-down">
@@ -340,12 +447,13 @@ HOT1;
 
 HOT2;
 
-        $hotel = generateInputBlock($hotel1, $hotel2,$ho_det, $typs[2], $f, $cur_sh_sal);
+        $hotel = generateInputBlock($hotel1, $hotel2,$ho_det, $typs[2], $f, $cur_sh_sal,$hot_obj);
     }
     $tour = '';
     if(isset($typs[3]))
     {
         $par_obj = new parvaz_class();
+        $khadamat_factor_id = $typs[3][0]['khadamat_factor_id'];        
         $par_obj->loadByKhadamatFactor($typs[3][0]['khadamat_factor_id']);
         $tmp = new city_class($par_obj->mabda_id);
         $mabda = $tmp->name;
@@ -366,7 +474,7 @@ HOT2;
             <div class="col-sm-1">
                 <select name="tour_gender[]" style="width:80px;">
                     <option>سن</option>
-                    <option value="adl"#age_adl#>Adult<option>
+                    <option value="adl"#age_adl#>Adult</option>
                     <option value="chd"#age_chd#>Child</option>
                     <option value="inf"#age_inf#>Infant</option>
                 </select>
@@ -374,7 +482,7 @@ HOT2;
             <div class="col-sm-1">
                 <select name="tour_sex[]" style="width:80px;">
                     <option>جنسیت</option>
-                    <option value="0"#gender_0#>مونث<option>
+                    <option value="0"#gender_0#>مونث</option>
                     <option value="1"#gender_1#>مذکر</option>
                 </select>
             </div>
@@ -407,7 +515,7 @@ HOT2;
 PARDET;
         $parvaz1 = <<<PAR
         <div class="row hs-border hs-padding hs-margin-up-down hs-gray pointer" onclick="$('#flight_div').toggle();">
-            <div class="col-sm-2 hs-padding">#khadamat_name#</div>$tit
+            <div class="col-sm-2 hs-padding">#khadamat_name#</div>$tit <input type="hidden" name="khadamat_factor_id-3" value="$khadamat_factor_id" />
         </div>
         <div id="flight_div">
             <div class="row hs-border hs-padding mm-letter-vaziat-0 hs-margin-up-down">
@@ -456,11 +564,12 @@ PAR;
             </div>
         </div>
 PAR2;
-        $tour = generateInputBlock($parvaz1, $parvaz2, $par_det, $typs[3], $f,$cur_sh_sal);
+        $tour = generateInputBlock($parvaz1, $parvaz2, $par_det, $typs[3], $f,$cur_sh_sal,$par_obj);
     }
     $visa_melli = '';
     if(isset($typs[4]))
     {
+        $khadamat_factor_id = $typs[4][0]['khadamat_factor_id'];
         $ho_det = <<<HODET
             <div class="row hs-border hs-padding mm-letter-vaziat-0 hs-margin-up-down">
                 <div class="col-sm-1">
@@ -469,7 +578,7 @@ PAR2;
                 <div class="col-sm-1">
                     <select name="visamelli_sex[]" style="width: 80px;">
                         <option>جنسیت</option>
-                        <option value="0"#gender_0#>مونث<option>
+                        <option value="0"#gender_0#>مونث</option>
                         <option value="1"#gender_1#>مذکر</option>
                     </select>
                 </div>
@@ -487,7 +596,7 @@ PAR2;
 HODET;
         $hotel1 = <<<HOT1
             <div class="row hs-border hs-padding hs-margin-up-down hs-gray pointer" onclick="$('#hotel_div').toggle();">
-                #khadamat_name#
+                #khadamat_name#<input type="hidden" name="khadamat_factor_id-4" value="$khadamat_factor_id" />
             </div>
             <div id="hotel_div">
                 <div class="row hs-border hs-padding mm-letter-vaziat-0 hs-margin-up-down">
@@ -535,6 +644,7 @@ HOT2;
     $visa_pass = '';
     if(isset($typs[5]))
     {
+        $khadamat_factor_id = $typs[5][0]['khadamat_factor_id'];
         $ho_det = <<<HODET
             <div class="row hs-border hs-padding mm-letter-vaziat-0 hs-margin-up-down">
                 <div class="col-sm-1">
@@ -543,7 +653,7 @@ HOT2;
                 <div class="col-sm-1">
                     <select name="visapass_sex[]" style="width: 80px;">
                         <option>جنسیت</option>
-                        <option value="0"#gender_0#>مونث<option>
+                        <option value="0"#gender_0#>مونث</option>
                         <option value="1"#gender_1#>مذکر</option>
                     </select>
                 </div>
@@ -561,7 +671,7 @@ HOT2;
 HODET;
         $hotel1 = <<<HOT1
             <div class="row hs-border hs-padding hs-margin-up-down hs-gray pointer" onclick="$('#hotel_div').toggle();">
-                #khadamat_name#
+                #khadamat_name#<input type="hidden" name="khadamat_factor_id-5" value="$khadamat_factor_id" />
             </div>
             <div id="hotel_div">
                 <div class="row hs-border hs-padding mm-letter-vaziat-0 hs-margin-up-down">

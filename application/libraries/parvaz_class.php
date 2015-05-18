@@ -21,6 +21,7 @@ class parvaz_class
         {
             $mysql = new mysql_class;
             $mysql->ex_sql("select * from `parvaz` where `khadamat_factor_id` = $kfid",$q);
+            //echo "select * from `parvaz` where `khadamat_factor_id` = $kfid";
             if(isset($q[0]))
             {
                 $r = $q[0];
@@ -31,7 +32,26 @@ class parvaz_class
     }
     public static function add($parvaz)
     {
+        $my = new mysql_class;
+        $field='';
+        $values = '';
+        foreach($parvaz as $fi=>$val)
+        {
+            $field.= ($field==''?'':',')."`$fi`";
+            $values.= ($values==''?'':',')."'$val'";
+        }
+        $qu = "insert into parvaz ($field) values ($values)";
+        $ln = $my->ex_sqlx($qu,FALSE);
+        $out = $my->insert_id($ln);
+        $my->close($ln);
+        return($out);
+    }
+    public static function loadKhadamat_factor_id($factor_id)
+    {
         
+        $my = new mysql_class;
+        $my->ex_sql("select id from khadamat_factor where factor_id=$factor_id and khadamat_id=1",$q);
+        return(count($q)>0?$q[0]['id']:-1);
     }        
 } 
 

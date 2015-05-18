@@ -12,19 +12,37 @@
         $parvaz1['chd']= (int)$this->input->post('chd');
         $parvaz1['inf']= (int)$this->input->post('inf');
         $parvaz1['airline']= mysql_real_escape_string($this->input->post('airline'));
-        $parvaz1['tarikh_parvaz']= $this->inc_model->jalaliToMiladi($this->input->post('tarikh_parvaz'));
+        $parvaz1['tarikh']= $this->inc_model->jalaliToMiladi($this->input->post('tarikh_parvaz'));
         $parvaz1['airplain']= mysql_real_escape_string($this->input->post('airplain'));
         $parvaz1['saat']= (int)$this->input->post('hour').':'.(int)$this->input->post('minute');
         $parvaz1['saat_vorood']= (int)$this->input->post('hour_v').':'.(int)$this->input->post('minute_v');
         $parvaz1['shomare'] = mysql_real_escape_string($this->input->post('shomare'));
         $parvaz1['is_bargasht'] = 0;
         $parvaz1['class_parvaz']= mysql_real_escape_string($this->input->post('class_parvaz'));
-        var_dump($parvaz1);
-    }    
-    if($this->input->get('s_country_id')!==FALSE)
-    {
-        $out=city_class::loadAll($this->input->get('s_country_id'));
-        die($out);
+        $parvaz1['factor_id'] = (int)$p1;
+        $parvaz1['khadamat_factor_id'] = parvaz_class::loadKhadamat_factor_id((int)$p1);
+        $gohar_voucher_id=11111;
+        $parvaz1['gohar_voucher_id'] = ($this->input->post('raft_check')!==FALSE?-1:$gohar_voucher_id);
+        parvaz_class::add($parvaz1);
+        
+        $parvaz2['mabda_id']= (int)$this->input->post('city_to');
+        $parvaz2['maghsad_id']= (int)$this->input->post('city_from');
+        $parvaz2['adl']= (int)$this->input->post('adl');
+        $parvaz2['chd']= (int)$this->input->post('chd');
+        $parvaz2['inf']= (int)$this->input->post('inf');
+        $parvaz2['airline']= mysql_real_escape_string($this->input->post('airline_b'));
+        $parvaz2['tarikh']= $this->inc_model->jalaliToMiladi($this->input->post('tarikh_parvaz_b'));
+        $parvaz2['airplain']= mysql_real_escape_string($this->input->post('airplain_b'));
+        $parvaz2['saat']= (int)$this->input->post('hour_b').':'.(int)$this->input->post('minute_b');
+        $parvaz2['saat_vorood']= (int)$this->input->post('hour_v_b').':'.(int)$this->input->post('minute_v_b');
+        $parvaz2['shomare'] = mysql_real_escape_string($this->input->post('shomare_b'));
+        $parvaz2['is_bargasht'] = 1;
+        $parvaz2['class_parvaz']= mysql_real_escape_string($this->input->post('class_parvaz_b'));
+        $parvaz2['factor_id'] = (int)$p1;
+        $parvaz2['khadamat_factor_id'] = parvaz_class::loadKhadamat_factor_id((int)$p1);
+        $gohar_voucher_id_b=11111;
+        $parvaz1['gohar_voucher_id'] = ($this->input->post('bargasht_check')!==FALSE?-1:$gohar_voucher_id_b);
+        parvaz_class::add($parvaz2);
     }    
     if((int)$p1==0)
     {
@@ -208,152 +226,158 @@
                 ثبت دستی
             </div>
             <div class="col-sm-12 hs-margin-up-down"  >
+                <input type="checkbox" id="raft_check" name="raft_check" onchange="toggle_raft();" >
                 پرواز رفت
             </div>
-            <div class="col-sm-2" >
-                ایرلاین
-                <select name="airline" style="width:100%" >
-                    <option value="-1">
-                        انتخاب ایرلاین
-                    </option>
-                    <option value="ایران ایر">
-                        ایران ایر
-                    </option>
-                    <option value="آتا">
-                        آتا
-                    </option>
-                </select>
-            </div>
-            <div class="col-sm-2" >
-                کلاس پرواز
-                <input name="class_parvaz" class="form-control" placeholder="کلاس"  >
-            </div>
-            <div class="col-sm-2" >
-                شماره پرواز
-                <input name="shomare" class="form-control" placeholder="شماره پرواز"  >
-            </div>
-            <div class="col-sm-6" >
-                هواپیما
-                <input name="airplain" class="form-control" placeholder="هواپیما"  >
-            </div>
-            <div class="col-sm-2" >
-                تاریخ
-                <input name="tarikh_parvaz" id="tarikh_parvaz" readonly="readonly" class="form-control" placeholder="تاریخ"  >
-            </div>
-            <div class="col-sm-2" >
-                <small>
-                دقیقه خروج
-                </small>
-                <select name="minute" style="width: 100%" >
-                    <?php
-                        echo $this->inc_model->generateOption(59,0,1);
-                    ?>
-                </select>
-            </div>
-            <div class="col-sm-2" >
-                <small>
-                ساعت خروج
-                </small>
-                <select name="hour" style="width: 100%" >                
-                    <?php
-                        echo $this->inc_model->generateOption(23,0,1);
-                    ?>
-                </select>
-            </div>
-            <div class="col-sm-2" >
-                <small>
-                دقیقه ورود
-                </small>
-                <select name="minute_v" style="width: 100%" >
-                    <?php
-                        echo $this->inc_model->generateOption(59,0,1);
-                    ?>
-                </select>
-            </div>
-            <div class="col-sm-2" >
-                <small>
-                ساعت ورود
-                </small>
-                <select name="hour_v" style="width: 100%" >
-                    <?php
-                        echo $this->inc_model->generateOption(23,0,1);
-                    ?>
-                </select>
-                <input type="hidden" name="gohar_voucher_id" id="gohar_voucher_id" >
+            <div id="raft_div" >
+                <div class="col-sm-2" >
+                    ایرلاین
+                    <select name="airline" style="width:100%" >
+                        <option value="-1">
+                            انتخاب ایرلاین
+                        </option>
+                        <option value="ایران ایر">
+                            ایران ایر
+                        </option>
+                        <option value="آتا">
+                            آتا
+                        </option>
+                    </select>
+                </div>
+                <div class="col-sm-2" >
+                    کلاس پرواز
+                    <input name="class_parvaz" class="form-control" placeholder="کلاس"  >
+                </div>
+                <div class="col-sm-2" >
+                    شماره پرواز
+                    <input name="shomare" class="form-control" placeholder="شماره پرواز"  >
+                </div>
+                <div class="col-sm-6" >
+                    هواپیما
+                    <input name="airplain" class="form-control" placeholder="هواپیما"  >
+                </div>
+                <div class="col-sm-2" >
+                    تاریخ
+                    <input name="tarikh_parvaz" id="tarikh_parvaz" readonly="readonly" class="form-control" placeholder="تاریخ"  >
+                </div>
+                <div class="col-sm-2" >
+                    <small>
+                    دقیقه خروج
+                    </small>
+                    <select name="minute" style="width: 100%" >
+                        <?php
+                            echo $this->inc_model->generateOption(59,0,1);
+                        ?>
+                    </select>
+                </div>
+                <div class="col-sm-2" >
+                    <small>
+                    ساعت خروج
+                    </small>
+                    <select name="hour" style="width: 100%" >                
+                        <?php
+                            echo $this->inc_model->generateOption(23,0,1);
+                        ?>
+                    </select>
+                </div>
+                <div class="col-sm-2" >
+                    <small>
+                    دقیقه ورود
+                    </small>
+                    <select name="minute_v" style="width: 100%" >
+                        <?php
+                            echo $this->inc_model->generateOption(59,0,1);
+                        ?>
+                    </select>
+                </div>
+                <div class="col-sm-2" >
+                    <small>
+                    ساعت ورود
+                    </small>
+                    <select name="hour_v" style="width: 100%" >
+                        <?php
+                            echo $this->inc_model->generateOption(23,0,1);
+                        ?>
+                    </select>
+                    <input type="hidden" name="gohar_voucher_id" id="gohar_voucher_id" >
+                </div>
             </div>
             <div class="col-sm-12 hs-margin-up-down"  >
+                <input type="checkbox" id="bargasht_check" name="bargasht_check" onchange="toggle_bargasht();" >
                 پرواز برگشت
             </div>
-            <div class="col-sm-2" >
-                ایرلاین
-                <select name="airline_b" style="width:100%" >
-                    <option value="-1">
-                        انتخاب ایرلاین
-                    </option>
-                    <option value="ایران ایر">
-                        ایران ایر
-                    </option>
-                    <option value="آتا">
-                        آتا
-                    </option>
-                </select>
-            </div>
-            <div class="col-sm-2" >
-                کلاس پرواز
-                <input name="class_parvaz_b" class="form-control" placeholder="کلاس"  >
-            </div>
-            <div class="col-sm-2" >
-                شماره پرواز
-                <input name="shomare_b" class="form-control" placeholder="شماره پرواز"  >
-            </div>
-            <div class="col-sm-6" >
-                هواپیما
-                <input name="airplain_b" class="form-control" placeholder="هواپیما"  >
-            </div>
-            <div class="col-sm-2" >
-                تاریخ
-                <input name="tarikh_parvaz_b" id="tarikh_parvaz_b" readonly="readonly" class="form-control" placeholder="تاریخ"  >
-            </div>
-            <div class="col-sm-2" >
-                <small>
-                دقیقه خروج
-                </small>
-                <select name="minute_b" style="width: 100%" >
-                    <?php
-                        echo $this->inc_model->generateOption(59,0,1);
-                    ?>
-                </select>
-            </div>
-            <div class="col-sm-2" >
-                <small>
-                ساعت خروج
-                </small>
-                <select name="hour_b" style="width: 100%" >                
-                    <?php
-                        echo $this->inc_model->generateOption(23,0,1);
-                    ?>
-                </select>
-            </div>
-            <div class="col-sm-2" >
-                <small>
-                دقیقه ورود
-                </small>
-                <select name="minute_v_b" style="width: 100%" >
-                    <?php
-                        echo $this->inc_model->generateOption(59,0,1);
-                    ?>
-                </select>
-            </div>
-            <div class="col-sm-2" >
-                <small>
-                ساعت ورود
-                </small>
-                <select name="hour_v_b" style="width: 100%" >
-                    <?php
-                        echo $this->inc_model->generateOption(23,0,1);
-                    ?>
-                </select>
-                <input type="hidden" name="gohar_voucher_id_b" id="gohar_voucher_id_b" >
+            <div id="bargasht_div" >
+                <div class="col-sm-2" >
+                    ایرلاین
+                    <select name="airline_b" style="width:100%" >
+                        <option value="-1">
+                            انتخاب ایرلاین
+                        </option>
+                        <option value="ایران ایر">
+                            ایران ایر
+                        </option>
+                        <option value="آتا">
+                            آتا
+                        </option>
+                    </select>
+                </div>
+                <div class="col-sm-2" >
+                    کلاس پرواز
+                    <input name="class_parvaz_b" class="form-control" placeholder="کلاس"  >
+                </div>
+                <div class="col-sm-2" >
+                    شماره پرواز
+                    <input name="shomare_b" class="form-control" placeholder="شماره پرواز"  >
+                </div>
+                <div class="col-sm-6" >
+                    هواپیما
+                    <input name="airplain_b" class="form-control" placeholder="هواپیما"  >
+                </div>
+                <div class="col-sm-2" >
+                    تاریخ
+                    <input name="tarikh_parvaz_b" id="tarikh_parvaz_b" readonly="readonly" class="form-control" placeholder="تاریخ"  >
+                </div>
+                <div class="col-sm-2" >
+                    <small>
+                    دقیقه خروج
+                    </small>
+                    <select name="minute_b" style="width: 100%" >
+                        <?php
+                            echo $this->inc_model->generateOption(59,0,1);
+                        ?>
+                    </select>
+                </div>
+                <div class="col-sm-2" >
+                    <small>
+                    ساعت خروج
+                    </small>
+                    <select name="hour_b" style="width: 100%" >                
+                        <?php
+                            echo $this->inc_model->generateOption(23,0,1);
+                        ?>
+                    </select>
+                </div>
+                <div class="col-sm-2" >
+                    <small>
+                    دقیقه ورود
+                    </small>
+                    <select name="minute_v_b" style="width: 100%" >
+                        <?php
+                            echo $this->inc_model->generateOption(59,0,1);
+                        ?>
+                    </select>
+                </div>
+                <div class="col-sm-2" >
+                    <small>
+                    ساعت ورود
+                    </small>
+                    <select name="hour_v_b" style="width: 100%" >
+                        <?php
+                            echo $this->inc_model->generateOption(23,0,1);
+                        ?>
+                    </select>
+                    <input type="hidden" name="gohar_voucher_id_b" id="gohar_voucher_id_b" >
+                </div>
             </div>
         </div>
         <?php
@@ -461,25 +485,28 @@
             <div class="col-sm-12 hs-gray hs-padding hs-border hs-margin-up-down" >
                 ثبت دستی
             </div>
-            <div class="col-sm-2" >
-                <select id="country_to" name="country_to" style="width: 100%" onchange="loadCity(this);" >
-                    <option value="-1">
-                        کشور مقصد
-                    </option>
-                    <?php
-                        echo country_class::loadAll();
-                    ?>
-                </select>
-            </div>
             <div class="col-sm-2" id="hotel_city_div" >
                 <select id="city_to" name="city_to" style="width: 100%"  >
                     <option value="-1">
                         شهر مقصد
                     </option>
+                    <?php
+                    echo city_class::loadAll(0);
+                    ?>
                 </select>
             </div>
             <div class="col-sm-2" >
                 <input class="form-control" name="hotel_name" placeholder="نام هتل" >
+            </div>
+            <div class="col-sm-2 text-center" >
+                <select name="hotel_star" id="hotel_star" title="ستاره" style="width: 40%" >
+                    <?php
+                        echo $this->inc_model->generateOption(5,1,-1);
+                    ?>
+                </select>
+                <small>
+                ستاره
+                </small>
             </div>
             <div class="col-sm-2" >
                 <input class="dateValue2 form-control" name="hotel_az_tarikh" placeholder="از تاریخ" >
@@ -505,17 +532,6 @@
                     <option value="2" >
                         سوئیت
                     </option> 
-                </select>
-            </div>
-            <div class="col-sm-2 hs-margin-up-down text-center" >
-                ستاره
-                <select name="hotel_star" id="hotel_star" title="ستاره" style="width: 100%" >
-                    <option value="-1" >
-                        انتخاب  
-                    </option>
-                    <?php
-                        echo $this->inc_model->generateOption(5,1,-1);
-                    ?>
                 </select>
             </div>
             <div class="col-sm-2 hs-margin-up-down text-center" >
@@ -570,6 +586,10 @@
     </div>
 </div>
 <script>
+    $(document).ready(function(){
+        $("#raft_div :input").prop("disabled",true);
+        $("#bargasht_div :input").prop("disabled",true);
+    });
     function loadCity(inp)
     {
         ob = { "s_country_id":$(inp).val()};
@@ -604,5 +624,35 @@
                 $("#tarikh_parvaz_b").val(newd);
             }
         },100);
+    }
+    function toggle_raft()
+    {
+        if($("#raft_div :input").prop("disabled"))
+        {    
+            $("#raft_div :input").prop("disabled",false);
+            $("#raft_div :input").css("border","1px solid #3c6e8f");
+            $("#raft_div").find(".select2-selection").css("border","solid 1px #3c6e8f");
+        }    
+        else
+        {    
+            $("#raft_div :input").prop("disabled",true);
+            $("#raft_div :input").css("border","1px solid rgb(169, 169, 169)");
+            $("#raft_div").find(".select2-selection").css("border","1px solid rgb(169, 169, 169)");
+        }    
+    }
+    function toggle_bargasht()
+    {
+        if($("#bargasht_div :input").prop("disabled"))
+        {    
+            $("#bargasht_div :input").prop("disabled",false);
+            $("#bargasht_div :input").css("border","1px solid #3c6e8f");
+            $("#bargasht_div").find(".select2-selection").css("border","solid 1px #3c6e8f");
+        }    
+        else
+        {    
+            $("#bargasht_div :input").prop("disabled",true);
+            $("#bargasht_div :input").css("border","1px solid rgb(169, 169, 169)");
+            $("#bargasht_div").find(".select2-selection").css("border","1px solid rgb(169, 169, 169)");
+        }    
     }
 </script>
