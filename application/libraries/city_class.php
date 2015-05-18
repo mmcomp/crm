@@ -27,6 +27,18 @@ class city_class
         }
         return ($out);
     }        
+    public static function loadAllSel($selected,$country_id=0)
+    {
+        $out='';
+        $my = new mysql_class;
+        $wer = $country_id==0?'':" where country_id=$country_id";
+        $my->ex_sql("select id,name from city $wer order by name", $q);
+        foreach($q as $r)
+        {
+            $out.='<option value="'.$r['id'].'" '.(($selected==(int)$r['id'])?'selected':'').'>'.$r['name'].'</option>';
+        }
+        return ($out);
+    }        
 }
 
 

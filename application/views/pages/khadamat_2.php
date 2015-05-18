@@ -139,8 +139,8 @@
             $id = $mo['id'];
             $khadamat_name = $mo['khadamat_name'];
             $passport = $mo['passport'];
-            $midStr = str_replace('#pindex#', $pindex, $midStr);
-            $midStr1 = str_replace('#age_adl#', $age_adl, $midStr);
+            $midStr1 = str_replace('#pindex#', $pindex, $midStr);
+            $midStr1 = str_replace('#age_adl#', $age_adl, $midStr1);
             $midStr1 = str_replace('#age_chd#', $age_chd, $midStr1);
             $midStr1 = str_replace('#age_inf#', $age_inf, $midStr1);
             $midStr1 = str_replace('#gender_0#', $gender_0, $midStr1);
@@ -162,6 +162,11 @@
         $out = $startStr.$pdet.$endStr;
         return($out);
 
+    }
+    function dateDif($date1,$date2)
+    {
+        $dif = strtotime($date1)-strtotime($date2);
+        return($dif/(24*60*60));
     }
     if ( ! defined('BASEPATH')) exit('No direct script access allowed');
     $factor_id = -1;
@@ -187,23 +192,64 @@
         foreach ($mosafer_id as $i=>$mosafer_id0)
         {
             $tarikh_tavalod = $this->inc_model->jalaliToMiladi($_REQUEST['parvaz_tarikh_tavalod-sal'][$i].'/'.$_REQUEST['parvaz_tarikh_tavalod-mah'][$i].'/'.$_REQUEST['parvaz_tarikh_tavalod-rooz'][$i]);
-            mosafer_class::add($fname[$i], $lname[$i], $code_melli[$i], '', '', $sex[$i], $gender[$i], $tarikh_tavalod, $khadamat_factor_id);
+            mosafer_class::add($fname[$i], $lname[$i], $code_melli[$i], '', '', $sex[$i], $gender[$i], $tarikh_tavalod, $khadamat_factor_id,$mosafer_id0);
             
         }
     }
     if(isset($_REQUEST['hotel_mosafer_id']))
     {
+        $gender = $_REQUEST['hotel_gender'];
         $sex = $_REQUEST['hotel_sex'];
         $mosafer_id = $_REQUEST['hotel_mosafer_id'];
         $fname = $_REQUEST['hotel_fname'];
         $lname = $_REQUEST['hotel_lname'];
         $code_melli = $_REQUEST['hotel_code_melli'];
         $khadamat_factor_id = $_REQUEST['khadamat_factor_id-2'];
-        //$tarikh_tavalod = $this->inc_model->jalaliToMiladi($_REQUEST['parvaz_tarikh_tavalod-sal'].'/'.$_REQUEST['parvaz_tarikh_tavalod-mah'].'/'.$_REQUEST['parvaz_tarikh_tavalod-rooz']);
         foreach ($mosafer_id as $i=>$mosafer_id0)
         {
-            //mosafer_class::add($fname, $lname, $code_melli, '', '', $gender, $age, $tarikh_tavalod, $khadamat_factor_id);
+            mosafer_class::add($fname[$i], $lname[$i], $code_melli[$i], '', '', $sex[$i], $gender[$i], '', $khadamat_factor_id,$mosafer_id0);
         }
+        
+    }
+    if(isset($_REQUEST['hotel_room_id']))
+    {
+        $my = new mysql_class;
+        $hotel_room_id = $_REQUEST['hotel_room_id'];
+        $qq = array();
+        foreach ($hotel_room_id as $idx=>$hid)
+                $qq[$idx] = '';
+        if(isset($_REQUEST['hotel_trans_raft_city']))
+        {
+            $raft_city = $_REQUEST['hotel_trans_raft_city'];
+            $raft_airline = $_REQUEST['hotel_trans_raft_airline'];
+            $raft_shomare = $_REQUEST['hotel_trans_raft_shomare'];
+            $raft_vorood = $_REQUEST['hotel_trans_raft_saat_vorood'];
+            $raft_khorooj = $_REQUEST['hotel_trans_raft_saat_khorooj'];
+            foreach($raft_city as $idx=>$rc)
+                $qq[$idx] = " `raft_city` = ".(int)$rc." , `raft_airline` = ".(int)$raft_airline[$idx]." , `raft_shomare` = '".$raft_shomare[$idx]."' , `raft_saat_vorood` = '".$raft_vorood[$idx]."', `raft_saat_khorooj` = '".$raft_khorooj[$idx]."'";
+        }
+        if(isset($_REQUEST['hotel_trans_bargasht_city']))
+        {
+            $bargasht_city = $_REQUEST['hotel_trans_bargasht_city'];
+            $bargasht_airline = $_REQUEST['hotel_trans_bargasht_airline'];
+            $bargasht_shomare = $_REQUEST['hotel_trans_bargasht_shomare'];
+            $bargasht_vorood = $_REQUEST['hotel_trans_bargasht_saat_vorood'];
+            $bargasht_khorooj = $_REQUEST['hotel_trans_bargasht_saat_khorooj'];
+            foreach($bargasht_city as $idx=>$rc)
+                $qq[$idx] .=(($qq[$idx]!='')?',':'') . " `bargasht_city` = ".(int)$rc." , `bargasht_airline` = ".(int)$bargasht_airline[$idx]." , `bargasht_shomare` = '".$bargasht_shomare[$idx]."' , `bargasht_saat_vorood` = '".$bargasht_vorood[$idx]."', `bargasht_saat_khorooj` = '".$bargasht_khorooj[$idx]."'";
+        }
+        if(isset($_REQUEST['hotel_trans_vasat_city']))
+        {
+            $vasat_city = $_REQUEST['hotel_trans_vasat_city'];
+            $vasat_airline = $_REQUEST['hotel_trans_vasat_airline'];
+            $vasat_shomare = $_REQUEST['hotel_trans_vasat_shomare'];
+            $vasat_vorood = $_REQUEST['hotel_trans_vasat_saat_vorood'];
+            $vasat_khorooj = $_REQUEST['hotel_trans_vasat_saat_khorooj'];
+            foreach($vasat_city as $idx=>$rc)
+                $qq[$idx] .=(($qq[$idx]!='')?',':'') . " `vasat_city` = ".(int)$rc." , `vasat_airline` = ".(int)$vasat_airline[$idx]." , `vasat_shomare` = '".$vasat_shomare[$idx]."' , `vasat_saat_vorood` = '".$vasat_vorood[$idx]."', `vasat_saat_khorooj` = '".$vasat_khorooj[$idx]."'";
+        }
+        foreach($hotel_room_id as $indx=>$hrid)
+            $my->ex_sqlx("update `hotel_room` set ".$qq[$indx]." where `id` = $hrid");
     }
 //----------UPDATING End----------    
     $msg = '';
@@ -372,16 +418,26 @@ PAR2;
         $hot_obj = new hotel_class();
         $khadamat_factor_id = $typs[2][0]['khadamat_factor_id'];
         $hot_obj->loadByKhadamatFactor($typs[2][0]['khadamat_factor_id']);
+        $hot_obj->shab = dateDif($hot_obj->ta_tarikh, $hot_obj->az_tarikh);
         $tmp = new city_class($hot_obj->maghsad_id);
         $maghsad = $tmp->name;
+        
         $tit = '<div class="col-sm-2 hs-padding">'.$maghsad.'</div>';
         $tit .='<div class="col-sm-2 hs-padding">'.$hot_obj->name.'</div>';
         $tit .='<div class="col-sm-2 hs-padding">'.$hot_obj->shab.'شب'.'</div>';
-        $tit .= '<div class="col-sm-2 hs-padding">'.'تاریخ:'.jdate("d-m-Y",strtotime($hot_obj->tarikh)).'</div>';
+        $tit .= '<div class="col-sm-2 hs-padding">'.'تاریخ:'.jdate("d-m-Y",strtotime($hot_obj->az_tarikh)).'</div>';
         $ho_det = <<<HODET
             <div class="row hs-border hs-padding mm-letter-vaziat-0 hs-margin-up-down">
                 <div class="col-sm-1">
                     #pindex#
+                </div>
+                <div class="col-sm-1">
+                    <select name="hotel_gender[]" style="width:80px;">
+                        <option>سن</option>
+                        <option value="adl"#age_adl#>Adult</option>
+                        <option value="chd"#age_chd#>Child</option>
+                        <option value="inf"#age_inf#>Infant</option>
+                    </select>
                 </div>
                 <div class="col-sm-1">
                     <select name="hotel_sex[]" style="width: 80px;">
@@ -394,7 +450,7 @@ PAR2;
                     <input type="hidden" name="hotel_mosafer_id[]" value="#id#" />
                     <input name="hotel_fname[]" class="form-control same same_fname" placeholder="نام *" value="#fname#">
                 </div>
-                <div class="col-sm-5">
+                <div class="col-sm-4">
                     <input name="hotel_lname[]" class="form-control same same_lname" placeholder="نام خانوادگی *" value="#lname#">
                 </div>
                 <div class="col-sm-2">
@@ -447,7 +503,188 @@ HOT1;
 
 HOT2;
 
-        $hotel = generateInputBlock($hotel1, $hotel2,$ho_det, $typs[2], $f, $cur_sh_sal,$hot_obj);
+        $tra1 = <<<TR1
+        <div class="row hs-border hs-padding hs-margin-up-down hs-gray pointer" onclick="$('#hotel_room_div').toggle();">
+            ترانسفر فرودگاهی
+        </div>
+        <div id="hotel_room_div">
+                #hoty#
+        </div>
+TR1;
+        $tra3_raft = <<<RAFT
+                    <div class="row">
+                        <div class="col-sm-2">
+                            رفت
+                        </div>
+                        <div class="col-sm-2">
+                            <select name="hotel_trans_raft_city[#indx#]" style="width: 80px;"> 
+                                <option>شهر</option>
+                                #city#
+                            </select>
+                        </div>
+                        <div class="col-sm-1">
+                            <select name="hotel_trans_raft_airline[#indx#]" style="width: 80px;"> 
+                                <option>ایرلاین</option>
+                                #airline#
+                            </select>
+                        </div>
+                        <div class="col-sm-2">
+                            <input name="hotel_trans_raft_shomare[#indx#]" placeholder="شماره پرواز" class="form-control" value="#shomare#"/>
+                        </div>
+                        <div class="col-sm-2">
+                            <input name="hotel_trans_raft_saat_vorood[#indx#]" placeholder="ساعت ورود" class="form-control" value="#saat_vorood#"/>
+                        </div>
+                        <div class="col-sm-2">
+                            <input name="hotel_trans_raft_saat_khorooj[#indx#]" placeholder="ساعت خروج" class="form-control" value="#saat_khorooj#"/>
+                        </div>
+                    </div>
+
+RAFT;
+        $tra3_vasat = <<<RAFT
+                    <div class="row">
+                        <div class="col-sm-2">
+                            وسط
+                        </div>
+                        <div class="col-sm-2">
+                            <select name="hotel_trans_vasat_city[#indx#]" style="width: 80px;"> 
+                                <option>شهر</option>
+                                #city#
+                            </select>
+                        </div>
+                        <div class="col-sm-1">
+                            <select name="hotel_trans_vasat_airline[#indx#]" style="width: 80px;"> 
+                                <option>ایرلاین</option>
+                                #airline#
+                            </select>
+                        </div>
+                        <div class="col-sm-2">
+                            <input name="hotel_trans_vasat_shomare[#indx#]" placeholder="شماره پرواز" class="form-control" value="#shomare#"/>
+                        </div>
+                        <div class="col-sm-2">
+                            <input name="hotel_trans_vasat_saat_vorood[#indx#]" placeholder="ساعت ورود" class="form-control" value="#saat_vorood#"/>
+                        </div>
+                        <div class="col-sm-2">
+                            <input name="hotel_trans_vasat_saat_khorooj[#indx#]" placeholder="ساعت خروج" class="form-control" value="#saat_khorooj#"/>
+                        </div>
+                    </div>
+
+RAFT;
+        $tra3_bargasht = <<<BRG
+                    <div class="row">
+                        <div class="col-sm-2">
+                            برگشت
+                        </div>
+                        <div class="col-sm-2">
+                            <select name="hotel_trans_bragasht_city[#indx#]" style="width: 80px;"> 
+                                <option>شهر</option>
+                                #city#
+                            </select>
+                        </div>
+                        <div class="col-sm-1">
+                            <select name="hotel_trans_bargasht_airline[#indx#]" style="width: 80px;"> 
+                                <option>ایرلاین</option>
+                                #airline#
+                            </select>
+                        </div>
+                        <div class="col-sm-2">
+                            <input name="hotel_trans_bargasht_shomare[#indx#]" placeholder="شماره پرواز" class="form-control" value="#shomare#"/>
+                        </div>
+                        <div class="col-sm-2">
+                            <input name="hotel_trans_bargasht_saat_vorood[#indx#]" placeholder="ساعت ورود" class="form-control" value="#saat_vorood#"/>
+                        </div>
+                        <div class="col-sm-2">
+                            <input name="hotel_trans_bargasht_saat_khorooj[#indx#]" placeholder="ساعت خروج" class="form-control" value="#saat_khorooj#"/>
+                        </div>
+                    </div>
+BRG;
+        $tra2 = <<<TR2
+            <div class="row hs-border hs-padding mm-letter-vaziat-0 hs-margin-up-down">
+                <div class="col-sm-1">
+                    اتاق  #indx#
+                </div>
+                <div class="col-sm-2">
+                    رفت/برگشت
+                </div>
+                <div class="col-sm-2">
+                    شهر 
+                </div>
+                <div class="col-sm-1">
+                    ایرلاین
+                </div>
+                <div class="col-sm-2">
+                    شماره پرواز
+                </div>
+                <div class="col-sm-2">
+                    ساعت ورود
+                </div>
+                <div class="col-sm-2">
+                    ساعت خروج
+                </div>
+            </div>
+            <div class="row hs-border hs-padding mm-letter-vaziat-0 hs-margin-up-down">
+                <div class="col-sm-1" style="line-height: #hei#px;">
+                    #name#<input type="hidden" name="hotel_room_id[#indx#]" value="#hrid#" />
+                </div>
+                <div class="col-sm-11">
+                    #raft#
+                    #vasat#
+                    #bargasht#
+                </div>
+            </div>
+TR2;
+        $tra = '';
+        $hr = hotel_room_class::loadByFactorId($factor_id);
+        foreach($hr as $i=>$hrr)
+        {
+            $tr2_tmp = $tra2;
+            $hei = 50;
+            $r=(int)$hrr['transfer_raft']+(int)$hrr['transfer_vasat']+(int)$hrr['transfer_bargasht'];
+            if($r-2>0)
+                $hei = $hei*($r-1);
+            if((int)$hrr['transfer_raft']==1)
+            {
+                $tra3_raft1 = str_replace("#city#", city_class::loadAllSel($hrr['raft_city']), $tra3_raft);
+                $tra3_raft1 = str_replace("#airline#", airline_class::loadAll($hrr['raft_airline']), $tra3_raft1);
+                $tra3_raft1 = str_replace("#shomare#", $hrr['raft_shomare'], $tra3_raft1);
+                $tra3_raft1 = str_replace("#saat_vorood#", $hrr['raft_saat_vorood'], $tra3_raft1);
+                $tra3_raft1 = str_replace("#saat_khorooj#", $hrr['raft_saat_khorooj'], $tra3_raft1);
+                $tr2_tmp = str_replace("#raft#", $tra3_raft1, $tr2_tmp);
+            }
+            else
+                $tr2_tmp = str_replace("#raft#", '', $tr2_tmp);
+            if((int)$hrr['transfer_vasat']==1)
+            {
+                $tra3_raft1 = str_replace("#city#", city_class::loadAllSel($hrr['vasat_city']), $tra3_vasat);
+                $tra3_raft1 = str_replace("#airline#", airline_class::loadAll($hrr['vasat_airline']), $tra3_raft1);
+                $tra3_raft1 = str_replace("#shomare#", $hrr['vasat_shomare'], $tra3_raft1);
+                $tra3_raft1 = str_replace("#saat_vorood#", $hrr['vasat_saat_vorood'], $tra3_raft1);
+                $tra3_raft1 = str_replace("#saat_khorooj#", $hrr['vasat_saat_khorooj'], $tra3_raft1);
+                $tr2_tmp = str_replace("#vasat#", $tra3_raft1, $tr2_tmp);
+            }
+            else
+                $tr2_tmp = str_replace("#vasat#", '', $tr2_tmp);
+            if((int)$hrr['transfer_bargasht']==1)
+            {
+                $tra3_raft1 = str_replace("#city#", city_class::loadAllSel($hrr['bargasht_city']), $tra3_bargasht);
+                $tra3_raft1 = str_replace("#airline#", airline_class::loadAll($hrr['bargasht_airline']), $tra3_raft1);
+                $tra3_raft1 = str_replace("#shomare#", $hrr['bargasht_shomare'], $tra3_raft1);
+                $tra3_raft1 = str_replace("#saat_vorood#", $hrr['bargasht_saat_vorood'], $tra3_raft1);
+                $tra3_raft1 = str_replace("#saat_khorooj#", $hrr['bargasht_saat_khorooj'], $tra3_raft1);
+                $tr2_tmp = str_replace("#bargasht#", $tra3_raft1, $tr2_tmp);
+            }
+            else
+                $tr2_tmp = str_replace("#bargasht#", '', $tr2_tmp);
+            $tr2_tmp = str_replace("#indx#", $i+1, $tr2_tmp);
+            $tr2_tmp = str_replace("#hrid#", $hrr['id'], $tr2_tmp);
+            $tr2_tmp = str_replace("#name#", $hrr['name'], $tr2_tmp);
+            $tr2_tmp = str_replace("#hei#", $hei, $tr2_tmp);
+            $tra .= $tr2_tmp;
+        }
+        if(count($hr)>0)
+            $tra1 = str_replace("#hoty#", $tra, $tra1);
+        else
+            $tra1 = '';
+        $hotel = generateInputBlock($hotel1, $hotel2,$ho_det, $typs[2], $f, $cur_sh_sal,$hot_obj).$tra1;
     }
     $tour = '';
     if(isset($typs[3]))
@@ -742,20 +979,21 @@ HOT2;
     </div>
     <div class="col-sm-10" >
         <?php echo $hotel.$tour.$visa_melli.$visa_pass; ?>
-        <div class="hs-float-left hs-margin-up-down">
-            <button href="" class="btn hs-btn-default btn-lg" >
-                ادامه
-                <span class="glyphicon glyphicon-chevron-left"></span>
-            </button>
-        </div>
-        <div class="hs-float-right hs-margin-up-down">
-            <a href="<?php echo site_url().'khadamat_1/'.$factor_id; ?>" class="btn hs-btn-default btn-lg" >
-                <span class="glyphicon glyphicon-chevron-right"></span>
-                مرحله قبلی
-            </a>
-        </div>
+    </div>
+    <div class="hs-float-left hs-margin-up-down">
+        <button href="" class="btn hs-btn-default btn-lg" >
+            ادامه
+            <span class="glyphicon glyphicon-chevron-left"></span>
+        </button>
     </div>
     </form>
+    <div class="hs-float-right hs-margin-up-down">
+        <a href="<?php echo site_url().'khadamat_1/'.$factor_id; ?>" class="btn hs-btn-default btn-lg" >
+            <span class="glyphicon glyphicon-chevron-right"></span>
+            مرحله قبلی
+        </a>
+    </div>
+
 </div>
 <script>
     function toggle_profile()

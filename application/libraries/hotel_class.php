@@ -29,7 +29,29 @@ class hotel_class
             }
         }
     }
-
+    public static function loadKhadamat_factor_id($factor_id)
+    {
+        $my = new mysql_class;
+        $my->ex_sql("select id from khadamat_factor where factor_id=$factor_id and khadamat_id=2",$q);
+        return(count($q)>0?$q[0]['id']:-1);
+    }
+    public static function add($hotel)
+    {
+        $my = new mysql_class;
+        $field='';
+        $values = '';
+        foreach($hotel as $fi=>$val)
+        {
+            $field.= ($field==''?'':',')."`$fi`";
+            $values.= ($values==''?'':',')."'$val'";
+        }
+        $qu = "insert into hotel ($field) values ($values)";
+        echo $qu;
+        $ln = $my->ex_sqlx($qu,FALSE);
+        $out = $my->insert_id($ln);
+        $my->close($ln);
+        return($out);
+    }
 }
 
 

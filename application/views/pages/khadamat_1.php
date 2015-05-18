@@ -43,7 +43,22 @@
         $gohar_voucher_id_b=11111;
         $parvaz1['gohar_voucher_id'] = ($this->input->post('bargasht_check')!==FALSE?-1:$gohar_voucher_id_b);
         parvaz_class::add($parvaz2);
-    }    
+    }
+    if($this->input->post('city_to_hotel')!==FALSE)
+    {
+        $hotel['maghsad_id'] = (int)$this->input->post('city_to_hotel');
+        $hotel['az_tarikh'] = $this->inc_model->jalaliToMiladi($this->input->post('az_tarikh_hotel'));
+        $hotel['ta_tarikh'] = $this->inc_model->jalaliToMiladi($this->input->post('ta_tarikh_hotel'));
+        $hotel['adl'] = (int)$this->input->post('hotel_adl');
+        $hotel['chd'] = (int)$this->input->post('hotel_chd');
+        $hotel['inf'] = (int)$this->input->post('hotel_inf');
+        $hotel['name'] = trim($this->input->post('hotel_name'));
+        $hotel['star'] = (int)$this->input->post('hotel_star');
+        $hotel['room_count'] = (int)$this->input->post('room_count');
+        $hotel['factor_id'] = (int)$p1;
+        $hotel['khadamat_factor_id'] = hotel_class::loadKhadamat_factor_id((int)$p1);
+        hotel_class::add($hotel);
+    } 
     if((int)$p1==0)
     {
         show_404();
@@ -102,7 +117,7 @@
                 </select>
             </div>
             <div class="col-sm-6 hs-margin-up-down" >
-                <select id="city_to" name="city_to" style="width: 100%"  >
+                <select id="city_to" name="city_to" style="width: 100%" onchange="changeHotelCity();" >
                     <option value="-1">
                         انتخاب مقصد
                     </option>
@@ -112,10 +127,10 @@
                 </select>
             </div>
             <div class="col-sm-6 hs-margin-up-down"  >
-                <input class="dateValue2 form-control" placeholder="از تاریخ" onblur="fillRaft(this);" >
+                <input class="dateValue2 form-control" placeholder="از تاریخ" onblur="fillRaft(this);" name="az_tarikh" id="az_tarikh" >
             </div>
             <div class="col-sm-6 hs-margin-up-down"  >
-                <input class="dateValue2 form-control" placeholder="تا تاریخ" onblur="fillBargasht(this)" >
+                <input class="dateValue2 form-control" placeholder="تا تاریخ" onblur="fillBargasht(this)" name="ta_tarikh" id="ta_tarikh" >
             </div>
             <div class="col-sm-4 hs-margin-up-down" >
                 تعداد بزرگسال: 
@@ -388,8 +403,19 @@
             <div class="col-sm-12 hs-btn-default hs-padding hs-border"  >
                 جستجوی هتل
             </div>
-            <div class="col-sm-6 col-sm-offset-6 hs-margin-up-down" >
-                <select id="city_to" name="city_to_hotel" style="width: 100%"  >
+            <div class="col-sm-6 hs-margin-up-down" >
+                <select class="form-control" name="hotel_room_count" id="hotel_room_count" style="width: 100%" onchange="showHotelExtra()" >
+                    <option value="-1" >
+                        تعداد اتاق
+                    </option>
+                    <?php
+                        echo $this->inc_model->generateOption(6,1,1);
+                    ?>
+                </select>
+                <input type="hidden" name="gohar_hotel_id" id="gohar_flight_id" >
+            </div>
+            <div class="col-sm-6 hs-margin-up-down" >
+                <select id="city_to_hotel" name="city_to_hotel" style="width: 100%"  >
                     <option value="-1">
                         انتخاب مقصد
                     </option>
@@ -399,30 +425,14 @@
                 </select>
             </div>
             <div class="col-sm-6 hs-margin-up-down"  >
-                <input class="dateValue2 form-control" placeholder="از تاریخ" >
+                <input class="dateValue2 form-control" placeholder="از تاریخ" name="az_tarikh_hotel" id="az_tarikh_hotel" onblur="fillHotel(this)" >
             </div>
             <div class="col-sm-6 hs-margin-up-down"  >
-                <input class="dateValue2 form-control" placeholder="تا تاریخ" >
+                <input class="dateValue2 form-control" placeholder="تا تاریخ" name="ta_tarikh_hotel" id="ta_tarikh_hotel" onblur="fillShab(this)" >
             </div>
-            <div class="col-sm-4 hs-margin-up-down" >
-                تعداد بزرگسال: 
-                <select name="hotel_adl" style="width: 50px;" >
-                    <?php echo $this->inc_model->generateOption(9,1,1); ?>
-                </select>
+            <div id="nafarat_div" class="col-sm-12 hs-margin-up-down" >
             </div>
-            <div class="col-sm-4 hs-margin-up-down" >
-                تعداد کودک: 
-                <select name="hotel_chd" style="width: 50px;" >
-                    <?php echo $this->inc_model->generateOption(9,0,1); ?>
-                </select>
-            </div> 
-            <div class="col-sm-4 hs-margin-up-down" >
-                تعداد نوزاد: 
-                <select name="hotel_inf" style="width: 50px;" >
-                    <?php echo $this->inc_model->generateOption(9,0,1); ?>
-                </select>
-            </div>
-            <div class="col-sm-6 hs-margin-up-down"  onclick="$('#hotel_results').toggle()" >
+            <div class="col-sm-12 hs-margin-up-down"  onclick="$(\'#hotel_results\').toggle()" >
                 <a class="btn hs-btn-default" >
                     جستجوی هتل در گوهر
                 </a>
@@ -485,31 +495,21 @@
             <div class="col-sm-12 hs-gray hs-padding hs-border hs-margin-up-down" >
                 ثبت دستی
             </div>
-            <div class="col-sm-2" id="hotel_city_div" >
-                <select id="city_to" name="city_to" style="width: 100%"  >
-                    <option value="-1">
-                        شهر مقصد
-                    </option>
-                    <?php
-                    echo city_class::loadAll(0);
-                    ?>
-                </select>
-            </div>
-            <div class="col-sm-2" >
+            <div class="col-sm-6" >
                 <input class="form-control" name="hotel_name" placeholder="نام هتل" >
             </div>
-            <div class="col-sm-2 text-center" >
-                <select name="hotel_star" id="hotel_star" title="ستاره" style="width: 40%" >
+            <div class="col-sm-1 text-left" >
+                <select name="hotel_star" id="hotel_star" title="ستاره" style="width: 100%" >
                     <?php
                         echo $this->inc_model->generateOption(5,1,-1);
                     ?>
                 </select>
-                <small>
+            </div>
+            <div class="col-sm-1 text-right" >
                 ستاره
-                </small>
             </div>
             <div class="col-sm-2" >
-                <input class="dateValue2 form-control" name="hotel_az_tarikh" placeholder="از تاریخ" >
+                <input class="dateValue2 form-control" name="hotel_az_tarikh" id="hotel_az_tarikh" placeholder="از تاریخ" >
             </div>
             <div class="col-sm-2" >
                 <select class="form-control" name="hotel_shab" style="width: 100%">
@@ -521,48 +521,8 @@
                     ?>
                 </select>
             </div>
-            <div class="col-sm-2" >
-                <select class="form-control" name="hotel_room_type" style="width: 100%">
-                    <option value="-1" >
-                        نوع اتاق
-                    </option>
-                    <option value="1" >
-                        دوتخته
-                    </option>   
-                    <option value="2" >
-                        سوئیت
-                    </option> 
-                </select>
-            </div>
-            <div class="col-sm-2 hs-margin-up-down text-center" >
-                سرویس اضافه
-                <select name="extra_service" id="hotel_star" title="سرویس اضافه" style="width: 100%" >
-                    <?php
-                        echo $this->inc_model->generateOption(5,0,1);
-                    ?>
-                </select>
-            </div>
-            <div class="col-sm-2 hs-margin-up-down text-center" >
-                گشت
-                <input class="form-control" type="checkbox" >
-            </div>
-            <div class="col-sm-2 hs-margin-up-down text-center" >
-                ترانسفر رفت
-                <input class="form-control" type="checkbox" >
-            </div>
-            <div class="col-sm-2 hs-margin-up-down text-center" >
-                ترانسفر میانی
-                <input class="form-control" type="checkbox" >
-            </div>
-            <div class="col-sm-2 hs-margin-up-down text-center" >
-                ترانسفر برگشت
-                <input class="form-control" type="checkbox" >
-            </div>
-            <div class="col-sm-2 hs-margin-up-down text-center" >
-                پذیرایی
-                <input class="form-control" type="checkbox" >
-                <input type="hidden" name="gohar_hotel_id" id="gohar_flight_id" >
-            </div>
+            
+            <div id="hotel_extra_div" ></div>
         </div>
         <?php
         } endif;
@@ -598,7 +558,7 @@
             console.log(res);
             var tt = '<select id="city_to" name="city_to" style="width: 100%"  ><option value="-1">شهر مقصد</option>'+res+'</select>';
             $("#hotel_city_div").html(tt);
-            $('#hotel_city_div select').select2({dir:'rtl'});
+            $('#hotel_city_div :select').select2({dir:'rtl'});
         });
     }
     function fillRaft(inp)
@@ -610,6 +570,13 @@
                 var newd = tt[2]+'/'+tt[1]+'/'+tt[0];
                 $(inp).val(newd);
                 $("#tarikh_parvaz").val(newd);
+                if($("#az_tarikh_hotel").length>0)
+                {
+                    $("#az_tarikh_hotel").val(newd);
+                    $("#az_tarikh_hotel").prop("disabled",true);
+                    $("#hotel_az_tarikh").val(newd);
+                    $("#hotel_az_tarikh").prop("disabled",true);
+                }    
             }    
         },100);
     }
@@ -622,6 +589,11 @@
                 var newd = tt[2]+'/'+tt[1]+'/'+tt[0];
                 $(inp).val(newd);
                 $("#tarikh_parvaz_b").val(newd);
+                if($("#ta_tarikh_hotel").length>0)
+                {
+                    $("#ta_tarikh_hotel").val(newd);
+                    $("#ta_tarikh_hotel").prop("disabled",true);
+                } 
             }
         },100);
     }
@@ -654,5 +626,106 @@
             $("#bargasht_div :input").css("border","1px solid rgb(169, 169, 169)");
             $("#bargasht_div").find(".select2-selection").css("border","1px solid rgb(169, 169, 169)");
         }    
+    }
+    function showHotelExtra()
+    {
+        var tt = "<div class='col-sm-3 hs-margin-up-down text-center' >\
+                    نام اتاق \
+                    <input type='text' class='form-control' name='room_name[]' >\
+                </div>\
+                <div class='col-sm-2 hs-margin-up-down text-center' >\
+                    ظرفیت بزرگسال\
+                    <select name='extra_service[]' class='hotel_extra' title='سرویس اضافه' style='width: 100%' > <?php echo str_replace('"','\"',$this->inc_model->generateOption(5,0,1)); ?>\
+                    </select> \
+                </div>\
+                <div class='col-sm-2 hs-margin-up-down text-center' >\
+                    ظرفیت کودک\
+                    <select name='extra_service[]' class='hotel_extra' title='سرویس اضافه' style='width: 100%' > <?php echo str_replace('"','\"',$this->inc_model->generateOption(5,0,1)); ?>\
+                    </select> \
+                </div>\
+                <div class='col-sm-1 hs-margin-up-down text-center' >\
+                    <small>\
+                    گشت\
+                    </small>\
+                    <input class='form-control' type='checkbox' name='gasht[]' >\
+                </div>\
+                <div class='col-sm-1 hs-margin-up-down text-center' >\
+                    <small>\
+                    ت. رفت\
+                    </small>\
+                    <input class='form-control' type='checkbox' name='transfer_raft[]' >\
+                </div>\
+                <div class='col-sm-1 hs-margin-up-down text-center' >\
+                    <small>\
+                    ت. میانی\
+                    </small>\
+                    <input class='form-control' type='checkbox' name='transfer_vasat[]' >\
+                </div>\
+                <div class='col-sm-1 hs-margin-up-down text-center' >\
+                    <small>\
+                    ت. برگشت\
+                    </small>\
+                    <input class='form-control' type='checkbox' name='transfer_bargasht[]' >\
+                </div>\
+                <div class='col-sm-1 hs-margin-up-down text-center' >\
+                    <small>\
+                    پذیرایی\
+                    </small>\
+                    <input class='form-control' type='checkbox' name='paziraii[]' >\
+                </div>";
+        var nafarat = '<div class="col-sm-4 hs-margin-up-down" > \
+                تعداد بزرگسال: \
+                <select name="hotel_adl[]" style="width: 50px;" class="hotel_extra" >\
+                    <?php echo $this->inc_model->generateOption(9,1,1); ?>\
+                </select>\
+            </div>\
+            <div class="col-sm-4 hs-margin-up-down" >\
+                تعداد کودک: \
+                <select name="hotel_chd[]" style="width: 50px;" class="hotel_extra" >\
+                    <?php echo $this->inc_model->generateOption(9,0,1); ?>\
+                </select>\
+            </div> \
+            <div class="col-sm-4 hs-margin-up-down" >\
+                تعداد نوزاد: \
+                <select name="hotel_inf[]" style="width: 50px;" class="hotel_extra" >\
+                    <?php echo $this->inc_model->generateOption(9,0,1); ?>\
+                </select>\
+            </div>\
+            ';                
+        var tedad = parseInt($("#hotel_room_count").val(),10);
+        $("#hotel_extra_div").html('');
+        $("#nafarat_div").html('');
+        for(var i=0;i<tedad;i++)
+        {
+            $("#hotel_extra_div").append(tt);
+            $("#nafarat_div").append(nafarat);
+        }
+        $(".hotel_extra") .select2({
+            dir:"rtl"
+        });
+    }
+    function changeHotelCity()
+    {
+        if($("#city_to_hotel").length>0)
+        {
+            $("#city_to_hotel").val($("#city_to").val());
+            $("#city_to_hotel").prop("disabled",true);
+            $("#city_to_hotel").select2({
+                dir:"rtl"
+            });
+        }   
+    }
+    function fillHotel(inp)
+    {
+        setTimeout(function(){
+            var tt  = $(inp).val().split('/');
+            if(tt.length>1)
+            {    
+                var newd = tt[2]+'/'+tt[1]+'/'+tt[0];
+                $(inp).val(newd);
+                $("#hotel_az_tarikh").val(newd);
+                $("#hotel_az_tarikh").prop("disabled",true);   
+            }    
+        },100);
     }
 </script>

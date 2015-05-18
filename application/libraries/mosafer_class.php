@@ -15,13 +15,21 @@
                 }
             }
         }
-        public static function add($fname,$lname,$code_melli,$passport, $passport_engheza, $gender, $age, $tarikh_tavalod, $khadamat_factor_id)
+        public static function add($fname,$lname,$code_melli,$passport, $passport_engheza, $gender, $age, $tarikh_tavalod,$khadamat_factor_id, $mos_id=-1)
         {
             $mysql = new mysql_class;
-            echo "insert into `mosafer` (`fname`, `lname`, `code_melli`, `passport`, `passport_engheza`, `gender`, `age`, `tarikh_tavalod`, `khadamat_factor_id`) values ('$fname','$lname','$code_melli','$passport', '$passport_engheza', $gender, '$age', '$tarikh_tavalod', $khadamat_factor_id)";
-            $ln = $mysql->ex_sqlx("insert into `mosafer` (`fname`, `lname`, `code_melli`, `passport`, `passport_engheza`, `gender`, `age`, `tarikh_tavalod`, `khadamat_factor_id`) values ('$fname','$lname','$code_melli','$passport', '$passport_engheza', $gender, '$age', '$tarikh_tavalod', $khadamat_factor_id)",FALSE);
-            $id = $mysql->insert_id($ln);
-            $mysql->close($ln);
+            $mos_id=(int)$mos_id;
+            if($mos_id>0)
+            {
+                $id = $mos_id;
+                $mysql->ex_sqlx("update `mosafer` set `fname` = '$fname' , `lname` = '$lname', `code_melli` = '$code_melli', `passport` = '$passport', `passport_engheza` = '$passport_engheza', `gender` =  $gender, `age` = '$age', `tarikh_tavalod` = '$tarikh_tavalod', `khadamat_factor_id` = '$khadamat_factor_id' where `id` = $mos_id");
+            }
+            else
+            {
+                $ln = $mysql->ex_sqlx("insert into `mosafer` (`fname`, `lname`, `code_melli`, `passport`, `passport_engheza`, `gender`, `age`, `tarikh_tavalod`, `khadamat_factor_id`) values ('$fname','$lname','$code_melli','$passport', '$passport_engheza', $gender, '$age', '$tarikh_tavalod', $khadamat_factor_id)",FALSE);
+                $id = $mysql->insert_id($ln);
+                $mysql->close($ln);
+            }
             return($id);
         }
         public static function loadByFactor($factor_id)
