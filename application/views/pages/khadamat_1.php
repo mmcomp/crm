@@ -6,13 +6,15 @@
         $user_id1 = (int)$p1;
     if($this->input->post('city_from')!==FALSE)
     {
+        //var_dump($_REQUEST);
+        //echo $this->inc_model->jalaliToMiladi($_REQUEST['']);
         $parvaz1['mabda_id']= (int)$this->input->post('city_from');
         $parvaz1['maghsad_id']= (int)$this->input->post('city_to');
         $parvaz1['adl']= (int)$this->input->post('adl');
         $parvaz1['chd']= (int)$this->input->post('chd');
         $parvaz1['inf']= (int)$this->input->post('inf');
         $parvaz1['airline']= ($this->input->post('airline'));
-        $parvaz1['tarikh']= $this->inc_model->jalaliToMiladi($this->input->post('tarikh_parvaz'));
+        $parvaz1['tarikh']= $this->inc_model->jalaliToMiladi($this->input->post('az_tarikh'));
         $parvaz1['airplain']= ($this->input->post('airplain'));
         $parvaz1['saat']= (int)$this->input->post('hour').':'.(int)$this->input->post('minute');
         $parvaz1['saat_vorood']= (int)$this->input->post('hour_v').':'.(int)$this->input->post('minute_v');
@@ -42,8 +44,8 @@
         $parvaz2['factor_id'] = (int)$p1;
         $parvaz2['khadamat_factor_id'] = parvaz_class::loadKhadamat_factor_id((int)$p1);
         $gohar_voucher_id_b=11111;
-        $parvaz1['gohar_voucher_id'] = ($this->input->post('bargasht_check')!==FALSE?-1:$gohar_voucher_id_b);
-        $parvaz1['parvaz_id'] =(int) $this->input->post('parvaz_id_b');
+        $parvaz2['gohar_voucher_id'] = ($this->input->post('bargasht_check')!==FALSE?-1:$gohar_voucher_id_b);
+        $parvaz2['parvaz_id'] =(int) $this->input->post('parvaz_id_b');
         parvaz_class::add($parvaz2);
     }
     if($this->input->post('city_to_hotel')!==FALSE)
@@ -247,7 +249,7 @@
                         انتخاب مقصد
                     </option>
                     <?php
-                        echo city_class::loadAll(isset($parvaz['bargasht']->mabda_id->maghsad_id)?$parvaz['bargasht']->maghsad_id:'');
+                        echo city_class::loadAll(isset($parvaz['raft']->maghsad_id)?$parvaz['raft']->maghsad_id:'');
                     ?>
                 </select>
             </div>
@@ -281,86 +283,7 @@
                 </a>
             </div>
             <div class="col-sm-12" id="flight_results" style="display: none;"  >
-                <table class="table table-bordered table-responsive">
-                    <tr>
-                        <td>
-                            
-                        </td>
-                        <td>
-                            ایرلاین
-                        </td>
-                        <td>
-                            شماره
-                        </td>
-                        <td>
-                            تاریخ
-                        </td>
-                        <td>
-                            ساعت
-                        </td>
-                        <td>
-                            تأمین کننده
-                        </td>
-                        <td>
-                            ظرفیت
-                        </td>
-                        <td>
-                            قسمت
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <input type="checkbox" >
-                        </td>
-                        <td>
-                            آتا
-                        </td>
-                        <td>
-                            5264
-                        </td>
-                        <td>
-                            1394-02-23
-                        </td>
-                        <td>
-                            22:40
-                        </td>
-                        <td>
-                            سامان سیر رسپینا
-                        </td>
-                        <td>
-                            7
-                        </td>
-                        <td>
-                            1,080,000
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <input type="checkbox" >
-                        </td>
-                        <td>
-                            ایران ایر
-                        </td>
-                        <td>
-                            269
-                        </td>
-                        <td>
-                            1394-02-23
-                        </td>
-                        <td>
-                            22:20
-                        </td>
-                        <td>
-                            سامان سیر رسپینا
-                        </td>
-                        <td>
-                            5
-                        </td>
-                        <td>
-                            1,100,000
-                        </td>
-                    </tr>
-                </table>
+                
             </div>
             <div class="col-sm-12 hs-gray hs-padding hs-border hs-margin-up-down" >
                 ثبت دستی
@@ -532,7 +455,7 @@
                 <small>
                 تعداد اتاق:
                 </small>
-                <input readonly="readonly" class="hs-border" name="hotel_room_count" style="width: 40%" id="hotel_room_count" value="<?php echo isset($hot->room_count)?$hot->room_count:''; ?>" >
+                <input readonly="readonly" class="hs-border" name="hotel_room_count" style="width: 40%" id="hotel_room_count" value="<?php echo isset($hot->room_count)?$hot->room_count:'0'; ?>" >
                 <big><span class="glyphicon glyphicon-plus-sign pointer" onclick="showHotelExtra()" ></span></big>
                 <input type="hidden" name="gohar_hotel_id" id="gohar_flight_id" >
             </div>

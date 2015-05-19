@@ -170,10 +170,10 @@
         return($dif/(24*60*60));
     }
     if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-    /*
+    
     $o = $this->parvaz_model->loadAll("mhd","thr","1394-01-01","1395-01-01",array(724,800));
     var_dump($o);
-    */
+    
     $factor_id = -1;
     if(trim($p1)!='')
         $factor_id = (int)$p1;

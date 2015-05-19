@@ -35,18 +35,36 @@ class parvaz_class
         $my = new mysql_class;
         $field='';
         $values = '';
-        foreach($parvaz as $fi=>$val)
-        {
-            if($parvaz)
-            $field.= ($field==''?'':',')."`$fi`";
-            $values.= ($values==''?'':',')."'$val'";
+        if($parvaz['parvaz_id']<=0)
+        {    
+            foreach($parvaz as $fi=>$val)
+            {
+                if($fi!='parvaz_id')
+                {    
+                    $field.= ($field==''?'':',')."`$fi`";
+                    $values.= ($values==''?'':',')."'$val'";
+                }
+            }
+            $qu = "insert into parvaz ($field) values ($values)";
+            echo $qu;
+            $ln = $my->ex_sqlx($qu,FALSE);
+            $out = $my->insert_id($ln);
+            $my->close($ln);
         }
-        $qu = "insert into parvaz ($field) values ($values)";
-        echo $qu;
-        //$ln = $my->ex_sqlx($qu,FALSE);
-        //$out = $my->insert_id($ln);
-        //$my->close($ln);
-        $out='';
+        else
+        {
+            foreach($parvaz as $fi=>$val)
+            {
+                if($fi!='parvaz_id')
+                {    
+                    $field.= ($field==''?'':',')."`$fi`='$val'";
+                }
+            }
+            $qu = "update parvaz set $field where id=".$parvaz['parvaz_id'];
+            echo $qu;
+            $out = $my->ex_sqlx($qu);
+        }
+        //$out='';
         return($out);
     }
     public static function loadKhadamat_factor_id($factor_id)
