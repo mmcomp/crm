@@ -14,6 +14,16 @@ class parvaz_class
                     $this->$k = $v;
             }
         }
+    }    
+    public function loadByFactor($id)
+    {
+        $q = array();
+        if((int)$id > 0)
+        {
+            $mysql = new mysql_class;
+            $mysql->ex_sql("SELECT mabda.name mab ,maghsad.name mag,tarikh FROM `parvaz` left join city mabda on (mabda.id=mabda_id) left join city maghsad on (maghsad.id=maghsad_id) where `factor_id` = $id",$q);
+        }
+        return($q);
     }
     public function loadByKhadamatFactor($kfid)
     {

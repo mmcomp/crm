@@ -14,7 +14,17 @@ class hotel_class
                     $this->$k = $v;
             }
         }
-    }  
+    }
+    public function loadByFactor($id)
+    {
+        $q = array();
+        if((int)$id > 0)
+        {
+            $mysql = new mysql_class;
+            $mysql->ex_sql("SELECT maghsad.name ,az_tarikh,ta_tarikh FROM `hotel` left join city maghsad on (maghsad.id=maghsad_id) where `factor_id` = $id",$q);
+        }
+        return($q);
+    } 
     public function loadByKhadamatFactor($kfid)
     {
         if((int)$kfid > 0)

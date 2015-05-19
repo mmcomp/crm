@@ -1,12 +1,12 @@
 <?php
     if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-    $msg = '';
+    $next = FALSE;
     $user_id1 = $user_id;
     if(trim($p1)!='')
         $user_id1 = (int)$p1;
+    factor_class::marhale((int)$p1,'khadamat_1');
     if($this->input->post('city_from')!==FALSE)
     {
-        //var_dump($_REQUEST);
         //echo $this->inc_model->jalaliToMiladi($_REQUEST['']);
         $parvaz1['mabda_id']= (int)$this->input->post('city_from');
         $parvaz1['maghsad_id']= (int)$this->input->post('city_to');
@@ -27,6 +27,7 @@
         $parvaz1['gohar_voucher_id'] = ($this->input->post('raft_check')!==FALSE?-1:$gohar_voucher_id);
         $parvaz1['parvaz_id'] =(int) $this->input->post('parvaz_id');
         parvaz_class::add($parvaz1);
+        //var_dump($parvaz1);
         
         $parvaz2['mabda_id']= (int)$this->input->post('city_to');
         $parvaz2['maghsad_id']= (int)$this->input->post('city_from');
@@ -47,6 +48,8 @@
         $parvaz2['gohar_voucher_id'] = ($this->input->post('bargasht_check')!==FALSE?-1:$gohar_voucher_id_b);
         $parvaz2['parvaz_id'] =(int) $this->input->post('parvaz_id_b');
         parvaz_class::add($parvaz2);
+        $next = TRUE;
+        //var_dump($parvaz2);
     }
     if($this->input->post('city_to_hotel')!==FALSE)
     {
@@ -85,7 +88,12 @@
             $hotel_room[$i]['khadamat_factor_id'] = $hotel['khadamat_factor_id'];
         }
         hotel_class::add($hotel,$hotel_room);
-    } 
+        $next = TRUE;
+    }
+    if($next)
+    {
+        redirect('khadamat_2/'.$p1);
+    }    
     if((int)$p1==0)
     {
         show_404();
@@ -224,9 +232,10 @@
     echo $this->inc_model->loadProgress(1,$p1);
     ?>
     </div>
-    <form action="" method="POST" >
+    <form action="" method="POST" id="frm_khadamat_1" >
     <div class="col-sm-10" >
-        <?php if(in_array('1',$include_types) || in_array('3',$include_types)): { ?>
+        <?php 
+        if(in_array('1',$include_types) || in_array('3',$include_types)): { ?>
         <div class="row hs-border hs-margin-up-down">
             <div class="col-sm-12 hs-btn-default hs-padding hs-border"  >
                 جستجوی پرواز
@@ -262,19 +271,19 @@
             <div class="col-sm-4 hs-margin-up-down" >
                 تعداد بزرگسال: 
                 <select name="adl" style="width: 50px;" >
-                    <?php echo $this->inc_model->generateOption(9,1,1); ?>
+                    <?php echo $this->inc_model->generateOption(9,1,1,$parvaz['raft']->adl); ?>
                 </select>
             </div>
             <div class="col-sm-4 hs-margin-up-down" >
                 تعداد کودک: 
                 <select name="chd" style="width: 50px;" >
-                    <?php echo $this->inc_model->generateOption(9,0,1); ?>
+                    <?php echo $this->inc_model->generateOption(9,0,1,$parvaz['raft']->chd); ?>
                 </select>
             </div> 
             <div class="col-sm-4 hs-margin-up-down" >
                 تعداد نوزاد: 
                 <select name="inf" style="width: 50px;" >
-                    <?php echo $this->inc_model->generateOption(9,0,1); ?>
+                    <?php echo $this->inc_model->generateOption(9,0,1,$parvaz['raft']->inf); ?>
                 </select>
             </div>
             <div class="col-sm-12 hs-margin-up-down"  >
@@ -297,31 +306,28 @@
                     ایرلاین
                     <select name="airline" style="width:100%" >
                         <option value="-1">
-                            انتخاب ایرلاین
+                            انتخاب 
                         </option>
-                        <option value="ایران ایر">
-                            ایران ایر
-                        </option>
-                        <option value="آتا">
-                            آتا
-                        </option>
+                        <?php
+                            echo airline_class::loadAll(isset($parvaz['raft']->airline)?$parvaz['raft']->airline:'');
+                        ?>
                     </select>
                 </div>
                 <div class="col-sm-2" >
                     کلاس پرواز
-                    <input name="class_parvaz" class="form-control" placeholder="کلاس"  >
+                    <input name="class_parvaz" class="form-control" placeholder="کلاس" value="<?php echo isset($parvaz['raft']->class_parvaz)?$parvaz['raft']->class_parvaz:''; ?>"  >
                 </div>
                 <div class="col-sm-2" >
                     شماره پرواز
-                    <input name="shomare" class="form-control" placeholder="شماره پرواز"  >
+                    <input name="shomare" class="form-control" placeholder="شماره پرواز" value="<?php echo isset($parvaz['raft']->shomare)?$parvaz['raft']->shomare:''; ?>"  >
                 </div>
                 <div class="col-sm-6" >
                     هواپیما
-                    <input name="airplain" class="form-control" placeholder="هواپیما"  >
+                    <input name="airplain" class="form-control" placeholder="هواپیما"  value="<?php echo isset($parvaz['raft']->airplain)?$parvaz['raft']->airplain:''; ?>" >
                 </div>
                 <div class="col-sm-2" >
                     تاریخ
-                    <input name="tarikh_parvaz" id="tarikh_parvaz" readonly="readonly" class="form-control" placeholder="تاریخ"  >
+                    <input name="tarikh_parvaz" id="tarikh_parvaz" readonly="readonly" class="form-control" placeholder="تاریخ" value="<?php echo isset($parvaz['raft']->tarikh)?jdate("Y/m/d",strtotime($parvaz['raft']->tarikh)):'';?>" >
                 </div>
                 <div class="col-sm-2" >
                     <small>
@@ -329,7 +335,13 @@
                     </small>
                     <select name="minute" style="width: 100%" >
                         <?php
-                            echo $this->inc_model->generateOption(59,0,1);
+                            $min = '';
+                            if(isset($parvaz['raft']->saat))
+                            {
+                                $tt = explode(':',$parvaz['raft']->saat);
+                                $min = $tt[1];
+                            }    
+                            echo $this->inc_model->generateOption(59,0,1,$min);
                         ?>
                     </select>
                 </div>
@@ -339,7 +351,13 @@
                     </small>
                     <select name="hour" style="width: 100%" >                
                         <?php
-                            echo $this->inc_model->generateOption(23,0,1);
+                            $sa = '';
+                            if(isset($parvaz['raft']->saat))
+                            {
+                                $tt = explode(':',$parvaz['raft']->saat);
+                                $sa = $tt[0];
+                            }
+                            echo $this->inc_model->generateOption(23,0,1,$sa);
                         ?>
                     </select>
                 </div>
@@ -349,7 +367,13 @@
                     </small>
                     <select name="minute_v" style="width: 100%" >
                         <?php
-                            echo $this->inc_model->generateOption(59,0,1);
+                            $min = '';
+                            if(isset($parvaz['raft']->saat_vorood))
+                            {
+                                $tt = explode(':',$parvaz['raft']->saat_vorood);
+                                $min = $tt[1];
+                            }
+                            echo $this->inc_model->generateOption(59,0,1,$min);
                         ?>
                     </select>
                 </div>
@@ -359,7 +383,13 @@
                     </small>
                     <select name="hour_v" style="width: 100%" >
                         <?php
-                            echo $this->inc_model->generateOption(23,0,1);
+                            $sa = '';
+                            if(isset($parvaz['raft']->saat_vorood))
+                            {
+                                $tt = explode(':',$parvaz['raft']->saat_vorood);
+                                $sa = $tt[0];
+                            }
+                            echo $this->inc_model->generateOption(23,0,1,$sa);
                         ?>
                     </select>
                     <input type="hidden" name="gohar_voucher_id" id="gohar_voucher_id" >
@@ -374,31 +404,28 @@
                     ایرلاین
                     <select name="airline_b" style="width:100%" >
                         <option value="-1">
-                            انتخاب ایرلاین
+                            انتخاب 
                         </option>
-                        <option value="ایران ایر">
-                            ایران ایر
-                        </option>
-                        <option value="آتا">
-                            آتا
-                        </option>
+                        <?php
+                            echo airline_class::loadAll(isset($parvaz['bargasht']->airline)?$parvaz['bargasht']->airline:'');
+                        ?>
                     </select>
                 </div>
                 <div class="col-sm-2" >
                     کلاس پرواز
-                    <input name="class_parvaz_b" class="form-control" placeholder="کلاس"  >
+                    <input name="class_parvaz_b" class="form-control" placeholder="کلاس" value="<?php echo isset($parvaz['bargasht']->class_parvaz)?$parvaz['bargasht']->class_parvaz:''; ?>" >
                 </div>
                 <div class="col-sm-2" >
                     شماره پرواز
-                    <input name="shomare_b" class="form-control" placeholder="شماره پرواز"  >
+                    <input name="shomare_b" class="form-control" placeholder="شماره پرواز" value="<?php echo isset($parvaz['bargasht']->shomare)?$parvaz['bargasht']->shomare:''; ?>"  >
                 </div>
                 <div class="col-sm-6" >
                     هواپیما
-                    <input name="airplain_b" class="form-control" placeholder="هواپیما"  >
+                    <input name="airplain_b" class="form-control" placeholder="هواپیما" value="<?php echo isset($parvaz['bargasht']->airplain)?$parvaz['bargasht']->airplain:''; ?>" >
                 </div>
                 <div class="col-sm-2" >
                     تاریخ
-                    <input name="tarikh_parvaz_b" id="tarikh_parvaz_b" readonly="readonly" class="form-control" placeholder="تاریخ"  >
+                    <input name="tarikh_parvaz_b" id="tarikh_parvaz_b" readonly="readonly" class="form-control" placeholder="تاریخ" value="<?php echo isset($parvaz['bargasht']->tarikh)?jdate("Y/m/d",strtotime($parvaz['bargasht']->tarikh)):'';?>" >
                 </div>
                 <div class="col-sm-2" >
                     <small>
@@ -406,7 +433,13 @@
                     </small>
                     <select name="minute_b" style="width: 100%" >
                         <?php
-                            echo $this->inc_model->generateOption(59,0,1);
+                            $min = '';
+                            if(isset($parvaz['bargasht']->saat))
+                            {
+                                $tt = explode(':',$parvaz['bargasht']->saat);
+                                $min = $tt[1];
+                            }  
+                            echo $this->inc_model->generateOption(59,0,1,$min);
                         ?>
                     </select>
                 </div>
@@ -416,7 +449,13 @@
                     </small>
                     <select name="hour_b" style="width: 100%" >                
                         <?php
-                            echo $this->inc_model->generateOption(23,0,1);
+                            $sa = '';
+                            if(isset($parvaz['bargasht']->saat))
+                            {
+                                $tt = explode(':',$parvaz['bargasht']->saat);
+                                $sa = $tt[0];
+                            }
+                            echo $this->inc_model->generateOption(23,0,1,$sa);
                         ?>
                     </select>
                 </div>
@@ -426,7 +465,13 @@
                     </small>
                     <select name="minute_v_b" style="width: 100%" >
                         <?php
-                            echo $this->inc_model->generateOption(59,0,1);
+                            $min = '';
+                            if(isset($parvaz['bargasht']->saat_vorood))
+                            {
+                                $tt = explode(':',$parvaz['bargasht']->saat_vorood);
+                                $min = $tt[1];
+                            }
+                            echo $this->inc_model->generateOption(59,0,1,$min);
                         ?>
                     </select>
                 </div>
@@ -436,7 +481,13 @@
                     </small>
                     <select name="hour_v_b" style="width: 100%" >
                         <?php
-                            echo $this->inc_model->generateOption(23,0,1);
+                            $sa = '';
+                            if(isset($parvaz['bargasht']->saat_vorood))
+                            {
+                                $tt = explode(':',$parvaz['bargasht']->saat_vorood);
+                                $sa = $tt[0];
+                            }
+                            echo $this->inc_model->generateOption(23,0,1,$sa);
                         ?>
                     </select>
                     <input type="hidden" name="gohar_voucher_id_b" id="gohar_voucher_id_b" >
@@ -447,7 +498,7 @@
         } endif;
         if(in_array('2',$include_types) || in_array('3',$include_types)): {
         ?>
-        <div class="row hs-border">
+        <div class="row hs-border" id="hotel_div" >
             <div class="col-sm-12 hs-btn-default hs-padding hs-border"  >
                 جستجوی هتل
             </div>
@@ -460,20 +511,20 @@
                 <input type="hidden" name="gohar_hotel_id" id="gohar_flight_id" >
             </div>
             <div class="col-sm-6 hs-margin-up-down" >
-                <select id="city_to_hotel" name="city_to_hotel" style="width: 100%"  >
+                <select id="city_to_hotel" name="city_to_hotel" style="width: 100%" <?php echo isset($parvaz['raft']->maghsad_id)?'disabled':''; ?>  >
                     <option value="-1">
                         انتخاب مقصد
                     </option>
                     <?php
-                        echo city_class::loadAll(isset($hot->maghsad_id)?$hot->maghsad_id:'');
+                        echo city_class::loadAll(isset($parvaz['raft']->maghsad_id)?$parvaz['raft']->maghsad_id:(isset($hot->maghsad_id)?$hot->maghsad_id:''));
                     ?>
                 </select>
             </div>
             <div class="col-sm-6 hs-margin-up-down"  >
-                <input class="dateValue2 form-control" placeholder="از تاریخ" name="az_tarikh_hotel" id="az_tarikh_hotel" onblur="fillHotel(this)" value="<?php echo isset($hot->az_tarikh)?jdate("Y/m/d",strtotime($hot->az_tarikh)):'';?>" >
+                <input class="dateValue2 form-control" placeholder="از تاریخ" name="az_tarikh_hotel" id="az_tarikh_hotel" onblur="fillHotel(this)" value="<?php echo isset($parvaz['raft']->tarikh)?jdate("Y/m/d",strtotime($parvaz['raft']->tarikh)):(isset($hot->az_tarikh)?jdate("Y/m/d",strtotime($hot->az_tarikh)):'');?>" <?php echo isset($parvaz['raft']->tarikh)?'disabled':''; ?> >
             </div>
             <div class="col-sm-6 hs-margin-up-down"  >
-                <input class="dateValue2 form-control" placeholder="تا تاریخ" name="ta_tarikh_hotel" id="ta_tarikh_hotel" onblur="fillShab(this)" value="<?php echo isset($hot->ta_tarikh)?jdate("Y/m/d",strtotime($hot->ta_tarikh)):'';?>" >
+                <input class="dateValue2 form-control" placeholder="تا تاریخ" name="ta_tarikh_hotel" id="ta_tarikh_hotel" onblur="fillShab(this)" value="<?php echo isset($parvaz['bargasht']->tarikh)?jdate("Y/m/d",strtotime($parvaz['bargasht']->tarikh)):(isset($hot->ta_tarikh)?jdate("Y/m/d",strtotime($hot->ta_tarikh)):'');?>" <?php echo isset($parvaz['bargasht']->tarikh)?'disabled':''; ?> >
             </div>
             <div id="nafarat_div" class="col-sm-12 hs-margin-up-down" >
                 <?php
@@ -486,59 +537,7 @@
                 </a>
             </div>
             <div class="col-sm-12" id="hotel_results" style="display: none;"  >
-                <table class="table table-bordered table-responsive">
-                    <tr>
-                        <td>
-                            
-                        </td>
-                        <td>
-                            نام هتل
-                        </td>
-                        <td>
-                            تاریخ
-                        </td>
-                        <td>
-                            نوع اتاق
-                        </td>
-                        <td>
-                            قیمت
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <input type="checkbox" >
-                        </td>
-                        <td>
-                            شایان
-                        </td>
-                        <td>
-                            1394-02-23
-                        </td>
-                        <td>
-                            دوتخته
-                        </td>
-                        <td>
-                            1,080,000
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <input type="checkbox" >
-                        </td>
-                        <td>
-                         آراد
-                        </td>
-                        <td>
-                            1394-02-23
-                        </td>
-                        <td>
-                            سوئیت
-                        </td>
-                        <td>
-                            1,100,000
-                        </td>
-                    </tr>
-                </table>
+                
             </div>        
             <div class="col-sm-12 hs-gray hs-padding hs-border hs-margin-up-down" >
                 ثبت دستی
@@ -558,7 +557,7 @@
                 ستاره
             </div>
             <div class="col-sm-2" >
-                <input readonly="readonly" class="form-control" name="hotel_az_tarikh" id="hotel_az_tarikh" placeholder="از تاریخ" value="<?php echo isset($hot->az_tarikh)?jdate("Y/m/d",strtotime($hot->az_tarikh)):''; ?>" >
+                <input readonly="readonly" class="form-control" name="hotel_az_tarikh" id="hotel_az_tarikh" placeholder="از تاریخ" value="<?php echo isset($parvaz['raft']->tarikh)?jdate("Y/m/d",strtotime($parvaz['raft']->tarikh)):(isset($hot->az_tarikh)?jdate("Y/m/d",strtotime($hot->az_tarikh)):''); ?>" >
             </div>
             <div class="col-sm-2" >
                 <input readonly="readonly" class="form-control" name="hotel_shab" placeholder="تعداد شب" value="<?php echo $shab; ?>" >
@@ -573,10 +572,10 @@
         } endif;
         ?>
         <div class="hs-float-left hs-margin-up-down">
-            <button href="" class="btn hs-btn-default btn-lg" >
+            <a class="btn hs-btn-default btn-lg" onclick="contin()" >
                 ادامه
                 <span class="glyphicon glyphicon-chevron-left"></span>
-            </button>
+            </a>
         </div>
     </form>
     <form action="<?php echo site_url(); ?>profile" method="POST" >
@@ -814,5 +813,12 @@
                 $("#hotel_az_tarikh").prop("disabled",true);   
             }    
         },100);
+    }
+    function contin()
+    {
+        $("#raft_div :input").prop("disabled",false);
+        $("#bargasht_div :input").prop("disabled",false);
+        $("#hotel_div :input").prop("disabled",false);;
+        $("#frm_khadamat_1").submit();
     }
 </script>

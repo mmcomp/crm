@@ -171,12 +171,13 @@
     }
     if ( ! defined('BASEPATH')) exit('No direct script access allowed');
     
-    $o = $this->parvaz_model->loadAll("mhd","thr","1394-01-01","1395-01-01",array(724,800));
-    var_dump($o);
+    //$o = $this->parvaz_model->loadAll("mhd","thr","1394-01-01","1395-01-01",array(724,800));
+    //var_dump($o);
     
     $factor_id = -1;
     if(trim($p1)!='')
         $factor_id = (int)$p1;
+    factor_class::marhale($factor_id, "khadamat_2");
 //----------UPDATING Start--------
     //var_dump($_REQUEST);
     if(isset($_REQUEST['parvaz_mosafer_id']))
@@ -1000,8 +1001,6 @@ HOT2;
         ?>
 
         <?php echo $parvaz; ?>
-    </div>
-    <div class="col-sm-10" >
         <?php echo $hotel.$tour.$visa_melli.$visa_pass; ?>
         <div class="hs-float-left hs-margin-up-down">
             <button href="" class="btn hs-btn-default btn-lg" >

@@ -12,7 +12,7 @@ class Inc_model extends CI_Model {
     {
             //$this->load->database();
     }
-    public static function monize($str)
+    public static function monize($str,$per=FALSE)
     {
         $out=$str;
         $out=str_replace(',','',$out);
@@ -31,7 +31,7 @@ class Inc_model extends CI_Model {
                 }
         }                
         $out=$tmp;
-        return enToPerNums($out);
+        return (($per===FALSE)?$out:nc_model::enToPerNums($out));
     }
     public static function umonize($str){
         $out=$str;

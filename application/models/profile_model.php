@@ -106,6 +106,12 @@ class Profile_model extends CI_Model {
     }
     public function loadMenu()
     {
+        /*
+         * یک  = ارشد
+         * دو = کانتر
+         *  سه = مشتری
+         *  چهار = حسابدار
+         */
         $menu_and_paper = array(
             1 => array(
                 "صفحه اصلی" => site_url()."home",
@@ -117,11 +123,13 @@ class Profile_model extends CI_Model {
                 "پیشنویس ها" => site_url()."paper_cartable/pishnevis",
                 "پروفایل" => site_url()."profile",
                 "گزارش فروش" => site_url()."sale_report",
+                "چاپ فرم" => site_url()."print_form",
                 "مدیریت کاربران"=> site_url()."user_edit"
             ),
             2 => array(
                 "صفحه اصلی" => site_url()."home",
                 "ثبت مشتری جدید" => site_url()."new_user",
+                "چاپ فرم" => site_url()."print_form",
                 "کارتابل" => site_url()."paper_cartable/normal",
                 "ثبت نامه جدید" => site_url()."paper_new",
                 "نامه های ارسالی" => site_url()."paper_cartable/sent",
@@ -137,7 +145,17 @@ class Profile_model extends CI_Model {
                 "بایگانی" => site_url()."paper_cartable/archive",
                 "پیشنویس ها" => site_url()."paper_cartable/pishnevis",
                 "پروفایل" => site_url()."profile"        
-            )
+            ),
+            4 => array(
+                "صفحه اصلی" => site_url()."home",
+                "تایید پیش‌فاکتور" => site_url()."hesab_factor",
+                "کارتابل" => site_url()."paper_cartable/normal",
+                "ثبت نامه جدید" => site_url()."paper_new",
+                "نامه های ارسالی" => site_url()."paper_cartable/sent",
+                "بایگانی" => site_url()."paper_cartable/archive",
+                "پیشنویس ها" => site_url()."paper_cartable/pishnevis",
+                "پروفایل" => site_url()."profile"        
+            ),
         );
         $menu_no_paper = array(
             1 => array(
@@ -145,17 +163,25 @@ class Profile_model extends CI_Model {
                 "ثبت مشتری جدید" => site_url()."register",
                 "پروفایل" => site_url()."profile",
                 "گزارش فروش" => "sale_report",
+                "چاپ فرم" => site_url()."print_form",
                 "مدیریت کاربران"=> site_url()."user_edit"
             ),
             2 => array(
                 "صفحه اصلی" => site_url()."home",
                 "ثبت مشتری جدید" => site_url()."new_user",
+                "چاپ فرم" => site_url()."print_form",
                 "پروفایل" => site_url()."profile"        
             ),
             3 => array(
                 "صفحه اصلی" => site_url()."home",
                 "پروفایل" => site_url()."profile"        
-            )
+            ),
+            4 => array(
+                "صفحه اصلی" => site_url()."home",
+                "ثبت مشتری جدید" => site_url()."new_user",
+                "تایید پیش‌فاکتور" => site_url()."hesab_factor",
+                "پروفایل" => site_url()."profile"        
+            ),
         );
         $conf = new conf();
         if($conf->hasPaper===TRUE)

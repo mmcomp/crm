@@ -34,5 +34,23 @@
                     $out[] = $r['typ'];    
             }
             return($out);
-        }        
+        }
+        public static function loadByUser($user_id,$all = FALSE)
+        {
+            $my= new mysql_class;
+            $my->ex_sql("select * from `factor` where `user_id` = $user_id ".(($all===FALSE)?' and `is_tasfieh` = 0':''),$q);
+            return($q);
+        }
+        public static function marhale($factor_id,$name)
+        {
+            $my = new mysql_class;
+            $my->ex_sqlx("update factor set marhale='$name' where id=$factor_id");
+            return(TRUE);
+        }
+        public static function tasfie($factor_id)
+        {
+            $date = date("Y-m-d H:i:s");
+            $my = new mysql_class;
+            $my->ex_sqlx("update `factor` set `is_tasfieh`=1,`tarikh_tasfieh`='$date' where id=$factor_id");
+        }
     }

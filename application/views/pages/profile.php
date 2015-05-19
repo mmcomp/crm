@@ -15,6 +15,7 @@
         {
             $id = $factor_id;
         }
+        //$m->ex_sqlx("update `factor` set `marhale` = 'khadamat_1' where `id` = $id");
         if(isset($_REQUEST['khadamat']))
         {
             foreach($_REQUEST['khadamat'] as $kh)

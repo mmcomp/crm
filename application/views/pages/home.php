@@ -10,7 +10,15 @@
         }
         else
         {
-            redirect("profile?s_user_id=".$user_obj->id);
+            $u = new user_class($user_id);
+            if((int)$u->group_id==4)
+            {
+                redirect("hesab_factor/".$user_obj->id);
+            }
+            else
+            {
+                redirect("profile?s_user_id=".$user_obj->id);
+            }
         }
     }
 
