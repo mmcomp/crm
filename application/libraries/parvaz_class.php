@@ -37,13 +37,16 @@ class parvaz_class
         $values = '';
         foreach($parvaz as $fi=>$val)
         {
+            if($parvaz)
             $field.= ($field==''?'':',')."`$fi`";
             $values.= ($values==''?'':',')."'$val'";
         }
         $qu = "insert into parvaz ($field) values ($values)";
-        $ln = $my->ex_sqlx($qu,FALSE);
-        $out = $my->insert_id($ln);
-        $my->close($ln);
+        echo $qu;
+        //$ln = $my->ex_sqlx($qu,FALSE);
+        //$out = $my->insert_id($ln);
+        //$my->close($ln);
+        $out='';
         return($out);
     }
     public static function loadKhadamat_factor_id($factor_id)
@@ -52,10 +55,32 @@ class parvaz_class
         $my->ex_sql("select id from khadamat_factor where factor_id=$factor_id and khadamat_id=1",$q);
         return(count($q)>0?$q[0]['id']:-1);
     }        
-    public static function laodByFactor_id($factor_id)
+    public function loadByFactor_id($factor_id)
     {
-        //$my = new mysql_class;
-        //$my->ex_sql("select * from parvaz where factor_id=$factor_id", $q);
-    }        
+        $my = new mysql_class;
+        $my->ex_sql("select * from parvaz where factor_id=$factor_id", $q);
+        $out=array();
+        foreach($q as $r)
+        {
+            $tmp = new parvaz_class;
+            if((int)$r['is_bargasht']==0)
+            {    
+                foreach($r as $k=>$v)
+                {    
+                    $tmp->$k = $v;
+                }
+                $out['raft'] = $tmp;
+            }
+            else
+            {
+                foreach($r as $k=>$v)
+                {    
+                    $tmp->$k = $v;
+                }
+                $out['bargasht'] = $tmp;
+            }
+        }
+        return($out);
+    }         
 } 
 

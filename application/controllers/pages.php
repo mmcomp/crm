@@ -8,6 +8,7 @@ class Pages extends CI_Controller {
         $this->load->model('profile_model');
         $this->load->model('letter_model');
         $this->load->model('cartable_model');
+        $this->load->model('parvaz_model');
         
         $this->load->library('conf');
         $this->load->library('mysql_class');

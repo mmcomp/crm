@@ -1,5 +1,6 @@
 <?php
-    function perToEnNums($inNum){
+    function perToEnNums($inNum)
+    {
         $outp = $inNum;
         $outp = str_replace('۰', '0', $outp);
         $outp = str_replace('۱', '1', $outp);
@@ -169,6 +170,10 @@
         return($dif/(24*60*60));
     }
     if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+    /*
+    $o = $this->parvaz_model->loadAll("mhd","thr","1394-01-01","1395-01-01",array(724,800));
+    var_dump($o);
+    */
     $factor_id = -1;
     if(trim($p1)!='')
         $factor_id = (int)$p1;
@@ -998,20 +1003,21 @@ HOT2;
     </div>
     <div class="col-sm-10" >
         <?php echo $hotel.$tour.$visa_melli.$visa_pass; ?>
-    </div>
-    <div class="hs-float-left hs-margin-up-down">
-        <button href="" class="btn hs-btn-default btn-lg" >
-            ادامه
-            <span class="glyphicon glyphicon-chevron-left"></span>
-        </button>
+        <div class="hs-float-left hs-margin-up-down">
+            <button href="" class="btn hs-btn-default btn-lg" >
+                ادامه
+                <span class="glyphicon glyphicon-chevron-left"></span>
+            </button>
+        </div>
+        <div class="hs-float-right hs-margin-up-down">
+            <a href="<?php echo site_url().'khadamat_1/'.$factor_id; ?>" class="btn hs-btn-default btn-lg" >
+                <span class="glyphicon glyphicon-chevron-right"></span>
+                مرحله قبلی
+            </a>
+        </div>
     </div>
     </form>
-    <div class="hs-float-right hs-margin-up-down">
-        <a href="<?php echo site_url().'khadamat_1/'.$factor_id; ?>" class="btn hs-btn-default btn-lg" >
-            <span class="glyphicon glyphicon-chevron-right"></span>
-            مرحله قبلی
-        </a>
-    </div>
+
 
 </div>
 <script>
