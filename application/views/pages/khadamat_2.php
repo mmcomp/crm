@@ -46,7 +46,8 @@
                 'tarikh_tavalod' => '0000-00-00 00:00:00',
                 'id' => -1,
                 'khadamat_name' => '',
-                'passport' => ''
+                'passport' => '',
+                'ticket_number' => ''
             );
         }
         for($i = 0;$i < $chd;$i++)
@@ -60,7 +61,8 @@
                 'tarikh_tavalod' => '0000-00-00 00:00:00',
                 'id' => -1,
                 'khadamat_name' => '',
-                'passport' => ''
+                'passport' => '',
+                'ticket_number' => ''
             );
         }
         for($i = 0;$i < $inf;$i++)
@@ -74,7 +76,8 @@
                 'tarikh_tavalod' => '0000-00-00 00:00:00',
                 'id' => -1,
                 'khadamat_name' => '',
-                'passport' => ''
+                'passport' => '',
+                'ticket_number' => ''
             );
         }
     }
@@ -104,6 +107,7 @@
         //var_dump($inp);
         foreach($inp as $ind=>$mo)
         {
+            //var_dump($mo);
             $age = trim($mo['age']);
             $gender_0 = ((int)trim($mo['gender'])==0)?' selected':'';
             $gender_1 = ((int)trim($mo['gender'])==1)?' selected':'';
@@ -154,6 +158,7 @@
             $midStr1 = str_replace('#tav_rooz#', $tav_rooz, $midStr1);
             $midStr1 = str_replace('#tav_mah#', $tav_mah, $midStr1);
             $midStr1 = str_replace('#tav_sal#', $tav_sal, $midStr1);
+            $midStr1 = str_replace('#ticket_number#', $mo['ticket_number'], $midStr1);
             $pdet .= $midStr1;
             $pindex++;
         }
@@ -180,8 +185,13 @@
     factor_class::marhale($factor_id, "khadamat_2");
 //----------UPDATING Start--------
     //var_dump($_REQUEST);
+    $valid = TRUE;
     if(isset($_REQUEST['parvaz_mosafer_id']))
     {
+        $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
+        $this->form_validation->set_rules('parvaz_fname[]','پرواز : ' . 'نام ', 'required|min_length[3]|max_length[200]');
+        $this->form_validation->set_rules('parvaz_lname[]', 'پرواز : ' . 'نام خانوادگی ', 'required|min_length[3]|max_length[500]');
+        $this->form_validation->set_rules('parvaz_code_melli[]','پرواز : ' .  'کد ملی ', 'required|min_length[10]|max_length[20]');
         $gender = $_REQUEST['parvaz_gender'];
         $sex = $_REQUEST['parvaz_sex'];
         $mosafer_id = $_REQUEST['parvaz_mosafer_id'];
@@ -189,15 +199,55 @@
         $lname = $_REQUEST['parvaz_lname'];
         $code_melli = $_REQUEST['parvaz_code_melli'];
         $khadamat_factor_id = $_REQUEST['khadamat_factor_id-1'];
-        foreach ($mosafer_id as $i=>$mosafer_id0)
+        $ticket_number = $_REQUEST['ticket_number'];
+        if($this->form_validation->run()==FALSE)
         {
-            $tarikh_tavalod = $this->inc_model->jalaliToMiladi($_REQUEST['parvaz_tarikh_tavalod-sal'][$i].'/'.$_REQUEST['parvaz_tarikh_tavalod-mah'][$i].'/'.$_REQUEST['parvaz_tarikh_tavalod-rooz'][$i]);
-            mosafer_class::add($fname[$i], $lname[$i], $code_melli[$i], '', '', $sex[$i], $gender[$i], $tarikh_tavalod, $khadamat_factor_id,$mosafer_id0);
-            
+            $valid = FALSE;
+        }
+        else
+        {
+            foreach ($mosafer_id as $i=>$mosafer_id0)
+            {
+                $tarikh_tavalod = $this->inc_model->jalaliToMiladi($_REQUEST['parvaz_tarikh_tavalod-sal'][$i].'/'.$_REQUEST['parvaz_tarikh_tavalod-mah'][$i].'/'.$_REQUEST['parvaz_tarikh_tavalod-rooz'][$i]);
+                mosafer_class::add($fname[$i], $lname[$i], $code_melli[$i], '', '', $sex[$i], $gender[$i], $tarikh_tavalod, $khadamat_factor_id,$mosafer_id0,$ticket_number[$i]);
+
+            }
+        }
+    }
+    if(isset($_REQUEST['tour_mosafer_id']))
+    {
+        $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
+        $this->form_validation->set_rules('tour_fname[]','تور : ' . 'نام ', 'required|min_length[3]|max_length[200]');
+        $this->form_validation->set_rules('tour_lname[]', 'تور : ' . 'نام خانوادگی ', 'required|min_length[3]|max_length[500]');
+        $this->form_validation->set_rules('tour_code_melli[]','تور : ' .  'کد ملی ', 'required|min_length[10]|max_length[20]');
+        $gender = $_REQUEST['tour_gender'];
+        $sex = $_REQUEST['tour_sex'];
+        $mosafer_id = $_REQUEST['tour_mosafer_id'];
+        $fname = $_REQUEST['tour_fname'];
+        $lname = $_REQUEST['tour_lname'];
+        $code_melli = $_REQUEST['tour_code_melli'];
+        $khadamat_factor_id = $_REQUEST['khadamat_factor_id-1'];
+        $ticket_number = $_REQUEST['ticket_number'];
+        if($this->form_validation->run()==FALSE)
+        {
+            $valid = FALSE;
+        }
+        else
+        {
+            foreach ($mosafer_id as $i=>$mosafer_id0)
+            {
+                $tarikh_tavalod = $this->inc_model->jalaliToMiladi($_REQUEST['tour_tarikh_tavalod-sal'][$i].'/'.$_REQUEST['tour_tarikh_tavalod-mah'][$i].'/'.$_REQUEST['tour_tarikh_tavalod-rooz'][$i]);
+                mosafer_class::add($fname[$i], $lname[$i], $code_melli[$i], '', '', $sex[$i], $gender[$i], $tarikh_tavalod, $khadamat_factor_id,$mosafer_id0,$ticket_number[$i]);
+
+            }
         }
     }
     if(isset($_REQUEST['hotel_mosafer_id']))
     {
+        $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
+        $this->form_validation->set_rules('hotel_fname[]','هتل : ' . 'نام ', 'required|min_length[3]|max_length[200]');
+        $this->form_validation->set_rules('hotel_lname[]', 'هتل : ' . 'نام خانوادگی ', 'required|min_length[3]|max_length[500]');
+        $this->form_validation->set_rules('hotel_code_melli[]','هتل : ' .  'کد ملی ', 'required|min_length[10]|max_length[20]');
         $gender = $_REQUEST['hotel_gender'];
         $sex = $_REQUEST['hotel_sex'];
         $mosafer_id = $_REQUEST['hotel_mosafer_id'];
@@ -205,9 +255,16 @@
         $lname = $_REQUEST['hotel_lname'];
         $code_melli = $_REQUEST['hotel_code_melli'];
         $khadamat_factor_id = $_REQUEST['khadamat_factor_id-2'];
-        foreach ($mosafer_id as $i=>$mosafer_id0)
+        if($this->form_validation->run()==FALSE)
         {
-            mosafer_class::add($fname[$i], $lname[$i], $code_melli[$i], '', '', $sex[$i], $gender[$i], '', $khadamat_factor_id,$mosafer_id0);
+            $valid = FALSE;
+        }
+        else
+        {
+            foreach ($mosafer_id as $i=>$mosafer_id0)
+            {
+                mosafer_class::add($fname[$i], $lname[$i], $code_melli[$i], '', '', $sex[$i], $gender[$i], '', $khadamat_factor_id,$mosafer_id0,'');
+            }
         }
         
     }
@@ -255,9 +312,22 @@
     }
     if(isset($_REQUEST['mob']))
     {
-        $m = new mysql_class;
-        $m->ex_sqlx("update `factor` set `mob` = '".$_REQUEST['mob']."' , `email` = '".$_REQUEST['email']."' where id = $factor_id");
-        redirect('khadamat_3/'.$factor_id);
+        $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
+        $this->form_validation->set_rules('hotel_fname[]', 'تلفن همراه ', 'required|min_length[10]|max_length[15]');
+        $this->form_validation->set_rules('hotel_lname[]', 'ایمیل', 'required|valid_email');
+        if($this->form_validation->run()==FALSE)
+        {
+            $valid = FALSE;
+        }
+        else 
+        {
+            $m = new mysql_class;
+            $m->ex_sqlx("update `factor` set `mob` = '".$_REQUEST['mob']."' , `email` = '".$_REQUEST['email']."' where id = $factor_id");
+        }
+        if($valid)
+        {
+            redirect('khadamat_3/'.$factor_id);
+        }
     }
 //----------UPDATING End----------    
     $msg = '';
@@ -286,6 +356,7 @@
     $cur_sh_sal = $this->inc_model->perToEnNums(jdate("Y"));
     $f = new factor_class($factor_id);
     $mos = mosafer_class::loadByFactor($factor_id);
+    //var_dump($mos);
     $typs = array();
     foreach($mos as $mo)
     {
@@ -336,15 +407,15 @@
                     <option value="1"#gender_1#>مذکر</option>
                 </select>
             </div>
-            <div class="col-sm-2">
+            <div class="col-sm-1">
                 <input type="hidden" name="parvaz_mosafer_id[]" value="#id#" />
-                <input name="parvaz_fname[]" class="form-control same same_fname same_master" placeholder="نام *" value="#fname#">
+                <input name="parvaz_fname[]" class="form-control same same_fname#pindex# same_master" placeholder="نام *" value="#fname#">
             </div>
             <div class="col-sm-2">
-                <input name="parvaz_lname[]" class="form-control same same_lname same_master" placeholder="نام خانوادگی *" value="#lname#">
+                <input name="parvaz_lname[]" class="form-control same same_lname#pindex# same_master" placeholder="نام خانوادگی *" value="#lname#">
             </div>
             <div class="col-sm-2">
-                <input name="parvaz_code_melli[]" class="form-control same same_codemelli same_master" placeholder="کد ملی *" value="#code_melli#">
+                <input name="parvaz_code_melli[]" class="form-control same same_codemelli#pindex# same_master" placeholder="کد ملی *" value="#code_melli#">
             </div>
             <div class="col-sm-3">
                 <select name="parvaz_tarikh_tavalod-rooz[]" style="width:50px;">
@@ -359,6 +430,9 @@
                     <option>سال</option>
                     #tav_sal#
                 </select>
+            </div>
+            <div class="col-sm-1">
+                <input name="parvaz_ticket_number[]" class="form-control" placeholder="شماره بلیت" value="#ticket_number#" >
             </div>
         </div>
 
@@ -385,7 +459,7 @@ PARDET;
                     نام 
                     <span class="mm-font-red">*</span>
                 </div>
-                <div class="col-sm-3">
+                <div class="col-sm-2">
                     نام خانوادگی
                     <span class="mm-font-red">*</span>
                 </div>
@@ -396,6 +470,9 @@ PARDET;
                 <div class="col-sm-2">
                     تاریخ تولد
                     <span class="mm-font-red">*</span>
+                </div>
+                <div class="col-sm-1">
+                    شماره تیکت
                 </div>
             </div>
 
@@ -473,13 +550,13 @@ PAR2;
                 </div>
                 <div class="col-sm-3">
                     <input type="hidden" name="hotel_mosafer_id[]" value="#id#" />
-                    <input name="hotel_fname[]" class="form-control same same_fname" placeholder="نام *" value="#fname#">
+                    <input name="hotel_fname[]" class="form-control same same_fname#pindex#" placeholder="نام *" value="#fname#">
                 </div>
                 <div class="col-sm-4">
-                    <input name="hotel_lname[]" class="form-control same same_lname" placeholder="نام خانوادگی *" value="#lname#">
+                    <input name="hotel_lname[]" class="form-control same same_lname#pindex#" placeholder="نام خانوادگی *" value="#lname#">
                 </div>
                 <div class="col-sm-2">
-                    <input name="hotel_code_melli[]" class="form-control same same_codemelli" placeholder="کد ملی *" value="#code_melli#">
+                    <input name="hotel_code_melli[]" class="form-control same same_codemelli#pindex#" placeholder="کد ملی *" value="#code_melli#">
                 </div>
             </div>
 HODET;
@@ -748,15 +825,15 @@ TR2;
                     <option value="1"#gender_1#>مذکر</option>
                 </select>
             </div>
-            <div class="col-sm-2">
+            <div class="col-sm-1">
                 <input type="hidden" name="tour_mosafer_id[]" value="#id#" />
-                <input name="tour_fname[]" class="form-control same same_fname same_master" placeholder="نام *" value="#fname#">
+                <input name="tour_fname[]" class="form-control same same_fname#pindex#" placeholder="نام *" value="#fname#">
             </div>
             <div class="col-sm-2">
-                <input name="tour_lname[]" class="form-control same same_lname same_master" placeholder="نام خانوادگی *" value="#lname#">
+                <input name="tour_lname[]" class="form-control same same_lname#pindex#" placeholder="نام خانوادگی *" value="#lname#">
             </div>
             <div class="col-sm-2">
-                <input name="tour_code_melli[]" class="form-control same same_codemelli same_master" placeholder="کد ملی *" value="#code_melli#">
+                <input name="tour_code_melli[]" class="form-control same same_codemelli#pindex#" placeholder="کد ملی *" value="#code_melli#">
             </div>
             <div class="col-sm-3">
                 <select name="tour_tarikh_tavalod-rooz[]" style="width:50px;">
@@ -771,6 +848,9 @@ TR2;
                     <option>سال</option>
                     #tav_sal#
                 </select>
+            </div>
+            <div class="col-sm-1">
+                <input name="tour_ticket_number[]" class="form-control" placeholder="شماره بلیت" value="#ticket_number#" >
             </div>
         </div>
 
@@ -794,7 +874,7 @@ PARDET;
                     نام 
                     <span class="mm-font-red">*</span>
                 </div>
-                <div class="col-sm-3">
+                <div class="col-sm-2">
                     نام خانوادگی
                     <span class="mm-font-red">*</span>
                 </div>
@@ -805,6 +885,9 @@ PARDET;
                 <div class="col-sm-2">
                     تاریخ تولد
                     <span class="mm-font-red">*</span>
+                </div>
+                <div class="col-sm-1">
+                    شماره تیکت
                 </div>
             </div>
 
@@ -834,7 +917,7 @@ PAR2;
         $khadamat_factor_id = $typs[4][0]['khadamat_factor_id'];
         $ho_det = <<<HODET
             <div class="row hs-border hs-padding mm-letter-vaziat-0 hs-margin-up-down">
-                <div class="col-sm-1">
+                <div class="col-sm-1 visam_index">
                     #pindex#
                 </div>
                 <div class="col-sm-1">
@@ -846,13 +929,13 @@ PAR2;
                 </div>
                 <div class="col-sm-3">
                     <input type="hidden" name="visamelli_mosafer_id[]" value="#id#" />
-                    <input name="visamelli_fname[]" class="form-control same same_fname" placeholder="نام *" value="#fname#">
+                    <input name="visamelli_fname[]" class="form-control same same_fname#pindex#" placeholder="نام *" value="#fname#">
                 </div>
                 <div class="col-sm-5">
-                    <input name="visamelli_name[]" class="form-control same same_lname" placeholder="نام خانوادگی *" value="#lname#">
+                    <input name="visamelli_name[]" class="form-control same same_lname#pindex#" placeholder="نام خانوادگی *" value="#lname#">
                 </div>
                 <div class="col-sm-2">
-                    <input name="visamelli_code_melli[]" class="form-control same same_codemelli" placeholder="کد ملی *" value="#code_melli#">
+                    <input name="visamelli_code_melli[]" class="form-control same same_codemelli#pindex#" placeholder="کد ملی *" value="#code_melli#">
                 </div>
             </div>
 HODET;
@@ -863,7 +946,9 @@ HODET;
             <div id="visam_div">
                 <div class="row hs-border hs-padding mm-letter-vaziat-0 hs-margin-up-down">
                     <div class="col-sm-1">
+                        <span class="glyphicon glyphicon-plus-sign pointer" onclick="addVisam()"></span>
                         ردیف
+                        <span class="glyphicon glyphicon-minus pointer" onclick="removeVisam()"></span>
                     </div>
                     <div class="col-sm-1">
                         جنسیت
@@ -883,7 +968,7 @@ HODET;
                 </div>
 HOT1;
         $hotel2 = <<<HOT2
-                <div class="row hs-border hs-padding mm-letter-vaziat-0 hs-margin-up-down">
+                <div class="row hs-border hs-padding mm-letter-vaziat-0 hs-margin-up-down" id="visam_last">
                     <div class="col-sm-2">
                         تلفن همراه : 
                     </div>
@@ -909,7 +994,7 @@ HOT2;
         $khadamat_factor_id = $typs[5][0]['khadamat_factor_id'];
         $ho_det = <<<HODET
             <div class="row hs-border hs-padding mm-letter-vaziat-0 hs-margin-up-down">
-                <div class="col-sm-1">
+                <div class="col-sm-1 visap_index">
                     #pindex#
                 </div>
                 <div class="col-sm-1">
@@ -921,13 +1006,13 @@ HOT2;
                 </div>
                 <div class="col-sm-3">
                     <input type="hidden" name="visapass_mosafer_id[]" value="#id#" />
-                    <input name="visapass_fname[]" class="form-control same same_fname" placeholder="نام *" value="#fname#">
+                    <input name="visapass_fname[]" class="form-control same same_fname#pindex#" placeholder="نام *" value="#fname#">
                 </div>
                 <div class="col-sm-5">
-                    <input name="visapass_lname[]" class="form-control same same_lname" placeholder="نام خانوادگی *" value="#lname#">
+                    <input name="visapass_lname[]" class="form-control same same_lname#pindex#" placeholder="نام خانوادگی *" value="#lname#">
                 </div>
                 <div class="col-sm-2">
-                    <input name="visapass_passport[]" class="form-control same same_passport" placeholder="شماره پاسپورت*" value="#passport#">
+                    <input name="visapass_passport[]" class="form-control same same_passport#pindex#" placeholder="شماره پاسپورت*" value="#passport#">
                 </div>
             </div>
 HODET;
@@ -938,7 +1023,9 @@ HODET;
             <div id="visap_div">
                 <div class="row hs-border hs-padding mm-letter-vaziat-0 hs-margin-up-down">
                     <div class="col-sm-1">
+                        <span class="glyphicon glyphicon-plus-sign pointer" onclick="addVisap()"></span>
                         ردیف
+                        <span class="glyphicon glyphicon-minus pointer" onclick="removeVisap()"></span>
                     </div>
                     <div class="col-sm-1">
                         جنسیت
@@ -958,7 +1045,7 @@ HODET;
                 </div>
 HOT1;
         $hotel2 = <<<HOT2
-                <div class="row hs-border hs-padding mm-letter-vaziat-0 hs-margin-up-down">
+                <div class="row hs-border hs-padding mm-letter-vaziat-0 hs-margin-up-down"  id="visap_last">
                     <div class="col-sm-2">
                         تلفن همراه : 
                     </div>
@@ -999,7 +1086,7 @@ HOT2;
         <?php
             echo $this->inc_model->loadProgress(2,$factor_id);
         ?>
-
+        <?php echo validation_errors(); ?>
         <?php echo $parvaz; ?>
         <?php echo $hotel.$tour.$visa_melli.$visa_pass; ?>
         <div class="hs-float-left hs-margin-up-down">
@@ -1020,6 +1107,80 @@ HOT2;
 
 </div>
 <script>
+    var tttm = '\
+            <div class="row hs-border hs-padding mm-letter-vaziat-0 hs-margin-up-down">\
+                <div class="col-sm-1 visam_index">\
+                    #pindex#\
+                </div>\
+                <div class="col-sm-1">\
+                    <select name="visamelli_sex[]" style="width: 80px;">\
+                        <option>جنسیت</option>\
+                        <option value="0">مونث</option>\
+                        <option value="1">مذکر</option>\
+                    </select>\
+                </div>\
+                <div class="col-sm-3">\
+                    <input type="hidden" name="visamelli_mosafer_id[]" value="" />\
+                    <input name="visamelli_fname[]" class="form-control same same_fname#pindex#" placeholder="نام *" value="">\
+                </div>\
+                <div class="col-sm-5">\
+                    <input name="visamelli_name[]" class="form-control same same_lname#pindex#" placeholder="نام خانوادگی *" value="">\
+                </div>\
+                <div class="col-sm-2">\
+                    <input name="visamelli_code_melli[]" class="form-control same same_codemelli#pindex#" placeholder="کد ملی *" value="">\
+                </div>\
+            </div>';
+    function addVisam()
+    {
+        var last_index = 1;
+        if($(".visam_index:last").length>0)
+            last_index=parseInt($(".visam_index:last").text().trim(),10)+1;
+        $("#visam_last").before(tttm.replace(/#pindex#/g,last_index));
+        $('select').select2({
+            dir: "rtl"
+        });
+    }
+    function removeVisam()
+    {
+        $(".visam_index:last").parent().remove();
+    }
+    var tttp = '\
+            <div class="row hs-border hs-padding mm-letter-vaziat-0 hs-margin-up-down">\
+                <div class="col-sm-1 visap_index">\
+                    #pindex#\
+                </div>\
+                <div class="col-sm-1">\
+                    <select name="visamelli_sex[]" style="width: 80px;">\
+                        <option>جنسیت</option>\
+                        <option value="0">مونث</option>\
+                        <option value="1">مذکر</option>\
+                    </select>\
+                </div>\
+                <div class="col-sm-3">\
+                    <input type="hidden" name="visamelli_mosafer_id[]" value="" />\
+                    <input name="visamelli_fname[]" class="form-control same same_fname#pindex#" placeholder="نام *" value="">\
+                </div>\
+                <div class="col-sm-5">\
+                    <input name="visamelli_name[]" class="form-control same same_lname#pindex#" placeholder="نام خانوادگی *" value="">\
+                </div>\
+                <div class="col-sm-2">\
+                    <input name="visamelli_code_passport[]" class="form-control same same_passport#pindex#" placeholder="شماره پاسپورت *" value="">\
+                </div>\
+            </div>';
+    function addVisap()
+    {
+        var last_index = 1;
+        if($(".visap_index:last").length>0)
+            last_index=parseInt($(".visap_index:last").text().trim(),10)+1;
+        $("#visap_last").before(tttp.replace(/#pindex#/g,last_index));
+        $('select').select2({
+            dir: "rtl"
+        });
+    }
+    function removeVisap()
+    {
+        $(".visap_index:last").parent().remove();
+    }
     function toggle_profile()
     {
         var is_visible = ($("#profile_div:visible").length>0);
