@@ -23,8 +23,6 @@
         $active = ($active & $active2);
         $menu_links .= "<li role='presentation'".(($active)?" class='active'":"")."><a href='$href'>$title</a></li>";
     }
-    //$taminkonande = new taminkonande_class;
-    
 ?>
 <div class="row" >
     <div class="col-sm-2" >

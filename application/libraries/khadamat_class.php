@@ -82,11 +82,16 @@ class khadamat_class
     public static function updateGhimat($factor_id,$request)
     {
         $my= new mysql_class;
+        $sum = 0;
+        $sum_comission = 0;
         for($i=0;$i<count($request['khadamat_id']);$i++)
         {
+            $sum+= $request['mablagh'][$i];
+            $sum_comission += $request['comission'][$i];
             $qu = "update khadamat_factor set mablagh='".$request['mablagh'][$i]."',comission='".$request['comission'][$i]."',jayeze_code='".$request['jayeze_code'][$i]."' where factor_id=$factor_id and khadamat_id=".$request['khadamat_id'][$i];
             $my->ex_sqlx($qu);
         }
+        $my->ex_sqlx("update factor set `commision`=$sum_comission,`mablagh`=$sum where factor_id = $factor_id");
     }        
 }
 
