@@ -115,27 +115,27 @@ class Inc_model extends CI_Model {
         $marhale = array(
             array(
                 "link" => "profile",
-                "name" => "مرحله یک"
+                "name" => "انتخاب مشتری و خدمات"
             ),
             array(
                 "link" => "khadamat_1",
-                "name" => "مرحله دو"
+                "name" => "انتخاب خدمات"
             ),
             array(
                 "link" => "khadamat_2",
-                "name" => "مرحله سه"
+                "name" => "ورود اطلاعات"
             ),
             array(
                 "link" => "khadamat_3",
-                "name" => "مرحله چهار"
+                "name" => "تأمین کننده ها"
             ),
             array(
                 "link" => "khadamat_4",
-                "name" => "مرحله پنج"
+                "name" => "مالی"
             ),
             array(
                 "link" => "khadamat_5",
-                "name" => "مرحله شش"
+                "name" => "فرم ها"
             )
         );
         $out = '<div class="row hs-margin-up-down">';

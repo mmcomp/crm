@@ -17,7 +17,7 @@
     $factor_id = -1;
     if(trim($p1)!='')
         $factor_id = (int)$p1;
-    $form_id = 1;
+    $form_id = 4;
     if(trim($p2)!='')
         $form_id = (int)$p2;
     $my = new mysql_class;
@@ -39,7 +39,7 @@
     $logo = asset_url()."img/donya_logo.jpg";
     $ham_tmp = '';
     $data = array();
-    $print_title =" ویزای انفرادی شینگن";
+    $print_title =" روادید سوئد";
     $my->ex_sql("select matn,matn2,name from print_theme where id=$form_id", $q);
     if(isset($q[0]))
     {

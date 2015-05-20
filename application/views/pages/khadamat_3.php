@@ -1,9 +1,6 @@
 <?php
     if ( ! defined('BASEPATH')) exit('No direct script access allowed');
     $msg = '';
-    $user_id1 = $user_id;
-    if(trim($p1)!='')
-        $user_id1 = (int)$p1;
     factor_class::marhale((int)$p1,'khadamat_3');
     if(isset($_REQUEST['khadamat_id']))
     {
@@ -19,7 +16,7 @@
     }
     $this->profile_model->loadUser($user_id);
     $men = $this->profile_model->loadMenu();
-    $this->profile_model->loadUser($user_id1);
+    $this->profile_model->loadUser($user_id);
     $user_obj = $this->profile_model->user;
     $menu_links = '';
     foreach($men as $title=>$href)

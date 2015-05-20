@@ -25,6 +25,7 @@
      <script src=" <?php echo asset_url().'js/bootstrap-datepicker.min.js' ?>"></script>
      <script src=" <?php echo asset_url().'js/bootstrap-datepicker.fa.min.js' ?>"></script>
      <script src=" <?php echo asset_url().'js/fileinput.min.js' ?>"></script>
+     <script src=" <?php echo asset_url().'js/jquery.PrintArea.js' ?>"></script>
     <?php
         if(isset($has_ckeditor) && $has_ckeditor) // if in edit_content ckedotr is activeted
         {    

@@ -1,15 +1,11 @@
 <?php
     if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-    $user_id1 = $user_id;
-    factor_class::marhale((int)$p1,'khadamat_4');
-    if($this->input->post('khadamat_id')!==FALSE)
-    {
-        khadamat_class::updateGhimat($p1, $_REQUEST);
-    }    
+    $factor_id = -1;
+    if(trim($p1)!='')
+        $factor_id = (int)$p1;
+    factor_class::marhale((int)$factor_id,'khadamat_5'); 
     $this->profile_model->loadUser($user_id);
     $men = $this->profile_model->loadMenu();
-    $this->profile_model->loadUser($user_id);
-    $user_obj = $this->profile_model->user;
     $menu_links = '';
     foreach($men as $title=>$href)
     {
@@ -20,6 +16,15 @@
             $active2 = FALSE;
         $active = ($active & $active2);
         $menu_links .= "<li role='presentation'".(($active)?" class='active'":"")."><a href='$href'>$title</a></li>";
+    }
+    $forms = '';
+    $my = new mysql_class;
+    $my->ex_sql("select * from  print_theme order by name", $q);
+    foreach($q as $r)
+    {
+        $id = (((int)$r['id']<10)?'0':'').$r['id'];
+        $sid = (int)$r['id'];
+        $forms .= "<div class=\"col-sm-6 col-xs-12 col-md-3 hs-border hs-padding hs-margin-up-down text-center mm-hover pointer\"  onclick=\"window.location='".  site_url()."print_$id/$factor_id/$sid';\"><span>".$r['name']."</span></div>";
     }
 ?>
 <div class="row" >
@@ -35,33 +40,15 @@
             </ul>
         </div>
     </div>
-    <form action="" method="POST" id="frm_tamin">
     <div class="col-sm-10" >
         <?php
-            echo $this->inc_model->loadProgress(4,$p1);
+            echo $this->inc_model->loadProgress(5,$p1);
         ?>
         <div class="row hs-margin-up-down hs-gray hs-padding hs-border">
-            قیمت ها
+            فرم ها
         </div>
         <div class="row" >
-            <div id="foroosh_all" >
-                <?php
-                    echo khadamat_class::loadForooshView($p1);
-                ?>
-            </div>
-        </div>
-        <div class="hs-float-left hs-margin-up-down">
-            <a class="btn hs-btn-default btn-lg" onclick="contin()" >
-                ادامه
-                <span class="glyphicon glyphicon-chevron-left"></span>
-            </a>
+            <?php echo $forms; ?>
         </div>
     </div>    
-    </form>
 </div>
-<script>
-    function contin()
-    {
-        $("#frm_tamin").submit();
-    }
-</script>

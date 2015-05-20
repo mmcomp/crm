@@ -1,57 +1,211 @@
-<p style="text-align: center;"><strong>بسمه تعالی</strong></p>
-<p style="text-align: center;">اوفوا بالعهد ان العهد کان مسئولاً</p>
-<p style="text-align: center;"><span style="font-size: 14pt;"><strong> قرارداد گشتهای خارج از کشور</strong></span></p>
-<p style="text-align: right;"><span style="font-size: 10pt;">ثبت نام کننده: #user_sabti#<br />این قرارداد فی مابین خانم/آقای #fname# $lname# فرزند : #father_name# به شماره شناسنامه: #shomare_shenasnameh#  تاریخ تولد: #tarikh_tavalod# آدرس: #addr# تلفن: #tel_sabet# و همراه: #mob# منفرداً یا به نمایندگی تام الاختیار از سوی افراد زیر جمعاً به تعداد#tedad# نفر که از این پس مسافر نامیده می شود از یک طرف و دفتر / شرکت خدمات گردشگری: دنیاسیر به شماره پروانه:       مورخ:      صادره از سوی اداره کل میراث فرهنگی، صنایع دستی و گردشگری استان : خراسان رضوی که از این پس کارگزار نامیده می شود از طرف دیگر، که برنامه سفر نیز در اختیار مسافر قرار گرفته است در تاریخ #tarikh# ساعت #saate# منعقد گردید. <br />ضمناً نام راهنمای تور آقا/ خانم :                             فرزند :                           دارای کارت شناسایی :                              می باشد.<br />الف) مشخصات مسافر یا مسافرین تور   <input type="text" class="form-control" name="tour_info" id="tour_info" placeholder="اطلاعات تور" > </span></p>
-<p style="text-align: right;"> </p>
-<table style="margin-left: auto; margin-right: auto; width: 100%;" border="1">
-<tbody>
-<tr>
-<td>ردیف</td>
-<td>نام و نام خانوادگی -فارسی</td>
-<td>نرخ تور</td>
-<td>شماره گذرنامه</td>
-<td>مدت اعتبار گذرنامه</td>
-<td>کدملی</td>
-<td>تاریخ تولد</td>
-<td>نسبت</td>
-</tr>
-<tr>
-<td> </td>
-<td> </td>
-<td> </td>
-<td> </td>
-<td> </td>
-<td> </td>
-<td> </td>
-<td> </td>
-</tr>
-</tbody>
-</table>
-<p style="text-align: right;"><span style="font-size: 12pt;"><strong> تور چارتر و غیر قابل استرداد می باشد.</strong></span><br /><strong>آژانس دنياسير در زمينه تهيه ارز مسافرتي مسئوليتي نخواهد داشت.</strong><br />خدمات تور: </p>
-<p style="text-align: right;"><strong>توجه:</p></strong>
-<textarea name="tavajoh" id="tavajoh" class="form-control" rows="5" >پرداخت 60 يورو در محل سفارت به ازاي هر نفر و هزینه خروجی به عهده مسافر محترم می باشد.
-در صورت رد درخواست ويزا از سوي سفارت فرانسه،20% از كل هزينه تور به ازاي هر نفر كسر و مابقي به مسافر عودت خواهد شد.</textarea>
-<p style="text-align: right;"><br /><strong>ب) موضوع قرارداد:</strong><br />موضوع این قرارداد تعیین حدود و وظایف و مسئولیت های طرفین قرارداد و همچنین نرخ گشت برای انجام مسافرت به طور دسته جمعی و انفرادی به شرح زیر می باشد:<br /><strong>ج) شرایط هزینه سفر:</strong></p>
-<p style="text-align: right;">۱) مدت سفر : #shab#  ازتاریخ  شمسی: #aztarikh_fa#     #aztarikh_mi#  لغایت  شمسی: #tatarikh_fa#  #tatarikh_mi#</p>
-<p style="text-align: right;"><strong>تبصره 2: در اتاقهای سه تخته، تخت سوم از نوع سفری بوده و موقتاً در اتاق دو نفره گذاشته می شود.</strong><br /><strong>تبصره 3: ساعات تحویل اتاقهای هتل به هنگام ورود ساعت 14 و تخیله آن ساعت 12 می باشد.</strong></p>
-<p style="text-align: right;">
-        3/2- وسیله حمل و نقل:
-        <input type="text" name="vasile" id="vasile" >
-        شرکت:      
-        <input type="text" name="sherkat" id="sherkat" >
-        درجه:
-        <input type="text" name="daraje" id="daraje" >
-        نام پایانه مبدأ:
-        <input type="text" name="mabda_terminal" id="mabda_terminal" >
-        نام پایانه مقصد: 
-        <input type="text" name="maghsad_terminal" id="maghsad_terminal" >
-</p>
-<p style="text-align: right;"> هزینه برای هر نفر: <br />تبصره 1: در صورت رزرو جا در پرواز و یا صدور بلیط چنانچه مسافر به هر علتی (بیماری، انصراف، ممنوع الخروج بودن و ...) بدون اعلام قبلی موفق به پرواز نگردد موظف به پرداخت هزینه ویزا، جریمه متعلق به بلیط و هزینه یک شب هتل می باشد.<br />تبصره2: در صورت ابطال پرواز توسط شرکت هواپیمایی موضوع این قرارداد، کارگزار مساعی خود را جهت اعزام مسافرین با اولین پرواز با توافق و رضایت مسافرین بکار گرفته لذا تغییرات احتمالی در نرخ پرواز مورد نظر با پرواز ابطال شده، از سوی طرفین قابل تعدیل می باشد، بدیهی است در صورت عدم تمایل مسافرین به تغییر پرواز، کارگزار موظف به پرداخت وجوه دریافتی پس از کسر هزینه ویزا به مسافر می باشد.<br />تبصره 3: پرداخت عوارض خروجی به عهده مسافر می باشد.</p>
-<p style="text-align: right;"> 4/2- دارای ترانسفر فرودگاهی می باشد نمی باشد <br />هزینه برای هر نفر : معادل تومان<br />5/2- کارمزد دفتر / شرکت شامل 5% کل قیمت گشت :                              هزینه برای هر نفر:                    ريال معادل                             تومان <br />6/2- راهنمای ایرانی مسلط به زبان و کشور هدف : هزینه برای هر نفر                          ریال معادل                                  تومان<br />7/2- هزینه کل برای هر نفر: بزرگسال                                  +                                   ريال</p>
-<p style="text-align: right;"><strong>3) تعهدات کارگزار</strong><br />1/3- کارگزار متعهد است مقررات کشور مقصد را که دانستن آن توسط مسافر ضروری است کتباً به اطلاع مسافر رسانده و مسافر موظف به رعایت کامل آن می باشد و در صورت ارتکاب هرگونه تخلفی، کارگزار هیچگونه مسئولیتی در قبال پیامدهای آن ندارد.<br />2/3- کارگزار متعهد است برنامه سفر و گشت مورد توافق را به طور کامل و دقیق انجام دهد و در صورت وقوع هر گونه پیشامد غیر منتظره ای از قبیل جنگ، شورش، اعتصاب، شرایط جوی و مشکلاتی که از کنترل کارگزار خارج بوده و سبب ابطال و یا تغییر برنامه گشت و یا مسافرت شود مسئولیتی متوجه کارگزار نخواهد بود.<br />3/3- کارگزار متعهد است بیمه کامل مسافرتی را در مورد مسافر اعمال نماید و در صورت بروز هرگونه حادثه ای در طول سفر بر اساس شرایط بیمه تحت پوشش اقدام نماید.<br />4/3- کارگزار متعهد است در صورت بروز هرگونه اتفاقی برای مسافر یا مسافرین در کشور مقصد، سفارتخانه جمهوری اسلامی ایران در آن کشور را از موضوع مطلع سازد.<br />5/3- کارگزار متعهد است تاریخ و اعتبار گذرنامه و شرایط سنی مسافر را کنترل نماید.<br />6/3- کارگزار متعهد است برای سفر، راهنمایی متخصص، مجرب و مسلط به امور را با گشت همراه نماید.<br />7/3- کارگزار متعهد است در صورت انصراف مسافر از همراهی گشت، روادید اخذ شده برای مسافر را توسط مقامات سفارت صادرکننده ابطال نماید.<br />8/3- کارگزار متعهد است تاریخ و شماره انصراف کتبی مسافر را در دفاتر رسمی خود ثبت کند.<br />9/3- کارگزار متعهد است در صورت لغو سفر به هر دلیل بجز موارد مطروحه در بند 2/3، تا یک ماه قبل از پرواز معادل 5% هزینه دریافتی و از یک ماه تا سه هفته قبل از پرواز معادل 7% هزینه دریافتی و از سه هفته تا 72 ساعت قبل از پرواز معادل 10% هزینه دریافتی و حداکثر از 72 ساعت تا قبل از پرواز معادل 12% هزینه دریافتی را به عنوان خسارت به مسافر پرداخت نماید.<br />10/3- کارگزار متعهد است در منطقه ای هتل را جهت استقرار گشت انتخاب نماید که شئونات در آن رعایت گردد.<br />11/3- کارگزار موظف است هتلی را جهت اقامت مسافران انتخاب نماید که شئونات اسلامی در آن رعایت می گردد.<br />4) تعهدات مسافر<br />1/4- مسافر متعهد است در صورت انجام تخلف در کشور مقصد که منجر به پرداخت جریمه و خسارتی توسط کارگزار می گردد جبران نماید.<br />2/4- مسافر متعهد است در صورت ممنوع الخروج بودن مسافر یا ممنوع الورود بودن به کشور مقصد ویا انصراف کتبی از همراهی تور، تا یک ماه قبل از پرواز معادل 50% قیمت کل گشت و از یک ماه تا سه هفته قبل از پرواز معادل 70% قیمت کل گشت و از سه هفته تا 72 ساعت قبل از پرواز معادل 90% قیمت کل گشت و در کمتر از 72 ساعت قبل از پرواز معادل 100% قیمت کل گشت را به عنوان خسارت به کارگزار بپردازد.<br />3/4- مسافر متعهد است برای پیگیری امور تور فقط از طریق فردی که به نمایندگی از سوی ایشان اقدام به ثبت نام نموده پیگیری نماید.<br />4/4- حفظ چمدان ها، اموال، مدارک شخصی به عهده مسافر بوده در صورت بروز هرگونه اتفاق برای هر یک از آنها، هیچ گونه مسئولیتی متوجه کارگزار نخواهد بود. لکن راهنمای گشت موظف به همکاری با مسافر می باشد. <br />5/4- مسافر متعهد است در طول سفر شئونات اسلامی را رعایت نموده و از ایجاد مزاحمت برای مسافرین خودداری و با تور به کشور بازگردد. در غیر این صورت کارگزار موظف است به محض ورود به کشور، گزارش آن را در اختیار نیروی انتظامی قرار دهد و کلیه خسارات مادی وارده احتمالی به عهده مسافر می باشد و باید جبران نماید.<br />6/4- مسافر متعهد است در ساعات تنظیم شده در برنامه های گشت شرکت نماید در غیر این صورت هیچ مسئولیتی به عهده کارگزار نخواهد بود.<br />7/4- مسافر متعهد است پس از بازگشت از سفر جهت اخذ مدارک خود با در دست داشتن اصل گذرنامه و تصویر از صفحه مربوط به مهر ورود و خروج کشور به کارگزار مراجعه کند.<br />تبصره: مسافر متعهد است در هنگام ترک کشور مقصد، دقت نماید تا گذرنامه اش به مهر ورود و خروج ممهور گردد.<br />8/4- مسافر متعهد است تضمینی را بر اساس توافق طرفین تعیین و در قبال اخذ رسید به صورت ودیعه نزد کارگزار بسپارد تا در صورت بروز هر گونه تخلفی از سوی مسافر، به عنوان خسارت و یا جریمه طبق این قرارداد توسط کارگزار مورد بهره برداری قرار گیرد.<br />تبصره: مسافر متعهد است ظرف مدت 10 روز پس از بازگشت از سفر، جهت اخذ تضمین به کارگزار مراجعه نماید.<br />10/4- مسافر متعهد است هزینه ارزی خود را تأمین نماید.<br />5) مسافر و کارگزار، اداره میراث فرهنگی، صنایع دستی و گردشگری را به عنوان حکم مرضی الطرفین تعیین تا در صورت بروز هرگونه اختلاف دررابطه با این قرارداد اعلام نظر نماید.</p>
-<p style="text-align: right;"><strong>بدیهی است نظر این اداره کل قطعی و برای طرفین لازم الاجراست.</strong><br /><strong>نام و نام خانوادگی مسافر و یا نماینده مسافر                              نام و نام خانوادگی مدیرعامل/ مدیر/ مدیر فنی شرکت / دفتر خدمات مسافری مهر و امضا مهر و امضا</strong></p>
-<p style="text-align: right;"> </p>
-<p style="text-align: right;"> </p>
-<p style="text-align: right;"> </p>
-<p style="text-align: right;"> </p>
-<p style="text-align: right;"> </p>
+<?php
+    if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+    $this->profile_model->loadUser($user_id);
+    $men = $this->profile_model->loadMenu();
+    $menu_links = '';
+    foreach($men as $title=>$href)
+    {
+        $tmp = explode('/', $href);
+        $active = ($tmp[2]==$page_addr);
+        $active2 = TRUE;
+        if(isset($tmp[3]) && trim($p1)!='' && $tmp[3]!=$p1)
+            $active2 = FALSE;
+        $active = ($active & $active2);
+        $menu_links .= "<li role='presentation'".(($active)?" class='active'":"")."><a href='$href'>$title</a></li>";
+    }
+    function replaceHashWithInput($hash,$body1,$data)
+    {
+        //var_dump($data);
+        $vis_pos = -1;
+        $array_vars = array();
+        while($vis_pos!==FALSE)
+        {
+            $vis_pos = strpos($body1,"#".$hash."_",$vis_pos+1);
+            if($vis_pos!==FALSE)
+            {
+                $vis_end = strpos($body1,"#",$vis_pos+2);
+                $vis = substr($body1,$vis_pos+1,$vis_end-$vis_pos-1);
+                $vis2 = str_replace("[", '', $vis);
+                $vis2 = str_replace("]", '', $vis2);
+                $val = ((isset($data[$vis2]))?$data[$vis2]:'');
+                //echo "<br/>$vis2=><br/>";
+                //var_dump($val);
+                if(strpos($vis,'[]')!==FALSE)
+                {
+                    if(!isset($array_vars[$vis]))
+                    {
+                        $array_vars[$vis] = array(
+                            "index"=>0,
+                            "values"=>$val
+                        );
+                    }
+                    if(isset($array_vars[$vis]["values"][$array_vars[$vis]["index"]]))
+                    {
+                        $val = $array_vars[$vis]["values"][$array_vars[$vis]["index"]];
+                        $array_vars[$vis]["index"]++;
+                    }
+                    else
+                    {
+                        $val = '';
+                    }
+                }
+                $body1 = substr($body1, 0, $vis_pos-1).'<input class="visa_input"  name="'.$vis.'" value="'.$val.'"/>'.substr($body1, $vis_end+1);
+            }
+        }
+        //var_dump($array_vars);
+        return($body1);
+    }
+    $factor_id = -1;
+    if(trim($p1)!='')
+        $factor_id = (int)$p1;
+    $form_id = 2;
+    if(trim($p2)!='')
+        $form_id = (int)$p2;
+    $body='';
+
+    $ham_tmp = '';
+    $data = array();
+    $my = new mysql_class;
+    if(isset($_REQUEST['save_form']))
+    {
+        $data = array();
+        foreach($_REQUEST as $key=>$value)
+        {
+            if(strpos($key, "gasht_")!==FALSE)
+            {
+                $data[$key]=$value;
+            }
+        }
+        //$data = $_REQUEST;
+        $form_id = (int)$_REQUEST['save_form'];
+        $tarikh = date("Y-m-d H:i:s");
+        $my->ex_sqlx("insert into print_factor (`print_theme_id`, `factor_id`, `tarikh`, `user_id`,`data`) values ($form_id,$factor_id,'$tarikh',$user_id,'". json_encode($data, JSON_UNESCAPED_UNICODE)."')");
+        //echo "insert into print_factor (`print_theme_id`, `factor_id`, `tarikh`, `user_id`,`data`) values ($form_id,$factor_id,'$tarikh',$user_id,'". json_encode($data, JSON_UNESCAPED_UNICODE)."')";
+    }
+    $my->ex_sql("select matn,matn2 from print_theme where id=$form_id order by id desc limit 1", $q);
+    if(isset($q[0]))
+    {
+        $body = $q[0]['matn'];
+        $ham_tmp = $q[0]['matn2'];
+        $my->ex_sql("select data from print_factor where factor_id = $factor_id and print_theme_id = $form_id order by tarikh desc",$qq);
+        if(isset($qq[0]))
+        {
+            $data1 = ((trim($qq[0]['data'])!='')?json_decode($qq[0]['data']):array());
+            $data =(array)$data1;
+        }
+    }
+    $hamrahan = '';
+    /*
+    $ham_tmp = <<<HAM
+    <tr valign="top">
+        <td width="25" height="2">
+        <p align="center"><strong>#index#</strong></p>
+        </td>
+        <td width="124">
+        <p align="center">#name#</p>
+        </td>
+        <td width="69">
+        <p align="center">#pedar#</p>
+        </td>
+        <td width="88">
+        <p dir="ltr" align="center">#passport#</p>
+        </td>
+        <td width="210">
+        <p align="center"> #visa_hazine_mosafer[]# </p>
+        </td>
+    </tr>
+HAM;
+    */
+    $f = new factor_class($factor_id);
+    $body1 = 'اطلاعاتی موجود نیست';
+    if(isset($f->id))
+    {
+        $mos = mosafer_class::loadByFactor($factor_id);
+        $ham_out = '';
+        foreach($mos as $i=>$mo)
+        {
+            $ham_tmp1 = str_replace("#index#", ($i+1), $ham_tmp);
+            $ham_tmp1 = str_replace("#name#", $mo['fname'].' '.$mo['lname'], $ham_tmp1);
+            $ham_tmp1 = str_replace("#pedar#", '', $ham_tmp1);
+            $ham_tmp1 = str_replace("#passport#", $mo['passport'], $ham_tmp1);
+            $ham_out .= $ham_tmp1;
+        }
+        $u = new user_class($f->user_id);
+        $fname1 = $u->fname;
+        $lname1 = $u->lname;
+        $user_creator = new user_class($f->user_creator);
+        $body1 = str_replace("#fname1#", $fname1, $body);
+        $body1 = str_replace("#user_sabti#", $user_creator->fname.' '.$user_creator->lname, $body1);
+        $body1 = str_replace("#hamrahan#", $ham_out, $body1);
+        $body1 = str_replace("#lname1#", $lname1, $body1);
+        $body1 = $this->form_model->replaceHashWithInput("gasht",$body1,$data);
+
+    }
+?>
+<style>
+    .gasht_input{
+        border : none;
+    }
+    .gasht_textarea{
+        width: 100%;
+        height: 100px;
+    }
+    .list_table input{
+        width: 100%;
+    }
+    .gasht_input:hover{
+        border : red 1px dashed;
+    }
+    
+</style>
+<div class="row" >
+    <div class="col-sm-2" >
+        <div class="hs-margin-up-down hs-gray hs-padding hs-border" >
+              امکانات
+        </div>
+        <div class="hs-margin-up-down hs-padding hs-border" >
+            <ul class="nav nav-pills nav-stacked">
+            <?php
+                echo $menu_links;
+            ?>
+            </ul>
+        </div>
+    </div>
+    <form method="post">
+    <div class="col-sm-10" >
+        <div class="row">
+            <div class="hs-float-left" >
+                <button class="btn hs-btn-default btn-lg" >ثبت</button>
+            </div>
+            <div class="hs-float-left" >
+                <a class="btn hs-btn-default btn-lg hs-margin-left-right" onclick="prin()" >چاپ</a>
+            </div>
+        </div>
+        <div id="ifr" >
+        <?php echo $body1; ?>
+        </div>
+        <input type="hidden" name="save_form" value="<?php echo $form_id; ?>"/>
+    </div>
+    </form>
+
+
+</div>
+<script>
+    function prin()
+    { 
+        var b = $(".visa_input").css("border");
+        $(".gasht_input").css("border","none");
+        $(".gasht_textarea").css("border","none");
+        $(".list_table input").css("width","100%");
+        $(".gasht_textarea").css("width","100%");
+        $(".gasht_textarea").css("height","50px");
+        var pageNo = 'چاپ';
+        var headElements =  '<meta charset="utf-8" >,<meta http-equiv="X-UA-Compatible" content="IE=edge" >' ;
+        var options = { mode : 'popup', popClose :false, extraCss : '', retainAttr : ["class", "id", "style", "on"], extraHead : headElements ,popHt: 500,popWd: 700,popTitle:pageNo};
+        //$("#ifr").css("width","21cm");
+        $("#ifr").printArea(options);
+        $(".gasht_input").css("border",b);
+        $(".gasht_textarea").css("border",b);
+    }
+</script>
