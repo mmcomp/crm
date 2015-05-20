@@ -68,7 +68,6 @@ class hotel_class
         }
         else
         {
-             
             foreach($hotel as $fi=>$val)
             {
                 if($fi!='hotel_id')

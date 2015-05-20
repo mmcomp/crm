@@ -15,6 +15,18 @@
                 }
             }
         }
+        public static function loadByfactor($inp,$selected=-1)
+        {
+            $out='';
+            $my = new mysql_class;
+            $inp = (int)$inp;
+            $my->ex_sql("select khadamat.id,name from khadamat_factor left join khadamat on (khadamat.id=khadamat_id) where factor_id=$inp order by name desc", $q);
+            foreach($q as $r)
+            {
+                $out.='<option '.(((int)$selected==(int)$r['id'])?'selected="selected"':'').'  value="'.$r['id'].'" >'.$r['name'].'</option>';
+            }
+            return ($out);
+        }
         public static function loadKhadamats($factor_id)
         {
             $out= array();

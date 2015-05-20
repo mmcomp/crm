@@ -37,6 +37,7 @@ class Pages extends CI_Controller {
         $this->load->library('country_class');
         $this->load->library('taminkonande_class');
         $this->load->library('vahed_mablagh_class');
+        $this->load->library('khadamat_tamin_class');
         
         $this->load->library('xgrid');
         $this->load->view('modir/libs/jdf');

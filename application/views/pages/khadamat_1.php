@@ -57,9 +57,9 @@
         $hotel['maghsad_id'] = (int)$this->input->post('city_to_hotel');
         $hotel['az_tarikh'] = $this->inc_model->jalaliToMiladi($this->input->post('az_tarikh_hotel'));
         $hotel['ta_tarikh'] = $this->inc_model->jalaliToMiladi($this->input->post('ta_tarikh_hotel'));
-        $hotel['adl'] = (int)$this->input->post('hotel_adl');
-        $hotel['chd'] = (int)$this->input->post('hotel_chd');
-        $hotel['inf'] = (int)$this->input->post('hotel_inf');
+        $hotel['adl'] = (int)$this->input->post('hotel_adl')[0];
+        $hotel['chd'] = (int)$this->input->post('hotel_chd')[0];
+        $hotel['inf'] = (int)$this->input->post('hotel_inf')[0];
         $hotel['name'] = trim($this->input->post('hotel_name'));
         $hotel['star'] = (int)$this->input->post('hotel_star');
         $hotel['room_count'] = (int)$this->input->post('hotel_room_count');
@@ -87,6 +87,7 @@
             $hotel_room[$i]['factor_id'] = (int)$p1;
             $hotel_room[$i]['khadamat_factor_id'] = $hotel['khadamat_factor_id'];
         }
+        //var_dump($hotel);
         hotel_class::add($hotel,$hotel_room);
         $next = TRUE;
     }

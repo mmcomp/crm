@@ -42,6 +42,52 @@ class khadamat_class
         }
         return($out);
     }
+    public static function loadForooshView($factor_id)
+    {
+        $out = '';
+        $my = new mysql_class;
+        $my->ex_sql("select khadamat_id,name,`mablagh`, `comission`, `jayeze_code` from khadamat_factor left join khadamat on (khadamat_id=khadamat.id) where factor_id=$factor_id ", $q);
+        foreach($q as $r)
+        {
+            $out.='
+                    <div class="col-sm-1 text-center hs-margin-up-down" >
+                        نام:
+                    </div>
+                    <div class="col-sm-2 hs-margin-up-down" >
+                        <span>'.$r['name'].'</span>
+                        <input type="hidden" name="khadamat_id[]" value="'.$r['khadamat_id'].'" >
+                    </div>
+                    <div class="col-sm-1 text-center hs-margin-up-down" >
+                        قیمت:
+                    </div>
+                    <div class="col-sm-2" >
+                        <input class="form-control hs-margin-up-down" name="mablagh[]" value="'.$r['mablagh'].'" >
+                    </div>
+                    <div class="col-sm-1 text-center hs-margin-up-down" >
+                        کمیسیون:
+                    </div>
+                    <div class="col-sm-2 hs-margin-up-down" >
+                        <input class="form-control" name="comission[]" value="'.$r['comission'].'" >
+                    </div>
+                    <div class="col-sm-1 text-center hs-margin-up-down" >
+                        جایزه:
+                    </div>
+                    <div class="col-sm-2 hs-margin-up-down" >
+                        <input class="form-control" name="jayeze_code[]" value="'.$r['jayeze_code'].'">
+                    </div>
+                  ';
+        }
+        return($out);
+    }
+    public static function updateGhimat($factor_id,$request)
+    {
+        $my= new mysql_class;
+        for($i=0;$i<count($request['khadamat_id']);$i++)
+        {
+            $qu = "update khadamat_factor set mablagh='".$request['mablagh'][$i]."',comission='".$request['comission'][$i]."',jayeze_code='".$request['jayeze_code'][$i]."' where factor_id=$factor_id and khadamat_id=".$request['khadamat_id'][$i];
+            $my->ex_sqlx($qu);
+        }
+    }        
 }
 
 /* 

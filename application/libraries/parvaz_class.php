@@ -56,7 +56,7 @@ class parvaz_class
                 }
             }
             $qu = "insert into parvaz ($field) values ($values)";
-            echo $qu;
+            //echo $qu;
             $ln = $my->ex_sqlx($qu,FALSE);
             $out = $my->insert_id($ln);
             $my->close($ln);
@@ -71,7 +71,7 @@ class parvaz_class
                 }
             }
             $qu = "update parvaz set $field where id=".$parvaz['parvaz_id'];
-            echo $qu;
+            //echo $qu;
             $out = $my->ex_sqlx($qu);
         }
         //$out='';
@@ -109,6 +109,12 @@ class parvaz_class
             }
         }
         return($out);
-    }         
+    }       
+    public static function has_bargasht($factor_id,$khadamat_id)
+    {
+        $my = new mysql_class;
+        $my->ex_sql("select count(parvaz.id) cid from parvaz left join khadamat_factor on (khadamat_factor.id=khadamat_factor_id) where parvaz.factor_id=$factor_id and khadamat_id=$khadamat_id", $q);
+        return ((int)$q[0]['cid']==2);
+    }        
 } 
 

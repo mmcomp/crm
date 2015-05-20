@@ -178,6 +178,9 @@
         <div class="col-sm-4 hs-margin-up-down" >
             <input class="form-control" name="email" id="email" placeholder="نشانی ایمیل" value="<?php echo $this->input->post('email') !== FALSE ?$this->input->post('email'):''; ?>" >
         </div>
+        <div class="col-sm-4 col-sm-offset-2 hs-margin-up-down" >
+            <input type="text" class="form-control" name="passport" id="passport" placeholder="شماره پاسپورت" value="<?php echo $this->input->post('passport') !== FALSE ?$this->input->post('passport'):''; ?>" >
+        </div>
         <div class="col-sm-8 col-sm-offset-2 hs-margin-up-down" >
             <textarea class="form-control" rows="5"  name="address" id="address" placeholder="نشانی" ><?php echo $this->input->post('address') !== FALSE ?$this->input->post('address'):''; ?></textarea>
         </div>
