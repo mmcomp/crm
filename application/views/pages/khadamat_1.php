@@ -1,5 +1,40 @@
 <?php
     if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+    function hamed_jalalitomiladi($str)
+    {
+            $s=explode('/',$str);
+            $out = "";
+            if(count($s)==3){
+                    $y = (int)$s[0];
+                    $m = (int)$s[1];
+                    $d = (int)$s[2];
+                    if($d > $y)
+                    {
+                            $tmp = $d;
+                            $d = $y;
+                            $y = $tmp;
+                    }
+                    $y = (($y<1000)?$y+1300:$y);
+                    $miladi=jalali_to_jgregorian($y,$m,$d);
+                    $out=$miladi[0]."-".$miladi[1]."-".$miladi[2];
+            }
+            return $out;
+            //jalali_to_gregorian()
+    }
+    function perToEn($inNum){
+		$outp = $inNum;
+		$outp = str_replace('۰', '0', $outp);
+		$outp = str_replace('۱', '1', $outp);
+		$outp = str_replace('۲', '2', $outp);
+		$outp = str_replace('۳', '3', $outp);
+		$outp = str_replace('۴', '4', $outp);
+		$outp = str_replace('۵', '5', $outp);
+		$outp = str_replace('۶', '6', $outp);
+		$outp = str_replace('۷', '7', $outp);
+		$outp = str_replace('۸', '8', $outp);
+		$outp = str_replace('۹', '9', $outp);
+		return($outp);	
+    }
     $next = FALSE;
     $msg='';
     $user_id1 = $user_id;
@@ -20,8 +55,8 @@
         $this->form_validation->set_rules('shomare','شماره پرواز', 'required');
         $this->form_validation->set_rules('airplain','هواپیما', 'required');
         
-        $az_tar=  strtotime($this->inc_model->jalaliToMiladi($this->input->post('az_tarikh')));
-        $ta_tar=strtotime($this->inc_model->jalaliToMiladi($this->input->post('ta_tarikh')));
+        $az_tar=  strtotime(hamed_jalalitomiladi(perToEn($this->input->post('az_tarikh'))));
+        $ta_tar=strtotime(hamed_jalalitomiladi(perToEn($this->input->post('ta_tarikh'))));
         //$this->form_validation->set_rules('parvaz_lname[]', 'پرواز : ' . 'نام خانوادگی ', 'required|min_length[3]|max_length[500]');
         if($this->form_validation->run()==FALSE)
         {
@@ -39,7 +74,7 @@
             $parvaz1['chd']= (int)$this->input->post('chd');
             $parvaz1['inf']= (int)$this->input->post('inf');
             $parvaz1['airline']= ($this->input->post('airline'));
-            $parvaz1['tarikh']= $this->inc_model->jalaliToMiladi($this->input->post('az_tarikh'));
+            $parvaz1['tarikh']= hamed_jalalitomiladi(perToEn($this->input->post('az_tarikh')));
             $parvaz1['airplain']= ($this->input->post('airplain'));
             $parvaz1['saat']= (int)$this->input->post('hour').':'.(int)$this->input->post('minute');
             $parvaz1['saat_vorood']= (int)$this->input->post('hour_v').':'.(int)$this->input->post('minute_v');
@@ -59,7 +94,7 @@
             $parvaz2['chd']= (int)$this->input->post('chd');
             $parvaz2['inf']= (int)$this->input->post('inf');
             $parvaz2['airline']= ($this->input->post('airline_b'));
-            $parvaz2['tarikh']= $this->inc_model->jalaliToMiladi($this->input->post('tarikh_parvaz_b'));
+            $parvaz2['tarikh']=hamed_jalalitomiladi(perToEn($this->input->post('tarikh_parvaz_b')));// $this->inc_model->jalaliToMiladi($this->input->post('tarikh_parvaz_b'));
             $parvaz2['airplain']= ($this->input->post('airplain_b'));
             $parvaz2['saat']= (int)$this->input->post('hour_b').':'.(int)$this->input->post('minute_b');
             $parvaz2['saat_vorood']= (int)$this->input->post('hour_v_b').':'.(int)$this->input->post('minute_v_b');
@@ -84,8 +119,8 @@
         $this->form_validation->set_rules('hotel_name','نام هتل', 'required');
         $this->form_validation->set_rules('room_name[]','نام کلیه اتاق ها', 'required');
         $this->form_validation->set_rules('zarfiat[]','ظرفیت اتاق ها', 'required|is_natural_no_zero');
-        $az_tar=  strtotime($this->inc_model->jalaliToMiladi($this->input->post('az_tarikh_hotel')));
-        $ta_tar=  strtotime($this->inc_model->jalaliToMiladi($this->input->post('ta_tarikh_hotel')));
+        $az_tar=  strtotime(hamed_jalalitomiladi(perToEn($this->input->post('az_tarikh_hotel'))));
+        $ta_tar=strtotime(hamed_jalalitomiladi(perToEn($this->input->post('ta_tarikh_hotel'))));//  strtotime($this->inc_model->jalaliToMiladi($this->input->post('ta_tarikh_hotel')));
         if($this->form_validation->run()==FALSE)
         {
             $valid = FALSE;
@@ -97,8 +132,8 @@
         else
         {     
             $hotel['maghsad_id'] = (int)$this->input->post('city_to_hotel');
-            $hotel['az_tarikh'] = $this->inc_model->jalaliToMiladi($this->input->post('az_tarikh_hotel'));
-            $hotel['ta_tarikh'] = $this->inc_model->jalaliToMiladi($this->input->post('ta_tarikh_hotel'));
+            $hotel['az_tarikh'] = hamed_jalalitomiladi(perToEn($this->input->post('az_tarikh_hotel')));
+            $hotel['ta_tarikh'] = hamed_jalalitomiladi(perToEn($this->input->post('ta_tarikh_hotel')));
             $hotel['adl'] = 0;
             $hotel['chd'] = 0;
             $hotel['inf'] = 0;
@@ -190,6 +225,7 @@
     if(isset($hot->az_tarikh))
     {
         $tshab = strtotime($hot->ta_tarikh)- strtotime($hot->az_tarikh);
+        echo $hot->az_tarikh;
         $shab = floor($tshab/(60*60*24));
     }    
     for($j=0;$j<count($hot_room);$j++)
