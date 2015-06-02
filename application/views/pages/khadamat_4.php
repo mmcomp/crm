@@ -13,6 +13,7 @@
         else
         {    
             khadamat_class::updateGhimat($p1, $_REQUEST);
+            redirect('khadamat_5/'.$p1);
         }    
     }    
     $this->profile_model->loadUser($user_id);

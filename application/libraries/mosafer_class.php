@@ -36,6 +36,7 @@
         {
             $mysql = new mysql_class;
             $mysql->ex_sql("select `khadamat`.`typ` `khadamat_type`,`khadamat`.`name` `khadamat_name`,`mosafer`.`id`,`fname`, `lname`, `code_melli`, `passport`, `passport_engheza`, `gender`, `age`, `tarikh_tavalod`, `khadamat_factor`.`id` `khadamat_factor_id`,`ticket_number` from `khadamat_factor` left join `mosafer`  on (`khadamat_factor_id`=`khadamat_factor`.`id`) left join `khadamat` on (`khadamat`.`id`=`khadamat_id`) where `factor_id` = $factor_id order by `age`",$q);
+            //echo "select `khadamat`.`typ` `khadamat_type`,`khadamat`.`name` `khadamat_name`,`mosafer`.`id`,`fname`, `lname`, `code_melli`, `passport`, `passport_engheza`, `gender`, `age`, `tarikh_tavalod`, `khadamat_factor`.`id` `khadamat_factor_id`,`ticket_number` from `khadamat_factor` left join `mosafer`  on (`khadamat_factor_id`=`khadamat_factor`.`id`) left join `khadamat` on (`khadamat`.`id`=`khadamat_id`) where `factor_id` = $factor_id order by `age`";
             return($q);
         }
     }
