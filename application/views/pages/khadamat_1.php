@@ -193,19 +193,19 @@
                 <div class="col-sm-4 hs-margin-up-down" > 
                 تعداد بزرگسال: 
                 <select name="hotel_adl[]" style="width: 50px;" class="hotel_extra" >
-                    '.$this->inc_model->generateOption(9,1,1,(int)$hot_room[$j]['adl']).'
+                    '.$this->inc_model->generateOption(9,0,1,(int)$hot_room[$j]['adl']).'
                 </select>
             </div>
             <div class="col-sm-4 hs-margin-up-down" >
                 تعداد کودک:
                 <select name="hotel_chd[]" style="width: 50px;" class="hotel_extra" >
-                    '.$this->inc_model->generateOption(9,1,1,(int)$hot_room[$j]['chd']).'
+                    '.$this->inc_model->generateOption(9,0,1,(int)$hot_room[$j]['chd']).'
                 </select>
             </div>
             <div class="col-sm-3 hs-margin-up-down" >
                 تعداد نوزاد: 
                 <select name="hotel_inf[]" style="width: 50px;" class="hotel_extra" >
-                    '.$this->inc_model->generateOption(9,1,1,(int)$hot_room[$j]['inf']).'
+                    '.$this->inc_model->generateOption(9,0,1,(int)$hot_room[$j]['inf']).'
                 </select>
             </div>
             <div class="col-sm-1 hs-margin-up-down">
@@ -733,7 +733,7 @@
         var nafarat = '<div class="col-sm-4 hs-margin-up-down" > \
                 تعداد بزرگسال: \
                 <select name="hotel_adl[]" style="width: 50px;" class="hotel_extra" >\
-                    <?php echo $this->inc_model->generateOption(9,1,1); ?>\
+                    <?php echo $this->inc_model->generateOption(9,0,1); ?>\
                 </select>\
             </div>\
             <div class="col-sm-4 hs-margin-up-down" >\
