@@ -128,7 +128,7 @@ class Profile_model extends CI_Model {
             ),
             2 => array(
                 "صفحه اصلی" => site_url()."home",
-                "ثبت مشتری جدید" => site_url()."new_user",
+                "ثبت مشتری جدید" => site_url()."register",
                 "چاپ فرم" => site_url()."print_form",
                 "کارتابل" => site_url()."paper_cartable/normal",
                 "ثبت نامه جدید" => site_url()."paper_new",
@@ -168,7 +168,7 @@ class Profile_model extends CI_Model {
             ),
             2 => array(
                 "صفحه اصلی" => site_url()."home",
-                "ثبت مشتری جدید" => site_url()."new_user",
+                "ثبت مشتری جدید" => site_url()."register",
                 "چاپ فرم" => site_url()."print_form",
                 "پروفایل" => site_url()."profile"        
             ),
@@ -178,7 +178,6 @@ class Profile_model extends CI_Model {
             ),
             4 => array(
                 "صفحه اصلی" => site_url()."home",
-                "ثبت مشتری جدید" => site_url()."new_user",
                 "تایید پیش‌فاکتور" => site_url()."hesab_factor",
                 "پروفایل" => site_url()."profile"        
             ),

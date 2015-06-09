@@ -433,7 +433,7 @@ class xgrid
 //				$ln = mysql_class::ex_sqlx($query,FALSE);
 				$out = (string)$mysql->insert_id($ln);
 				//$out = (string)mysql_insert_id($ln);
-				mysql_close($ln);
+				//mysql_close($ln);
 			}
 		}
 		return $out;

@@ -253,7 +253,7 @@
                 <textarea class="form-control" rows="5" name="address" id="address" placeholder="نشانی" ><?php echo $user_obj->address; ?></textarea>
             </div>
             <div class="col-sm-6  hs-margin-up-down" >
-                <button class="btn hs-btn-default" >ویرایش</button>
+                <button class="btn hs-btn-default" >ذخیره</button>
             </div>
         </div>        
     </div>

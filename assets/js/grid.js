@@ -160,10 +160,12 @@ function jshowGrid(indata,gname,targetFile)
 	}
 	function listToCombo(tmpList,sval)
 	{
+            console.log(tmpList);
 		var out = '';
-		for(val in tmpList)
+		for(val1 in tmpList)
 		{
-			txt = tmpList[val];
+			txt = tmpList[val1].val;
+                        val = tmpList[val1].id;
 			out += "<option value=\""+val+"\" "+((sval == val)?"selected='selected'":'')+" >"+txt+"</option>\n";
 		}
 		return(out);

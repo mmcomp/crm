@@ -1,5 +1,9 @@
 <?php
     if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+    function loadGrp()
+    {
+        return(group_class::loadAll());
+    }
     $this->profile_model->loadUser($user_id);
     $men = $this->profile_model->loadMenu();
     $msg = '';
@@ -40,6 +44,8 @@
     $xgrid1->column[$gname1][2]['name'] = 'نام خانوادگی';
     $xgrid1->column[$gname1][3]['name'] = 'کد ملی';
     $xgrid1->column[$gname1][11]['name'] = 'نام کاربری';
+    $xgrid1->column[$gname1][15]['name'] = 'گروه کاربری';
+    $xgrid1->column[$gname1][15]['clist'] = loadGrp();
     //$xgrid1->column[$gname1][12]['name'] = 'رمز عبور';
     //$xgrid1->column[$gname1][3]['cfunction'] = array('urldecode'); 
 
@@ -55,7 +61,11 @@
     $(document).ready(function(){
         var args=<?php echo $xgrid1->arg; ?>;
         args[ggname_project]['afterLoad']=function(){
-            console.log('after Load');
+            $("select").css("width","100%");
+            $("#pageNumber-gname_user").css("width","50px");
+            $("select").select2({
+                dir:'rtl'
+            });
             $($(".ajaxgrid_bottomTable td")[0]).append('<button class="btn hs-btn-default" id="deleteRow-gname_user" onclick="editProfile();">ویرایش</button>');
         };
         intialGrid(args);
