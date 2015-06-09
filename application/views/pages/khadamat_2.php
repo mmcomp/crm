@@ -312,6 +312,7 @@
     }
     if(isset($_REQUEST['mob']))
     {
+        /*
         $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
         $this->form_validation->set_rules('hotel_fname[]', 'تلفن همراه ', 'required|min_length[10]|max_length[15]');
         $this->form_validation->set_rules('hotel_lname[]', 'ایمیل', 'required|valid_email');
@@ -321,9 +322,11 @@
         }
         else 
         {
+         * /
+         */
             $m = new mysql_class;
             $m->ex_sqlx("update `factor` set `mob` = '".$_REQUEST['mob']."' , `email` = '".$_REQUEST['email']."' where id = $factor_id");
-        }
+        //}
         if($valid)
         {
             redirect('khadamat_3/'.$factor_id);
@@ -379,9 +382,9 @@
         if(isset($par_obj->mabda_id))
         {
             $tmp = new city_class($par_obj->mabda_id);
-            $mabda = $tmp->name;
+            $mabda = (isset($tmp->name))?$tmp->name:'----';
             $tmp = new city_class($par_obj->maghsad_id);
-            $maghsad = $tmp->name;
+            $maghsad = (isset($tmp->name))?$tmp->name:'----';
             $tit = '<div class="col-sm-2 hs-padding">'.$mabda.'...'.$maghsad.'</div>';
             $tit .= '<div class="col-sm-2 hs-padding">شماره:'.$par_obj->shomare.'</div>';
             $tit .= '<div class="col-sm-2 hs-padding">تاریخ:'.jdate("d-m-Y",strtotime($par_obj->tarikh)).'</div>';
@@ -505,7 +508,7 @@ PAR2;
         $hot_obj->loadByKhadamatFactor($typs[2][0]['khadamat_factor_id']);
         $hot_obj->shab = dateDif($hot_obj->ta_tarikh, $hot_obj->az_tarikh);
         $tmp = new city_class($hot_obj->maghsad_id);
-        $maghsad = $tmp->name;
+        $maghsad = (isset($tmp->name))?$tmp->name:'---';
         $hr = hotel_room_class::loadByFactorId($factor_id);
         $extra = 0;
         $extra_chd = 0;
@@ -795,9 +798,9 @@ TR2;
         $khadamat_factor_id = $typs[3][0]['khadamat_factor_id'];        
         $par_obj->loadByKhadamatFactor($typs[3][0]['khadamat_factor_id']);
         $tmp = new city_class($par_obj->mabda_id);
-        $mabda = $tmp->name;
+        $mabda = (isset($tmp->name))?$tmp->name:'----';
         $tmp = new city_class($par_obj->maghsad_id);
-        $maghsad = $tmp->name;
+        $maghsad = (isset($tmp->name))?$tmp->name:'----';
         $hot_obj = new hotel_class();
         $hot_obj->loadByKhadamatFactor($typs[3][0]['khadamat_factor_id']);
         $tit = '<div class="col-sm-2 hs-padding">'.$mabda.'...'.$maghsad.'</div>';
