@@ -172,7 +172,7 @@
     function dateDif($date1,$date2)
     {
         $dif = strtotime($date1)-strtotime($date2);
-        return($dif/(24*60*60));
+        return((int)abs($dif/(24*60*60)));
     }
     if ( ! defined('BASEPATH')) exit('No direct script access allowed');
     
