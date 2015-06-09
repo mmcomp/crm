@@ -202,7 +202,7 @@ HAM;
         $(".gasht_textarea").css("height","50px");
         var pageNo = 'چاپ';
         var headElements =  '<meta charset="utf-8" >,<meta http-equiv="X-UA-Compatible" content="IE=edge" >' ;
-        var options = { mode : 'popup', popClose :false, extraCss : '', retainAttr : ["class", "id", "style", "on"], extraHead : headElements ,popHt: 500,popWd: 700,popTitle:pageNo};
+        var options = { mode : 'popup', popClose :true, extraCss : '', retainAttr : ["class", "id", "style", "on"], extraHead : headElements ,popHt: 500,popWd: 700,popTitle:pageNo};
         //$("#ifr").css("width","21cm");
         $("#ifr").printArea(options);
         $(".gasht_input").css("border",b);
