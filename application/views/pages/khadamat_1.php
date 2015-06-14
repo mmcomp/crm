@@ -8,6 +8,7 @@
     factor_class::marhale((int)$p1,'khadamat_1');
     if($this->input->post('city_from')!==FALSE)
     {
+        //var_dump($_REQUEST);
         //echo $this->inc_model->jalaliToMiladi($_REQUEST['']);
         $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
         $this->form_validation->set_rules('city_from','مبدأ ', 'required|is_natural_no_zero');
@@ -51,7 +52,6 @@
             $parvaz1['gohar_voucher_id'] = ($this->input->post('raft_check')!==FALSE?-1:$gohar_voucher_id);
             $parvaz1['parvaz_id'] =(int) $this->input->post('parvaz_id');
             parvaz_class::add($parvaz1);
-            //var_dump($parvaz1);
 
             $parvaz2['mabda_id']= (int)$this->input->post('city_to');
             $parvaz2['maghsad_id']= (int)$this->input->post('city_from');
@@ -151,7 +151,8 @@
     }
     if($next)
     {
-        redirect('khadamat_2/'.$p1);
+        redirect('khadamat_2/'.$p1);        //$my->ex_sql("select id from khadamat_factor where factor_id=$factor_id and khadamat_id=1",$q);
+
     }    
     if((int)$p1==0)
     {
@@ -296,6 +297,7 @@
         <?php
             echo validation_errors();
             echo $msg;
+            echo "<div class='text-center hs-margin-up-down' ><div class='label label-danger' style='font-size:100%' >شماره فاکتور: $p1</div></div>"; 
         ?>
         
         <?php 
@@ -327,7 +329,7 @@
                 </select>
             </div>
             <div class="col-sm-6 hs-margin-up-down"  >
-                <input class="dateValue2 form-control" autocomplete="off" placeholder="از تاریخ" onblur="fillRaft(this);" name="az_tarikh" id="az_tarikh" value="<?php echo isset($parvaz['raft']->tarikh)?jdate("Y/m/d",strtotime($parvaz['raft']->tarikh)):'';?>" >
+                <input class="dateValue2 form-control" autocomplete="off" placeholder="از تاریخ" onblur="fillRaft(this)" name="az_tarikh" id="az_tarikh" value="<?php echo isset($parvaz['raft']->tarikh)?jdate("Y/m/d",strtotime($parvaz['raft']->tarikh)):'';?>" >
             </div>
             <div class="col-sm-6 hs-margin-up-down"  >
                 <input class="dateValue2 form-control" autocomplete="off" placeholder="تا تاریخ" onblur="fillBargasht(this)" name="ta_tarikh" id="ta_tarikh" value="<?php echo isset($parvaz['bargasht']->tarikh)?jdate("Y/m/d",strtotime($parvaz['bargasht']->tarikh)):'';?>" >
@@ -687,7 +689,7 @@
                     $("#hotel_az_tarikh").prop("disabled",true);
                 }    
             }    
-        },100);
+        },300);
     }
     function fillBargasht(inp)
     {
@@ -704,10 +706,24 @@
                     $("#ta_tarikh_hotel").prop("disabled",true);
                 } 
             }
-        },100);
+        },300);
     }
     function toggle_raft()
     {
+        var tt  = $("#az_tarikh").val().split('/');
+        if(tt.length>1)
+        {
+            var newd = tt[2]+'/'+tt[1]+'/'+tt[0];
+            $("#az_tarikh").val(newd);
+            $("#tarikh_parvaz").val(newd);
+            if($("#az_tarikh_hotel").length>0)
+            {
+                $("#az_tarikh_hotel").val(newd);
+                $("#az_tarikh_hotel").prop("disabled",true);
+                $("#hotel_az_tarikh").val(newd);
+                $("#hotel_az_tarikh").prop("disabled",true);
+            } 
+        }
         if($("#raft_div :input").prop("disabled"))
         {    
             $("#raft_div :input").prop("disabled",false);
@@ -723,6 +739,18 @@
     }
     function toggle_bargasht()
     {
+        var tt  = $("#ta_tarikh").val().split('/');
+        if(tt.length>1)
+        {
+            var newd = tt[2]+'/'+tt[1]+'/'+tt[0];
+            $("#ta_tarikh").val(newd);
+            $("#tarikh_parvaz_b").val(newd);
+            if($("#ta_tarikh_hotel").length>0)
+            {
+                $("#ta_tarikh_hotel").val(newd);
+                $("#ta_tarikh_hotel").prop("disabled",true);
+            } 
+        }
         if($("#bargasht_div :input").prop("disabled"))
         {    
             $("#bargasht_div :input").prop("disabled",false);

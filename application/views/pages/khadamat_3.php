@@ -63,6 +63,7 @@
         <?php
             echo $this->inc_model->loadProgress(3,$p1);
             echo validation_errors();
+            echo "<div class='text-center hs-margin-up-down' ><div class='label label-danger' style='font-size:100%' >شماره فاکتور: $p1</div></div>";             
         ?>
         <div class="row hs-margin-up-down hs-gray hs-padding hs-border">
             تامین کنندگان

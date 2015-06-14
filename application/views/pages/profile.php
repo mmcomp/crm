@@ -34,7 +34,14 @@
         }
     }
     $msg = '';
-    $user_id1 = $user_id;
+    if($factor_id>0)
+    {
+        $f = new factor_class($factor_id);
+        $user_id1 = $f->user_id;
+    }
+    else {
+        $user_id1 = $user_id;
+    }
     if(trim($p1)!='')
         $user_id1 = (int)$p1;
     if(isset($_REQUEST['s_user_id']))

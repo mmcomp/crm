@@ -1,6 +1,6 @@
 <?php
     if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-    if(isset($_REQUEST['s_code_melli']))
+    if(isset($_REQUEST['s_code_melli']) && trim($_REQUEST['s_factor_id'])=='')
     {
         $user_obj = new user_class;
         $user_obj->loadByCodeMelli(trim($_REQUEST['s_code_melli']));
@@ -21,7 +21,14 @@
             }
         }
     }
-
+    else if(isset($_REQUEST['s_factor_id']) && trim($_REQUEST['s_code_melli'])=='')
+    {
+        $f = new factor_class((int)$_REQUEST['s_factor_id']);
+        if(isset($f->marhale))
+        {
+            redirect($f->marhale."/".(int)$_REQUEST['s_factor_id']);
+        }
+    }
     $this->profile_model->loadUser($user_id);
     $men = $this->profile_model->loadMenu();
     $msg = '';

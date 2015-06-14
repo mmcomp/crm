@@ -803,6 +803,8 @@ TR2;
         $maghsad = (isset($tmp->name))?$tmp->name:'----';
         $hot_obj = new hotel_class();
         $hot_obj->loadByKhadamatFactor($typs[3][0]['khadamat_factor_id']);
+        //var_dump($hot_obj);
+        $hot_obj->shab = dateDif($hot_obj->ta_tarikh, $hot_obj->az_tarikh);
         $tit = '<div class="col-sm-2 hs-padding">'.$mabda.'...'.$maghsad.'</div>';
         $tit .= '<div class="col-sm-2 hs-padding">شماره:'.$par_obj->shomare.'</div>';
         $tit .= '<div class="col-sm-2 hs-padding">تاریخ:'.jdate("d-m-Y",strtotime($par_obj->tarikh)).'</div>';
@@ -1089,7 +1091,10 @@ HOT2;
         <?php
             echo $this->inc_model->loadProgress(2,$factor_id);
         ?>
-        <?php echo validation_errors(); ?>
+        <?php 
+            echo validation_errors();
+            echo "<div class='text-center hs-margin-up-down' ><div class='label label-danger' style='font-size:100%' >شماره فاکتور: $p1</div></div>"; 
+        ?>
         <?php echo $parvaz; ?>
         <?php echo $hotel.$tour.$visa_melli.$visa_pass; ?>
         <div class="hs-float-left hs-margin-up-down">

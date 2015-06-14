@@ -2,8 +2,36 @@
 <html>
 <head>
         <?php
+            
             $this->load->helper('html');
             $this->load->helper('url');
+            
+            $this->load->library('user_agent');
+
+            if ($this->agent->is_browser())
+            {
+                $agent = $this->agent->browser();//.' '.$this->agent->version();
+            }
+            elseif ($this->agent->is_robot())
+            {
+                $agent = $this->agent->robot();
+            }
+            elseif ($this->agent->is_mobile())
+            {
+                $agent = $this->agent->mobile();
+            }
+            else
+            {
+                $agent = 'Unidentified User Agent';
+            }
+            if(strtolower($agent)!='chrome')
+            {
+                //die('NOK');
+            }
+//echo $agent;
+
+//echo $this->agent->platform(); // Platform info (Windows, Linux, Mac, etc.)
+            
             echo meta($meta);
         ?>
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -87,7 +115,8 @@
                 <?php if($is_logged){ ?>
                 <form class="navbar-form navbar-left" action="<?php echo site_url(); ?>home" id="frm1">
                   <div class="form-group">
-                    <input type="text" class="form-control" placeholder="جستجوی کد ملی" name="s_code_melli">
+                      <input type="text" class="form-control" placeholder="جستجوی فاکتور" name="s_factor_id" onkeypress="$('#s_code_melli').val('');" id="s_factor_id">
+                    <input type="text" class="form-control" placeholder="جستجوی کد ملی" name="s_code_melli" id="s_code_melli" onkeypress="$('#s_factor_id').val('');">
                   </div>
                     <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
                 </form>

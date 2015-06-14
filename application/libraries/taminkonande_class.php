@@ -76,20 +76,20 @@ class taminkonande_class extends CI_Model {
     {
         $my = new mysql_class;
         $my->ex_sqlx("update tamin_khadamat set en=0 where factor_id=$factor_id");
+        //echo "update tamin_khadamat set en=0 where factor_id=$factor_id <br>";
         for($i=0;$i<count($params['khadamat_id']);$i++)
         {
             if((int)$params['tamin_khadamat_id'][$i]==-1)
             {    
-                $sql = "insert into tamin_khadamat (factor_id,taminkonande_id,mablagh,vahed_mablagh_id,khadamat_tamin_id,khadamat_id,toz) values ('".$factor_id."','".$params['taminkonande_id'][$i]."','".$params['mablagh'][$i]."','".$params['vahed_mablagh_id'][$i]."','".$params['khadamat_tamin_id'][$i]."','".$params['khadamat_id'][$i]."','".$params['toz'][$i]."')";
+                $sql = "insert into tamin_khadamat (factor_id,taminkonande_id,mablagh,vahed_mablagh_id,khadamat_tamin_id,khadamat_id,toz,en) values ('".$factor_id."','".$params['taminkonande_id'][$i]."','".$params['mablagh'][$i]."','".$params['vahed_mablagh_id'][$i]."','".$params['khadamat_tamin_id'][$i]."','".$params['khadamat_id'][$i]."','".$params['toz'][$i]."',1)";
             }
             else
             {
                 $sql = "update tamin_khadamat set en=1,taminkonande_id='".$params['taminkonande_id'][$i]."',mablagh='".$params['mablagh'][$i]."',vahed_mablagh_id='".$params['vahed_mablagh_id'][$i]."',khadamat_tamin_id='".$params['khadamat_tamin_id'][$i]."',khadamat_id='".$params['khadamat_id'][$i]."',toz='".$params['toz'][$i]."' where id=".$params['tamin_khadamat_id'][$i];
             }
-           //echo $sql.'<br/>';
             $my->ex_sqlx($sql);
-            $my->ex_sqlx("delete from tamin_khadamat where en=0 and factor_id=$factor_id");
         }
+        $my->ex_sqlx("delete from tamin_khadamat where en=0 and factor_id=$factor_id");
         return TRUE;
     }
     public static function loadLast($factor_id)

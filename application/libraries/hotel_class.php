@@ -42,7 +42,7 @@ class hotel_class
     public static function loadKhadamat_factor_id($factor_id)
     {
         $my = new mysql_class;
-        $my->ex_sql("select id from khadamat_factor where factor_id=$factor_id and khadamat_id=2",$q);
+        $my->ex_sql("select khadamat_factor.id from khadamat_factor left join khadamat on (khadamat.id=khadamat_id)  where factor_id=$factor_id and typ in (2,3)",$q);
         return(count($q)>0?$q[0]['id']:-1);
     }
     public static function add($hotel,$hotel_room)
