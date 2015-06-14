@@ -75,6 +75,8 @@
         $body1 = str_replace("#hamrahan#", $ham_out, $body1);
         $body1 = str_replace("#lname1#", $lname1, $body1);
         $body1 = str_replace("#logo#", $logo, $body1);
+        $body1 = str_replace("#address#", $u->address, $body1);
+        $body1 = str_replace("#tel#", $u->tell, $body1);
         $body1 = $this->form_model->replaceHashWithInput("visa",$body1,$data);
 
     }
