@@ -105,6 +105,7 @@
         if(isset($extra_obj->adl))
             createFakeMosafer((int)$extra_obj->adl-$cadl, (int)$extra_obj->chd-$cchd, (int)$extra_obj->inf-$cinf, $inp);
         //var_dump($inp);
+        $khadamat_name = '';
         foreach($inp as $ind=>$mo)
         {
             //var_dump($mo);
@@ -142,7 +143,8 @@
             $tav_mah = generateOption(12, 1, 1,$ptav_mah);
             $tav_sal = generateOption($cur_sh_sal, 1300, -1,$ptav_sal);
             $id = $mo['id'];
-            $khadamat_name = $mo['khadamat_name'];
+            if(trim($khadamat_name)=='' && trim($mo['khadamat_name'])!='')
+                $khadamat_name = $mo['khadamat_name'];
             $passport = $mo['passport'];
             $midStr1 = str_replace('#pindex#', $pindex, $midStr);
             $midStr1 = str_replace('#age_adl#', $age_adl, $midStr1);
@@ -199,7 +201,7 @@
         $lname = $_REQUEST['parvaz_lname'];
         $code_melli = $_REQUEST['parvaz_code_melli'];
         $khadamat_factor_id = $_REQUEST['khadamat_factor_id-1'];
-        $ticket_number = $_REQUEST['ticket_number'];
+        $ticket_number = isset($_REQUEST['ticket_number'])?$_REQUEST['ticket_number']:'';
         if($this->form_validation->run()==FALSE)
         {
             $valid = FALSE;
