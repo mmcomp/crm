@@ -139,6 +139,11 @@ HAM;
         $body1 = str_replace("#user_sabti#", $user_creator->fname.' '.$user_creator->lname, $body1);
         $body1 = str_replace("#hamrahan#", $ham_out, $body1);
         $body1 = str_replace("#lname1#", $lname1, $body1);
+        $body1 = str_replace("#pedar_name#", $u->pedar_name,$body1);
+        $body1 = str_replace("#tarikh_tavalod#",  jdate("d / m / Y", $u->tarikh_tavalod),$body1);
+        $body1 = str_replace("#address#", $u->address,$body1);
+        $body1 = str_replace("#tell#", $u->tell,$body1);
+        $body1 = str_replace("#mob#", $u->mob,$body1);
         $body1 = $this->form_model->replaceHashWithInput("gasht",$body1,$data);
 
     }

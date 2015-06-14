@@ -91,7 +91,7 @@ class khadamat_class
             $qu = "update khadamat_factor set mablagh='".$request['mablagh'][$i]."',comission='".$request['comission'][$i]."',jayeze_code='".$request['jayeze_code'][$i]."' where factor_id=$factor_id and khadamat_id=".$request['khadamat_id'][$i];
             $my->ex_sqlx($qu);
         }
-        $my->ex_sqlx("update factor set `commision`=$sum_comission,`mablagh`=$sum where factor_id = $factor_id");
+        $my->ex_sqlx("update factor set `commision`=$sum_comission,`mablagh`=$sum where id = $factor_id");
     }        
 }
 

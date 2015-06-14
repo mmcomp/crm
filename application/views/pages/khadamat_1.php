@@ -1,6 +1,7 @@
 <?php
     if ( ! defined('BASEPATH')) exit('No direct script access allowed');
     $next = FALSE;
+    $msg='';
     $user_id1 = $user_id;
     if(trim($p1)!='')
         $user_id1 = (int)$p1;
@@ -8,88 +9,145 @@
     if($this->input->post('city_from')!==FALSE)
     {
         //echo $this->inc_model->jalaliToMiladi($_REQUEST['']);
-        $parvaz1['mabda_id']= (int)$this->input->post('city_from');
-        $parvaz1['maghsad_id']= (int)$this->input->post('city_to');
-        $parvaz1['adl']= (int)$this->input->post('adl');
-        $parvaz1['chd']= (int)$this->input->post('chd');
-        $parvaz1['inf']= (int)$this->input->post('inf');
-        $parvaz1['airline']= ($this->input->post('airline'));
-        $parvaz1['tarikh']= $this->inc_model->jalaliToMiladi($this->input->post('az_tarikh'));
-        $parvaz1['airplain']= ($this->input->post('airplain'));
-        $parvaz1['saat']= (int)$this->input->post('hour').':'.(int)$this->input->post('minute');
-        $parvaz1['saat_vorood']= (int)$this->input->post('hour_v').':'.(int)$this->input->post('minute_v');
-        $parvaz1['shomare'] = ($this->input->post('shomare'));
-        $parvaz1['is_bargasht'] = 0;
-        $parvaz1['class_parvaz']= ($this->input->post('class_parvaz'));
-        $parvaz1['factor_id'] = (int)$p1;
-        $parvaz1['khadamat_factor_id'] = parvaz_class::loadKhadamat_factor_id((int)$p1);
-        $gohar_voucher_id=11111;
-        $parvaz1['gohar_voucher_id'] = ($this->input->post('raft_check')!==FALSE?-1:$gohar_voucher_id);
-        $parvaz1['parvaz_id'] =(int) $this->input->post('parvaz_id');
-        parvaz_class::add($parvaz1);
-        //var_dump($parvaz1);
+        $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
+        $this->form_validation->set_rules('city_from','مبدأ ', 'required|is_natural_no_zero');
+        $this->form_validation->set_rules('city_to','مقصد ', 'required|is_natural_no_zero');
+        $this->form_validation->set_rules('az_tarikh','از تاریخ', 'required');
+        $this->form_validation->set_rules('ta_tarikh','تا تاریخ', 'required');
+        $this->form_validation->set_rules('airline','ایرلاین ', 'required|is_natural_no_zero');
+        $this->form_validation->set_rules('class_parvaz','کلاس پرواز', 'required');
+        $this->form_validation->set_rules('shomare','شماره پرواز', 'required');
+        $this->form_validation->set_rules('airplain','هواپیما', 'required');
         
-        $parvaz2['mabda_id']= (int)$this->input->post('city_to');
-        $parvaz2['maghsad_id']= (int)$this->input->post('city_from');
-        $parvaz2['adl']= (int)$this->input->post('adl');
-        $parvaz2['chd']= (int)$this->input->post('chd');
-        $parvaz2['inf']= (int)$this->input->post('inf');
-        $parvaz2['airline']= ($this->input->post('airline_b'));
-        $parvaz2['tarikh']= $this->inc_model->jalaliToMiladi($this->input->post('tarikh_parvaz_b'));
-        $parvaz2['airplain']= ($this->input->post('airplain_b'));
-        $parvaz2['saat']= (int)$this->input->post('hour_b').':'.(int)$this->input->post('minute_b');
-        $parvaz2['saat_vorood']= (int)$this->input->post('hour_v_b').':'.(int)$this->input->post('minute_v_b');
-        $parvaz2['shomare'] = ($this->input->post('shomare_b'));
-        $parvaz2['is_bargasht'] = 1;
-        $parvaz2['class_parvaz']= ($this->input->post('class_parvaz_b'));
-        $parvaz2['factor_id'] = (int)$p1;
-        $parvaz2['khadamat_factor_id'] = parvaz_class::loadKhadamat_factor_id((int)$p1);
-        $gohar_voucher_id_b=11111;
-        $parvaz2['gohar_voucher_id'] = ($this->input->post('bargasht_check')!==FALSE?-1:$gohar_voucher_id_b);
-        $parvaz2['parvaz_id'] =(int) $this->input->post('parvaz_id_b');
-        parvaz_class::add($parvaz2);
-        $next = TRUE;
+        $az_tar=  strtotime($this->inc_model->jalaliToMiladi($this->input->post('az_tarikh')));
+        $ta_tar=strtotime($this->inc_model->jalaliToMiladi($this->input->post('ta_tarikh')));
+        //$this->form_validation->set_rules('parvaz_lname[]', 'پرواز : ' . 'نام خانوادگی ', 'required|min_length[3]|max_length[500]');
+        if($this->form_validation->run()==FALSE)
+        {
+            $valid = FALSE;
+        }
+        else if($ta_tar<=$az_tar)
+        {
+            $msg ='<div class="alert alert-danger" >'. 'تاریخ رفت از تاریخ برگشت بزرگتر است'.'</div>';
+        }    
+        else
+        {    
+            $parvaz1['mabda_id']= (int)$this->input->post('city_from');
+            $parvaz1['maghsad_id']= (int)$this->input->post('city_to');
+            $parvaz1['adl']= (int)$this->input->post('adl');
+            $parvaz1['chd']= (int)$this->input->post('chd');
+            $parvaz1['inf']= (int)$this->input->post('inf');
+            $parvaz1['airline']= ($this->input->post('airline'));
+            $parvaz1['tarikh']= $this->inc_model->jalaliToMiladi($this->input->post('az_tarikh'));
+            $parvaz1['airplain']= ($this->input->post('airplain'));
+            $parvaz1['saat']= (int)$this->input->post('hour').':'.(int)$this->input->post('minute');
+            $parvaz1['saat_vorood']= (int)$this->input->post('hour_v').':'.(int)$this->input->post('minute_v');
+            $parvaz1['shomare'] = ($this->input->post('shomare'));
+            $parvaz1['is_bargasht'] = 0;
+            $parvaz1['class_parvaz']= ($this->input->post('class_parvaz'));
+            $parvaz1['factor_id'] = (int)$p1;
+            $parvaz1['khadamat_factor_id'] = parvaz_class::loadKhadamat_factor_id((int)$p1);
+            $gohar_voucher_id=11111;
+            $parvaz1['gohar_voucher_id'] = ($this->input->post('raft_check')!==FALSE?-1:$gohar_voucher_id);
+            $parvaz1['parvaz_id'] =(int) $this->input->post('parvaz_id');
+            parvaz_class::add($parvaz1);
+            //var_dump($parvaz1);
+
+            $parvaz2['mabda_id']= (int)$this->input->post('city_to');
+            $parvaz2['maghsad_id']= (int)$this->input->post('city_from');
+            $parvaz2['adl']= (int)$this->input->post('adl');
+            $parvaz2['chd']= (int)$this->input->post('chd');
+            $parvaz2['inf']= (int)$this->input->post('inf');
+            $parvaz2['airline']= ($this->input->post('airline_b'));
+            $parvaz2['tarikh']= $this->inc_model->jalaliToMiladi($this->input->post('tarikh_parvaz_b'));
+            $parvaz2['airplain']= ($this->input->post('airplain_b'));
+            $parvaz2['saat']= (int)$this->input->post('hour_b').':'.(int)$this->input->post('minute_b');
+            $parvaz2['saat_vorood']= (int)$this->input->post('hour_v_b').':'.(int)$this->input->post('minute_v_b');
+            $parvaz2['shomare'] = ($this->input->post('shomare_b'));
+            $parvaz2['is_bargasht'] = 1;
+            $parvaz2['class_parvaz']= ($this->input->post('class_parvaz_b'));
+            $parvaz2['factor_id'] = (int)$p1;
+            $parvaz2['khadamat_factor_id'] = parvaz_class::loadKhadamat_factor_id((int)$p1);
+            $gohar_voucher_id_b=11111;
+            $parvaz2['gohar_voucher_id'] = ($this->input->post('bargasht_check')!==FALSE?-1:$gohar_voucher_id_b);
+            $parvaz2['parvaz_id'] =(int) $this->input->post('parvaz_id_b');
+            parvaz_class::add($parvaz2);
+            $next = TRUE;
+        }
         //var_dump($parvaz2);
     }
     if($this->input->post('city_to_hotel')!==FALSE)
     {
-        //var_dump($_REQUEST);
-        $hotel['maghsad_id'] = (int)$this->input->post('city_to_hotel');
-        $hotel['az_tarikh'] = $this->inc_model->jalaliToMiladi($this->input->post('az_tarikh_hotel'));
-        $hotel['ta_tarikh'] = $this->inc_model->jalaliToMiladi($this->input->post('ta_tarikh_hotel'));
-        $hotel['adl'] = (int)$this->input->post('hotel_adl')[0];
-        $hotel['chd'] = (int)$this->input->post('hotel_chd')[0];
-        $hotel['inf'] = (int)$this->input->post('hotel_inf')[0];
-        $hotel['name'] = trim($this->input->post('hotel_name'));
-        $hotel['star'] = (int)$this->input->post('hotel_star');
-        $hotel['room_count'] = (int)$this->input->post('hotel_room_count');
-        $hotel['factor_id'] = (int)$p1;
-        $hotel['khadamat_factor_id'] = hotel_class::loadKhadamat_factor_id((int)$p1);
-        $hotel['hotel_id'] = (int)$this->input->post('hotel_id');
-        //
-        $hotel_room_count = (int)$this->input->post('hotel_room_count');
-        $hotel_room=array();
-        for($i=0;$i<$hotel_room_count;$i++)
+        $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
+        $this->form_validation->set_rules('hotel_room_count','تعداد اتاق', 'required|is_natural_no_zero');
+        $this->form_validation->set_rules('city_to_hotel','مقصد هتل', 'required|is_natural_no_zero');
+        $this->form_validation->set_rules('hotel_name','نام هتل', 'required');
+        $this->form_validation->set_rules('room_name[]','نام کلیه اتاق ها', 'required');
+        $this->form_validation->set_rules('zarfiat[]','ظرفیت اتاق ها', 'required|is_natural_no_zero');
+        $az_tar=  strtotime($this->inc_model->jalaliToMiladi($this->input->post('az_tarikh_hotel')));
+        $ta_tar=strtotime($this->inc_model->jalaliToMiladi($this->input->post('ta_tarikh_hotel')));
+        if($this->form_validation->run()==FALSE)
         {
-            $hotel_room[$i]['adl'] = (int)$this->input->post('hotel_adl')[$i];
-            $hotel_room[$i]['chd'] = (int)$this->input->post('hotel_chd')[$i];
-            $hotel_room[$i]['inf'] = (int)$this->input->post('hotel_inf')[$i];
-            $hotel_room[$i]['name'] = trim($this->input->post('room_name')[$i]);
-            $hotel_room[$i]['zarfiat'] = (int)$this->input->post('zarfiat')[$i];
-            $hotel_room[$i]['extra_service'] =(int) $this->input->post('extra_service')[$i];
-            $hotel_room[$i]['extra_service_chd'] =(int) $this->input->post('extra_service_chd')[$i];
-            $hotel_room[$i]['gasht'] = $this->input->post('gasht')!==FALSE ? (isset($this->input->post('gasht')[$i])?'1':'0') :'0';
-            $hotel_room[$i]['transfer_raft'] = $this->input->post('transfer_raft')!==FALSE ? (isset($this->input->post('transfer_raft')[$i])?'1':'0') :'0';
-            $hotel_room[$i]['transfer_vasat'] = $this->input->post('transfer_vasat')!==FALSE ? (isset($this->input->post('transfer_vasat')[$i])?'1':'0') :'0';
-            $hotel_room[$i]['transfer_bargasht'] = $this->input->post('transfer_bargasht')!==FALSE ? (isset($this->input->post('transfer_bargasht')[$i])?'1':'0') :'0';
-            $hotel_room[$i]['paziraii'] = $this->input->post('paziraii')!==FALSE ? (isset($this->input->post('paziraii')[$i])?'1':'0') :'0';            
-            $hotel_room[$i]['hotel_khadamat_id'] = trim($this->input->post('hotel_khadamat_id')[$i]);
-            $hotel_room[$i]['factor_id'] = (int)$p1;
-            $hotel_room[$i]['khadamat_factor_id'] = $hotel['khadamat_factor_id'];
+            $valid = FALSE;
         }
-        //var_dump($hotel);
-        hotel_class::add($hotel,$hotel_room);
-        $next = TRUE;
+        else if($ta_tar<=$az_tar)
+        {
+            $msg ='<div class="alert alert-danger" >'. 'تاریخ رفت هتل از تاریخ برگشت هتل بزرگتر است'.'</div>';
+        }
+        else
+        {     
+            $hotel['maghsad_id'] = (int)$this->input->post('city_to_hotel');
+            $hotel['az_tarikh'] = $this->inc_model->jalaliToMiladi($this->input->post('az_tarikh_hotel'));
+            $hotel['ta_tarikh'] = $this->inc_model->jalaliToMiladi($this->input->post('ta_tarikh_hotel'));
+            $hotel['adl'] = 0;
+            $hotel['chd'] = 0;
+            $hotel['inf'] = 0;
+            foreach($this->input->post('hotel_adl') as $val)
+            {
+                $hotel['adl'] += $val;
+            }    
+            foreach($this->input->post('hotel_chd') as $val)
+            {
+                $hotel['chd'] += $val;
+            }
+            foreach($this->input->post('hotel_inf') as $val)
+            {
+                $hotel['inf'] += $val;
+            }
+            //$hotel['adl'] = (int)$this->input->post('hotel_adl')[0];
+            //$hotel['chd'] = (int)$this->input->post('hotel_chd')[0];
+            //$hotel['inf'] = (int)$this->input->post('hotel_inf')[0];
+            $hotel['name'] = trim($this->input->post('hotel_name'));
+            $hotel['star'] = (int)$this->input->post('hotel_star');
+            $hotel['room_count'] = (int)$this->input->post('hotel_room_count');
+            $hotel['factor_id'] = (int)$p1;
+            $hotel['khadamat_factor_id'] = hotel_class::loadKhadamat_factor_id((int)$p1);
+            $hotel['hotel_id'] = (int)$this->input->post('hotel_id');
+            //
+            $hotel_room_count = (int)$this->input->post('hotel_room_count');
+            $hotel_room=array();
+            for($i=0;$i<$hotel_room_count;$i++)
+            {
+                $hotel_room[$i]['adl'] = (int)$this->input->post('hotel_adl')[$i];
+                $hotel_room[$i]['chd'] = (int)$this->input->post('hotel_chd')[$i];
+                $hotel_room[$i]['inf'] = (int)$this->input->post('hotel_inf')[$i];
+                $hotel_room[$i]['name'] = trim($this->input->post('room_name')[$i]);
+                $hotel_room[$i]['zarfiat'] = (int)$this->input->post('zarfiat')[$i];
+                $hotel_room[$i]['extra_service'] =(int) $this->input->post('extra_service')[$i];
+                $hotel_room[$i]['extra_service_chd'] =(int) $this->input->post('extra_service_chd')[$i];
+                $hotel_room[$i]['gasht'] = $this->input->post('gasht')!==FALSE ? (isset($this->input->post('gasht')[$i])?'1':'0') :'0';
+                $hotel_room[$i]['transfer_raft'] = $this->input->post('transfer_raft')!==FALSE ? (isset($this->input->post('transfer_raft')[$i])?'1':'0') :'0';
+                $hotel_room[$i]['transfer_vasat'] = $this->input->post('transfer_vasat')!==FALSE ? (isset($this->input->post('transfer_vasat')[$i])?'1':'0') :'0';
+                $hotel_room[$i]['transfer_bargasht'] = $this->input->post('transfer_bargasht')!==FALSE ? (isset($this->input->post('transfer_bargasht')[$i])?'1':'0') :'0';
+                $hotel_room[$i]['paziraii'] = $this->input->post('paziraii')!==FALSE ? (isset($this->input->post('paziraii')[$i])?'1':'0') :'0';            
+                $hotel_room[$i]['hotel_khadamat_id'] = trim($this->input->post('hotel_khadamat_id')[$i]);
+                $hotel_room[$i]['factor_id'] = (int)$p1;
+                $hotel_room[$i]['khadamat_factor_id'] = $hotel['khadamat_factor_id'];
+            }
+            //var_dump($hotel);
+            hotel_class::add($hotel,$hotel_room);
+            $next = TRUE;
+        }    
     }
     if($next)
     {
@@ -235,6 +293,11 @@
     </div>
     <form action="" method="POST" id="frm_khadamat_1" >
     <div class="col-sm-10" >
+        <?php
+            echo validation_errors();
+            echo $msg;
+        ?>
+        
         <?php 
         if(in_array('1',$include_types) || in_array('3',$include_types)): { ?>
         <div class="row hs-border hs-margin-up-down">
@@ -264,10 +327,10 @@
                 </select>
             </div>
             <div class="col-sm-6 hs-margin-up-down"  >
-                <input class="dateValue2 form-control" placeholder="از تاریخ" onblur="fillRaft(this);" name="az_tarikh" id="az_tarikh" value="<?php echo isset($parvaz['raft']->tarikh)?jdate("Y/m/d",strtotime($parvaz['raft']->tarikh)):'';?>" >
+                <input class="dateValue2 form-control" autocomplete="off" placeholder="از تاریخ" onblur="fillRaft(this);" name="az_tarikh" id="az_tarikh" value="<?php echo isset($parvaz['raft']->tarikh)?jdate("Y/m/d",strtotime($parvaz['raft']->tarikh)):'';?>" >
             </div>
             <div class="col-sm-6 hs-margin-up-down"  >
-                <input class="dateValue2 form-control" placeholder="تا تاریخ" onblur="fillBargasht(this)" name="ta_tarikh" id="ta_tarikh" value="<?php echo isset($parvaz['bargasht']->tarikh)?jdate("Y/m/d",strtotime($parvaz['bargasht']->tarikh)):'';?>" >
+                <input class="dateValue2 form-control" autocomplete="off" placeholder="تا تاریخ" onblur="fillBargasht(this)" name="ta_tarikh" id="ta_tarikh" value="<?php echo isset($parvaz['bargasht']->tarikh)?jdate("Y/m/d",strtotime($parvaz['bargasht']->tarikh)):'';?>" >
             </div>
             <div class="col-sm-4 hs-margin-up-down" >
                 تعداد بزرگسال: 

@@ -4,7 +4,16 @@
     factor_class::marhale((int)$p1,'khadamat_4');
     if($this->input->post('khadamat_id')!==FALSE)
     {
-        khadamat_class::updateGhimat($p1, $_REQUEST);
+        $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
+        $this->form_validation->set_rules('mablagh[]','قیمت ', 'required|is_natural_no_zero');
+        if($this->form_validation->run()==FALSE)
+        {
+            $valid = FALSE;
+        }
+        else
+        {    
+            khadamat_class::updateGhimat($p1, $_REQUEST);
+        }    
     }    
     $this->profile_model->loadUser($user_id);
     $men = $this->profile_model->loadMenu();
@@ -39,6 +48,7 @@
     <div class="col-sm-10" >
         <?php
             echo $this->inc_model->loadProgress(4,$p1);
+            echo validation_errors();
         ?>
         <div class="row hs-margin-up-down hs-gray hs-padding hs-border">
             قیمت ها
@@ -56,8 +66,14 @@
                 <span class="glyphicon glyphicon-chevron-left"></span>
             </a>
         </div>
-    </div>    
-    </form>
+        </form>
+        <div class="hs-float-right hs-margin-up-down">
+            <a href="<?php echo site_url().'khadamat_3/'.$p1; ?>" class="btn hs-btn-default btn-lg" >
+                <span class="glyphicon glyphicon-chevron-right"></span>
+                مرحله قبلی
+            </a>
+        </div>
+    </div>
 </div>
 <script>
     function contin()

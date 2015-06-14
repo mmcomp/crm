@@ -5,8 +5,21 @@
     if(isset($_REQUEST['khadamat_id']))
     {
         //var_dump($_REQUEST);
-        taminkonande_class::add($p1, $_REQUEST);
-        redirect('khadamat_4/'.$p1);
+        $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
+        $this->form_validation->set_rules('khadamat_id[]','خدمات ', 'required|is_natural_no_zero');
+        $this->form_validation->set_rules('khadamat_tamin_id[]','خدمات گرفته شده', 'required|is_natural_no_zero');
+        $this->form_validation->set_rules('taminkonande_id[]','تأمین کننده ', 'required|is_natural_no_zero');
+        $this->form_validation->set_rules('mablagh[]','مبلغ', 'required|is_natural_no_zero');
+        $this->form_validation->set_rules('vahed_mablagh_id[]','واحد', 'required|is_natural_no_zero');
+        if($this->form_validation->run()==FALSE)
+        {
+            $valid = FALSE;
+        }
+        else
+        {    
+            taminkonande_class::add($p1, $_REQUEST);
+            redirect('khadamat_4/'.$p1);
+        }    
     }
     if(isset($_REQUEST['khadamat_id_j']))
     {
@@ -49,6 +62,7 @@
     <div class="col-sm-10" >
         <?php
             echo $this->inc_model->loadProgress(3,$p1);
+            echo validation_errors();
         ?>
         <div class="row hs-margin-up-down hs-gray hs-padding hs-border">
             تامین کنندگان
@@ -71,8 +85,15 @@
                 <span class="glyphicon glyphicon-chevron-left"></span>
             </a>
         </div>
-    </div>    
-    </form>
+       
+        </form>
+        <div class="hs-float-right hs-margin-up-down">
+            <a href="<?php echo site_url().'khadamat_2/'.$p1; ?>" class="btn hs-btn-default btn-lg" >
+                <span class="glyphicon glyphicon-chevron-right"></span>
+                مرحله قبلی
+            </a>
+        </div>
+    </div> 
 </div>
 <script>
     var tmp = '<?php echo taminkonande_class::loadView($p1); ?>';
@@ -83,7 +104,7 @@
         $('select').select2({
             dir: "rtl"
         });
-*/
+        */
     }
     function loadKhadamat_tamin(inp)
     {
