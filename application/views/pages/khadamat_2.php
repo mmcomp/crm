@@ -228,8 +228,8 @@
         $fname = $_REQUEST['tour_fname'];
         $lname = $_REQUEST['tour_lname'];
         $code_melli = $_REQUEST['tour_code_melli'];
-        $khadamat_factor_id = $_REQUEST['khadamat_factor_id-1'];
-        $ticket_number = $_REQUEST['ticket_number'];
+        $khadamat_factor_id = $_REQUEST['khadamat_factor_id-3'];
+        $ticket_number = isset($_REQUEST['ticket_number'])?$_REQUEST['ticket_number']:'';
         if($this->form_validation->run()==FALSE)
         {
             $valid = FALSE;
