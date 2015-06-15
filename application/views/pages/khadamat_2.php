@@ -83,6 +83,8 @@
     }
     function generateInputBlock($startStr,$endStr,$midStr,$inp,$factor,$cur_sh_sal,$extra_obj=NULL)
     {
+        //echo "inp<br/>\n";
+        //var_dump($inp);
         $mob = $factor->mob;
         $email = $factor->email;
         $pdet = '';
@@ -499,8 +501,112 @@ PAR;
             </div>
         </div>
 PAR2;
-        $parvaz = generateInputBlock($parvaz1, $parvaz2, $par_det, $typs[1], $f,$cur_sh_sal,$par_obj);
-        //$parvaz = $parvaz1.$par_det.$parvaz2;
+        $dts = $typs[1];
+        if(isset($_REQUEST['khadamat_factor_id-1']))
+        {
+            $dts = array();
+            $dtmp = array(
+                        "khadamat_type"=>1,
+                        "khadamat_name"=>$typs[1][0]['khadamat_name'],
+                        "id"=>-1,
+                        "fname"=>'',
+                        "lname"=>'',
+                        "code_melli"=>'',
+                        "passport"=>'',
+                        "passport_engheza"=>'',
+                        "gender"=>1,
+                        "age"=>"adl",
+                        "tarikh_tavalod" => '0000-00-00 00:00:00',
+                        "khadamat_factor_id" => (int)$_REQUEST['khadamat_factor_id-1'],
+                        "ticket_number" => ''
+                    );
+            for($i = 0;$i < count($_REQUEST['parvaz_gender']);$i++)
+            {
+                $dts[] = $dtmp;
+            }
+            foreach($_REQUEST as $key=>$value)
+            {
+                if($key == 'parvaz_gender')
+                {
+                    foreach($value as $i=>$val)
+                    {
+                        $dts[$i]["age"] = $val;
+                    }
+                }
+                if($key == 'parvaz_sex')
+                {
+                    foreach($value as $i=>$val)
+                    {
+                        $dts[$i]["gender"] = $val;
+                    }
+                }
+                if($key == 'parvaz_mosafer_id')
+                {
+                    foreach($value as $i=>$val)
+                    {
+                        $dts[$i]["id"] = $val;
+                    }
+                }
+                if($key == 'parvaz_fname')
+                {
+                    foreach($value as $i=>$val)
+                    {
+                        $dts[$i]["fname"] = $val;
+                    }
+                }
+                if($key == 'parvaz_lname')
+                {
+                    foreach($value as $i=>$val)
+                    {
+                        $dts[$i]["lname"] = $val;
+                    }
+                }
+                if($key == 'parvaz_code_melli')
+                {
+                    foreach($value as $i=>$val)
+                    {
+                        $dts[$i]["code_melli"] = $val;
+                    }
+                }
+                if($key == 'parvaz_ticket_number')
+                {
+                    foreach($value as $i=>$val)
+                    {
+                        $dts[$i]["ticket_number"] = $val;
+                    }
+                }
+                if($key == 'parvaz_tarikh_tavalod-rooz')
+                {
+                    foreach($value as $i=>$val)
+                    {
+                        $dts[$i]["parvaz_tarikh_tavalod-rooz"] = $val;
+                    }
+                }
+                if($key == 'parvaz_tarikh_tavalod-mah')
+                {
+                    foreach($value as $i=>$val)
+                    {
+                        $dts[$i]["parvaz_tarikh_tavalod-mah"] = $val;
+                    }
+                }
+                if($key == 'parvaz_tarikh_tavalod-sal')
+                {
+                    foreach($value as $i=>$val)
+                    {
+                        $dts[$i]["parvaz_tarikh_tavalod-sal"] = $val;
+                    }
+                }
+            }
+            for($i = 0;$i < count($dts);$i++)
+            {
+                $tarikh_tav = $this->inc_model->jalaliToMiladi($dts[$i]['parvaz_tarikh_tavalod-sal'].'/'.$dts[$i]['parvaz_tarikh_tavalod-mah'].'/'.$dts[$i]['parvaz_tarikh_tavalod-rooz']);
+                $dts[$i]['tarikh_tavalod'] = $tarikh_tav;
+                unset($dts[$i]['parvaz_tarikh_tavalod-sal']);
+                unset($dts[$i]['parvaz_tarikh_tavalod-mah']);
+                unset($dts[$i]['parvaz_tarikh_tavalod-rooz']);
+            }
+        }
+        $parvaz = generateInputBlock($parvaz1, $parvaz2, $par_det, $dts, $f,$cur_sh_sal,$par_obj);
     }
     $hotel = '';
     if(isset($typs[2]))
@@ -791,7 +897,77 @@ TR2;
             $tra1 = str_replace("#hoty#", $tra, $tra1);
         else
             $tra1 = '';
-        $hotel = generateInputBlock($hotel1, $hotel2,$ho_det, $typs[2], $f, $cur_sh_sal,$hot_obj).$tra1;
+        $dts = $typs[2];
+        if(isset($_REQUEST['khadamat_factor_id-2']))
+        {
+            $dts = array();
+            $dtmp = array(
+                        "khadamat_type"=>2,
+                        "khadamat_name"=>$typs[2][0]['khadamat_name'],
+                        "id"=>-1,
+                        "fname"=>'',
+                        "lname"=>'',
+                        "code_melli"=>'',
+                        "passport"=>'',
+                        "passport_engheza"=>'',
+                        "gender"=>1,
+                        "age"=>"adl",
+                        "tarikh_tavalod" => '0000-00-00 00:00:00',
+                        "khadamat_factor_id" => (int)$_REQUEST['khadamat_factor_id-2'],
+                        "ticket_number" => ''
+                    );
+            for($i = 0;$i < count($_REQUEST['hotel_gender']);$i++)
+            {
+                $dts[] = $dtmp;
+            }
+            foreach($_REQUEST as $key=>$value)
+            {
+                if($key == 'hotel_gender')
+                {
+                    foreach($value as $i=>$val)
+                    {
+                        $dts[$i]["age"] = $val;
+                    }
+                }
+                if($key == 'hotel_sex')
+                {
+                    foreach($value as $i=>$val)
+                    {
+                        $dts[$i]["gender"] = $val;
+                    }
+                }
+                if($key == 'hotel_mosafer_id')
+                {
+                    foreach($value as $i=>$val)
+                    {
+                        $dts[$i]["id"] = $val;
+                    }
+                }
+                if($key == 'hotel_fname')
+                {
+                    foreach($value as $i=>$val)
+                    {
+                        $dts[$i]["fname"] = $val;
+                    }
+                }
+                if($key == 'hotel_lname')
+                {
+                    foreach($value as $i=>$val)
+                    {
+                        $dts[$i]["lname"] = $val;
+                    }
+                }
+                if($key == 'hotel_code_melli')
+                {
+                    foreach($value as $i=>$val)
+                    {
+                        $dts[$i]["code_melli"] = $val;
+                    }
+                }
+            }
+        }
+        
+        $hotel = generateInputBlock($hotel1, $hotel2,$ho_det, $dts, $f, $cur_sh_sal,$hot_obj).$tra1;
     }
     $tour = '';
     if(isset($typs[3]))
@@ -916,7 +1092,112 @@ PAR;
             </div>
         </div>
 PAR2;
-        $tour = generateInputBlock($parvaz1, $parvaz2, $par_det, $typs[3], $f,$cur_sh_sal,$par_obj);
+        $dts = $typs[3];
+        if(isset($_REQUEST['khadamat_factor_id-3']))
+        {
+            $dts = array();
+            $dtmp = array(
+                        "khadamat_type"=>3,
+                        "khadamat_name"=>$typs[3][0]['khadamat_name'],
+                        "id"=>-1,
+                        "fname"=>'',
+                        "lname"=>'',
+                        "code_melli"=>'',
+                        "passport"=>'',
+                        "passport_engheza"=>'',
+                        "gender"=>1,
+                        "age"=>"adl",
+                        "tarikh_tavalod" => '0000-00-00 00:00:00',
+                        "khadamat_factor_id" => (int)$_REQUEST['khadamat_factor_id-3'],
+                        "ticket_number" => ''
+                    );
+            for($i = 0;$i < count($_REQUEST['tour_gender']);$i++)
+            {
+                $dts[] = $dtmp;
+            }
+            foreach($_REQUEST as $key=>$value)
+            {
+                if($key == 'tour_gender')
+                {
+                    foreach($value as $i=>$val)
+                    {
+                        $dts[$i]["age"] = $val;
+                    }
+                }
+                if($key == 'tour_sex')
+                {
+                    foreach($value as $i=>$val)
+                    {
+                        $dts[$i]["gender"] = $val;
+                    }
+                }
+                if($key == 'tour_mosafer_id')
+                {
+                    foreach($value as $i=>$val)
+                    {
+                        $dts[$i]["id"] = $val;
+                    }
+                }
+                if($key == 'tour_fname')
+                {
+                    foreach($value as $i=>$val)
+                    {
+                        $dts[$i]["fname"] = $val;
+                    }
+                }
+                if($key == 'tour_lname')
+                {
+                    foreach($value as $i=>$val)
+                    {
+                        $dts[$i]["lname"] = $val;
+                    }
+                }
+                if($key == 'tour_code_melli')
+                {
+                    foreach($value as $i=>$val)
+                    {
+                        $dts[$i]["code_melli"] = $val;
+                    }
+                }
+                if($key == 'tour_ticket_number')
+                {
+                    foreach($value as $i=>$val)
+                    {
+                        $dts[$i]["ticket_number"] = $val;
+                    }
+                }
+                if($key == 'tour_tarikh_tavalod-rooz')
+                {
+                    foreach($value as $i=>$val)
+                    {
+                        $dts[$i]["tour_tarikh_tavalod-rooz"] = $val;
+                    }
+                }
+                if($key == 'tour_tarikh_tavalod-mah')
+                {
+                    foreach($value as $i=>$val)
+                    {
+                        $dts[$i]["tour_tarikh_tavalod-mah"] = $val;
+                    }
+                }
+                if($key == 'tour_tarikh_tavalod-sal')
+                {
+                    foreach($value as $i=>$val)
+                    {
+                        $dts[$i]["tour_tarikh_tavalod-sal"] = $val;
+                    }
+                }
+            }
+            for($i = 0;$i < count($dts);$i++)
+            {
+                $tarikh_tav = $this->inc_model->jalaliToMiladi($dts[$i]['tour_tarikh_tavalod-sal'].'/'.$dts[$i]['tour_tarikh_tavalod-mah'].'/'.$dts[$i]['tour_tarikh_tavalod-rooz']);
+                $dts[$i]['tarikh_tavalod'] = $tarikh_tav;
+                unset($dts[$i]['tour_tarikh_tavalod-sal']);
+                unset($dts[$i]['tour_tarikh_tavalod-mah']);
+                unset($dts[$i]['tour_tarikh_tavalod-rooz']);
+            }
+        }
+        $tour = generateInputBlock($parvaz1, $parvaz2, $par_det, $dts, $f,$cur_sh_sal,$par_obj);
     }
     $visa_melli = '';
     if(isset($typs[4]))
@@ -993,7 +1274,77 @@ HOT1;
 
 HOT2;
 
-        $visa_melli = generateInputBlock($hotel1, $hotel2,$ho_det, $typs[4], $f, $cur_sh_sal);
+        $dts = $typs[4];
+        if(isset($_REQUEST['khadamat_factor_id-4']))
+        {
+            $dts = array();
+            $dtmp = array(
+                        "khadamat_type"=>4,
+                        "khadamat_name"=>$typs[4][0]['khadamat_name'],
+                        "id"=>-1,
+                        "fname"=>'',
+                        "lname"=>'',
+                        "code_melli"=>'',
+                        "passport"=>'',
+                        "passport_engheza"=>'',
+                        "gender"=>1,
+                        "age"=>"adl",
+                        "tarikh_tavalod" => '0000-00-00 00:00:00',
+                        "khadamat_factor_id" => (int)$_REQUEST['khadamat_factor_id-4'],
+                        "ticket_number" => ''
+                    );
+            for($i = 0;$i < count($_REQUEST['visamelli_gender']);$i++)
+            {
+                $dts[] = $dtmp;
+            }
+            foreach($_REQUEST as $key=>$value)
+            {
+                if($key == 'visamelli_gender')
+                {
+                    foreach($value as $i=>$val)
+                    {
+                        $dts[$i]["age"] = $val;
+                    }
+                }
+                if($key == 'visamelli_sex')
+                {
+                    foreach($value as $i=>$val)
+                    {
+                        $dts[$i]["gender"] = $val;
+                    }
+                }
+                if($key == 'visamelli_mosafer_id')
+                {
+                    foreach($value as $i=>$val)
+                    {
+                        $dts[$i]["id"] = $val;
+                    }
+                }
+                if($key == 'visamelli_fname')
+                {
+                    foreach($value as $i=>$val)
+                    {
+                        $dts[$i]["fname"] = $val;
+                    }
+                }
+                if($key == 'visamelli_lname')
+                {
+                    foreach($value as $i=>$val)
+                    {
+                        $dts[$i]["lname"] = $val;
+                    }
+                }
+                if($key == 'visamelli_code_melli')
+                {
+                    foreach($value as $i=>$val)
+                    {
+                        $dts[$i]["code_melli"] = $val;
+                    }
+                }
+            }
+        }
+        
+        $visa_melli = generateInputBlock($hotel1, $hotel2,$ho_det, $dts, $f, $cur_sh_sal);
     }
     $visa_pass = '';
     if(isset($typs[5]))
@@ -1069,12 +1420,82 @@ HOT1;
             </div>
 
 HOT2;
-
-        $visa_pass = generateInputBlock($hotel1, $hotel2,$ho_det, $typs[5], $f, $cur_sh_sal);
+        $dts = $typs[5];
+        if(isset($_REQUEST['khadamat_factor_id-5']))
+        {
+            $dts = array();
+            $dtmp = array(
+                        "khadamat_type"=>5,
+                        "khadamat_name"=>$typs[5][0]['khadamat_name'],
+                        "id"=>-1,
+                        "fname"=>'',
+                        "lname"=>'',
+                        "code_melli"=>'',
+                        "passport"=>'',
+                        "passport_engheza"=>'',
+                        "gender"=>1,
+                        "age"=>"adl",
+                        "tarikh_tavalod" => '0000-00-00 00:00:00',
+                        "khadamat_factor_id" => (int)$_REQUEST['khadamat_factor_id-5'],
+                        "ticket_number" => ''
+                    );
+            for($i = 0;$i < count($_REQUEST['visapass_gender']);$i++)
+            {
+                $dts[] = $dtmp;
+            }
+            foreach($_REQUEST as $key=>$value)
+            {
+                if($key == 'visapass_gender')
+                {
+                    foreach($value as $i=>$val)
+                    {
+                        $dts[$i]["age"] = $val;
+                    }
+                }
+                if($key == 'visapass_sex')
+                {
+                    foreach($value as $i=>$val)
+                    {
+                        $dts[$i]["gender"] = $val;
+                    }
+                }
+                if($key == 'visapass_mosafer_id')
+                {
+                    foreach($value as $i=>$val)
+                    {
+                        $dts[$i]["id"] = $val;
+                    }
+                }
+                if($key == 'visapass_fname')
+                {
+                    foreach($value as $i=>$val)
+                    {
+                        $dts[$i]["fname"] = $val;
+                    }
+                }
+                if($key == 'visapass_lname')
+                {
+                    foreach($value as $i=>$val)
+                    {
+                        $dts[$i]["lname"] = $val;
+                    }
+                }
+                if($key == 'visapass_code_melli')
+                {
+                    foreach($value as $i=>$val)
+                    {
+                        $dts[$i]["code_melli"] = $val;
+                    }
+                }
+            }
+        }
+        $visa_pass = generateInputBlock($hotel1, $hotel2,$ho_det, $dts, $f, $cur_sh_sal);
     }
     //var_dump($typs);
 //----------DRAWING End------------
+    //var_dump($_REQUEST);
 ?>
+
 <div class="row" >
     <div class="col-sm-2" >
         <div class="hs-margin-up-down hs-gray hs-padding hs-border" >
