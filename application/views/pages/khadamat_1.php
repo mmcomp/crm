@@ -346,9 +346,9 @@
                 جستجوی پرواز
             </div>
             <div class="col-sm-6 hs-margin-up-down"  >
-                <input type="hidden" name="parvaz_id" value="<?php echo isset($parvaz['raft'])?$parvaz['raft']->id:-1; ?>">
-                <input type="hidden" name="parvaz_id_b" value="<?php echo isset($parvaz['bargasht'])?$parvaz['bargasht']->id:-1; ?>" >
-                <select id="city_from" name="city_from" style="width: 100%" >
+                <input class="zoor" type="hidden" name="parvaz_id" value="<?php echo isset($parvaz['raft'])?$parvaz['raft']->id:-1; ?>">
+                <input class="zoor" type="hidden" name="parvaz_id_b" value="<?php echo isset($parvaz['bargasht'])?$parvaz['bargasht']->id:-1; ?>" >
+                <select class="zoor" id="city_from" name="city_from" style="width: 100%" >
                     <option value="-1">
                         انتخاب مبدأ
                     </option>
@@ -358,7 +358,7 @@
                 </select>
             </div>
             <div class="col-sm-6 hs-margin-up-down" >
-                <select id="city_to" name="city_to" style="width: 100%" onchange="changeHotelCity();" >
+                <select class="zoor" id="city_to" name="city_to" style="width: 100%" onchange="changeHotelCity();" >
                     <option value="-1">
                         انتخاب مقصد
                     </option>
@@ -368,7 +368,7 @@
                 </select>
             </div>
             <div class="col-sm-6 hs-margin-up-down"  >
-                <input class="dateValue2 form-control" autocomplete="off" placeholder="از تاریخ" onblur="fillRaft(this)" name="az_tarikh" id="az_tarikh" value="<?php echo isset($parvaz['raft']->tarikh)?jdate("Y/m/d",strtotime($parvaz['raft']->tarikh)):'';?>" >
+                <input class="dateValue2 form-control zoor" autocomplete="off" placeholder="از تاریخ" onblur="fillRaft(this)" name="az_tarikh" id="az_tarikh" value="<?php echo isset($parvaz['raft']->tarikh)?jdate("Y/m/d",strtotime($parvaz['raft']->tarikh)):'';?>" >
             </div>
             <div class="col-sm-6 hs-margin-up-down"  >
                 <input class="dateValue2 form-control" autocomplete="off" placeholder="تا تاریخ" onblur="fillBargasht(this)" name="ta_tarikh" id="ta_tarikh" value="<?php echo (isset($parvaz['bargasht']->tarikh) && $parvaz['bargasht']->tarikh!='0000-00-00 00:00:00')?jdate("Y/m/d",strtotime($parvaz['bargasht']->tarikh)):'';?>" >
@@ -413,7 +413,7 @@
             <div id="raft_div" >
                 <div class="col-sm-2" >
                     ایرلاین
-                    <select name="airline" style="width:100%" >
+                    <select class="zoor" name="airline" style="width:100%" >
                         <option value="-1">
                             انتخاب 
                         </option>
@@ -424,15 +424,15 @@
                 </div>
                 <div class="col-sm-2" >
                     کلاس پرواز
-                    <input name="class_parvaz" class="form-control" placeholder="کلاس" value="<?php echo isset($parvaz['raft']->class_parvaz)?$parvaz['raft']->class_parvaz:''; ?>"  >
+                    <input name="class_parvaz" class="form-control zoor" placeholder="کلاس" value="<?php echo isset($parvaz['raft']->class_parvaz)?$parvaz['raft']->class_parvaz:''; ?>"  >
                 </div>
                 <div class="col-sm-2" >
                     شماره پرواز
-                    <input name="shomare" class="form-control" placeholder="شماره پرواز" value="<?php echo isset($parvaz['raft']->shomare)?$parvaz['raft']->shomare:''; ?>"  >
+                    <input name="shomare" class="form-control zoor" placeholder="شماره پرواز" value="<?php echo isset($parvaz['raft']->shomare)?$parvaz['raft']->shomare:''; ?>"  >
                 </div>
                 <div class="col-sm-6" >
                     هواپیما
-                    <input name="airplain" class="form-control" placeholder="هواپیما"  value="<?php echo isset($parvaz['raft']->airplain)?$parvaz['raft']->airplain:''; ?>" >
+                    <input name="airplain" class="form-control zoor" placeholder="هواپیما"  value="<?php echo isset($parvaz['raft']->airplain)?$parvaz['raft']->airplain:''; ?>" >
                 </div>
                 <div class="col-sm-2" >
                     تاریخ
@@ -620,7 +620,7 @@
                 <input type="hidden" name="gohar_hotel_id" id="gohar_flight_id" >
             </div>
             <div class="col-sm-6 hs-margin-up-down" >
-                <select id="city_to_hotel" name="city_to_hotel" style="width: 100%" <?php echo isset($parvaz['raft']->maghsad_id)?'disabled':''; ?>  >
+                <select class="zoor" id="city_to_hotel" name="city_to_hotel" style="width: 100%" <?php echo isset($parvaz['raft']->maghsad_id)?'disabled':''; ?>  >
                     <option value="-1">
                         انتخاب مقصد
                     </option>
@@ -630,10 +630,10 @@
                 </select>
             </div>
             <div class="col-sm-6 hs-margin-up-down"  >
-                <input class="dateValue2 form-control" placeholder="از تاریخ" name="az_tarikh_hotel" id="az_tarikh_hotel" onblur="fillHotel(this)" value="<?php echo isset($parvaz['raft']->tarikh)?jdate("Y/m/d",strtotime($parvaz['raft']->tarikh)):(isset($hot->az_tarikh)?jdate("Y/m/d",strtotime($hot->az_tarikh)):'');?>" <?php echo isset($parvaz['raft']->tarikh)?'disabled':''; ?> >
+                <input class="dateValue2 form-control zoor" placeholder="از تاریخ" name="az_tarikh_hotel" id="az_tarikh_hotel" onblur="fillHotel(this)" value="<?php echo isset($parvaz['raft']->tarikh)?jdate("Y/m/d",strtotime($parvaz['raft']->tarikh)):(isset($hot->az_tarikh)?jdate("Y/m/d",strtotime($hot->az_tarikh)):'');?>" <?php echo isset($parvaz['raft']->tarikh)?'disabled':''; ?> >
             </div>
             <div class="col-sm-6 hs-margin-up-down"  >
-                <input class="dateValue2 form-control" placeholder="تا تاریخ" name="ta_tarikh_hotel" id="ta_tarikh_hotel" onblur="fillShab(this)" value="<?php echo isset($parvaz['bargasht']->tarikh)?jdate("Y/m/d",strtotime($parvaz['bargasht']->tarikh)):(isset($hot->ta_tarikh)?jdate("Y/m/d",strtotime($hot->ta_tarikh)):'');?>" <?php echo isset($parvaz['bargasht']->tarikh)?'disabled':''; ?> >
+                <input class="dateValue2 form-control zoor" placeholder="تا تاریخ" name="ta_tarikh_hotel" id="ta_tarikh_hotel" onblur="fillShab(this)" value="<?php echo isset($parvaz['bargasht']->tarikh)?jdate("Y/m/d",strtotime($parvaz['bargasht']->tarikh)):(isset($hot->ta_tarikh)?jdate("Y/m/d",strtotime($hot->ta_tarikh)):'');?>" <?php echo isset($parvaz['bargasht']->tarikh)?'disabled':''; ?> >
             </div>
             <div id="nafarat_div" class="col-sm-12 hs-margin-up-down" >
                 <?php
@@ -653,7 +653,7 @@
             </div>
             <div class="col-sm-6" >
                 <input type="hidden" name="hotel_id" value="<?php echo isset($hot->id)?$hot->id:'-1'; ?>">
-                <input class="form-control" name="hotel_name" placeholder="نام هتل" value="<?php echo isset($hot->name)?$hot->name:''; ?>" >
+                <input class="form-control zoor" name="hotel_name" placeholder="نام هتل" value="<?php echo isset($hot->name)?$hot->name:''; ?>" >
             </div>
             <div class="col-sm-1 text-left" >
                 <select name="hotel_star" id="hotel_star" title="ستاره" style="width: 100%" >
@@ -815,11 +815,11 @@
         hotel_info_index++;
         var tt = "<div class='col-sm-2 hs-margin-up-down text-center' >\
                     نام اتاق \
-                    <input type='text' class='form-control' name='room_name[]' >\
+                    <input type='text' class='form-control zoor' name='room_name[]' >\
                 </div>\
                 <div class='col-sm-1 hs-margin-up-down text-center' >\
                     <small>ظرفیت </small>\
-                    <select name='zarfiat[]' class='hotel_extra' title='ظرفیت' style='width: 100%' > <?php echo str_replace('"','\"',$this->inc_model->generateOption(5,0,1)); ?>\
+                    <select name='zarfiat[]' class='hotel_extra zoor' title='ظرفیت' style='width: 100%' > <?php echo str_replace('"','\"',$this->inc_model->generateOption(5,0,1)); ?>\
                     </select> \
                 </div>\
                 <div class='col-sm-2 hs-margin-up-down text-center' >\
@@ -951,17 +951,53 @@
     }
     function contin()
     {
-        if($("az_tarikh").length>0)
-        {
-            $("az_tarikh_hotel").val($("az_tarikh").val());
+        if(valid_frm())
+        {    
+            if($("az_tarikh").length>0)
+            {
+                $("az_tarikh_hotel").val($("az_tarikh").val());
+            }
+            if($("ta_tarikh").length>0)
+            {
+                $("ta_tarikh_hotel").val($("az_tarikh").val());
+            }
+            $("#raft_div :input").prop("disabled",false);
+            $("#bargasht_div :input").prop("disabled",false);
+            $("#hotel_div :input").prop("disabled",false);;
+            $("#frm_khadamat_1").submit();
         }
-        if($("ta_tarikh").length>0)
-        {
-            $("ta_tarikh_hotel").val($("az_tarikh").val());
-        }
-        $("#raft_div :input").prop("disabled",false);
-        $("#bargasht_div :input").prop("disabled",false);
-        $("#hotel_div :input").prop("disabled",false);;
-        $("#frm_khadamat_1").submit();
+        else
+            alert('موارد مشخص شده را وارد کنید');
+    }
+    function valid_frm()
+    {
+        var ou= true;
+        $(".zoor").css("border","1px solid rgb(204, 204, 204)");
+        $(".select2-selection").css("border","1px solid rgb(204, 204, 204)");
+        $.each($(".zoor"),function(id,field){
+            if($(field).is("input"))
+            {
+                if($(field).val()==='')
+                {
+                    $(field).css("border","solid 1px #ff0000");
+                    ou=false;
+                }
+                if($("#hotel_room_count").val()==='0')
+                {
+                    $("#hotel_room_count").css("border","solid 1px #ff0000");
+                    ou=false;
+                }    
+            }
+            else if($(field).is("select"))
+            {
+                if($(field).val()==='-1')
+                {
+                    console.log($(field).val());
+                    $(field).parent().find(".select2-selection").css("border","solid 1px #ff0000");
+                    ou=false;
+                }    
+            }
+        });
+        return (ou);
     }
 </script>
