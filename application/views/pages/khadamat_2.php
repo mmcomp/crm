@@ -275,10 +275,10 @@
     if(isset($_REQUEST['visamelli_mosafer_id']))
     {
         $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
-        $this->form_validation->set_rules('visamelli_fname[]','هتل : ' . 'نام ', 'required|min_length[3]|max_length[200]');
-        $this->form_validation->set_rules('visamelli_lname[]', 'هتل : ' . 'نام خانوادگی ', 'required|min_length[3]|max_length[500]');
-        $this->form_validation->set_rules('visamelli_code_melli[]','هتل : ' .  'کد ملی ', 'required|min_length[10]|max_length[20]');
-        $gender = $_REQUEST['visamelli_gender'];
+        $this->form_validation->set_rules('visamelli_fname[]','ویزا : ' . 'نام ', 'required|min_length[3]|max_length[200]');
+        $this->form_validation->set_rules('visamelli_lname[]', 'ویزا : ' . 'نام خانوادگی ', 'required|min_length[3]|max_length[500]');
+        $this->form_validation->set_rules('visamelli_code_melli[]','ویزا : ' .  'کد ملی ', 'required|min_length[10]|max_length[20]');
+        $gender = '';//$_REQUEST['visamelli_gender'];
         $sex = $_REQUEST['visamelli_sex'];
         $mosafer_id = $_REQUEST['visamelli_mosafer_id'];
         $fname = $_REQUEST['visamelli_fname'];
@@ -301,10 +301,10 @@
     if(isset($_REQUEST['visapass_mosafer_id']))
     {
         $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
-        $this->form_validation->set_rules('visapass_fname[]','هتل : ' . 'نام ', 'required|min_length[3]|max_length[200]');
-        $this->form_validation->set_rules('visapass_lname[]', 'هتل : ' . 'نام خانوادگی ', 'required|min_length[3]|max_length[500]');
-        $this->form_validation->set_rules('visapass_passport[]','هتل : ' .  'پاسپورت', 'required|min_length[10]|max_length[30]');
-        $gender = $_REQUEST['visapass_gender'];
+        $this->form_validation->set_rules('visapass_fname[]','ویزا : ' . 'نام ', 'required|min_length[3]|max_length[200]');
+        $this->form_validation->set_rules('visapass_lname[]', 'ویزا : ' . 'نام خانوادگی ', 'required|min_length[3]|max_length[500]');
+        $this->form_validation->set_rules('visapass_passport[]','ویزا : ' .  'پاسپورت', 'required|min_length[10]|max_length[30]');
+        $gender = '';//$_REQUEST['visapass_gender'];
         $sex = $_REQUEST['visapass_sex'];
         $mosafer_id = $_REQUEST['visapass_mosafer_id'];
         $fname = $_REQUEST['visapass_fname'];
@@ -1345,7 +1345,7 @@ HOT2;
                         "khadamat_factor_id" => (int)$_REQUEST['khadamat_factor_id-4'],
                         "ticket_number" => ''
                     );
-            for($i = 0;$i < count($_REQUEST['visamelli_gender']);$i++)
+            for($i = 0;$i < count($_REQUEST['visamelli_sex']);$i++)
             {
                 $dts[] = $dtmp;
             }
@@ -1491,7 +1491,7 @@ HOT2;
                         "khadamat_factor_id" => (int)$_REQUEST['khadamat_factor_id-5'],
                         "ticket_number" => ''
                     );
-            for($i = 0;$i < count($_REQUEST['visapass_gender']);$i++)
+            for($i = 0;$i < count($_REQUEST['visapass_sex']);$i++)
             {
                 $dts[] = $dtmp;
             }

@@ -1,0 +1,1 @@
+scp -P 8099 application/views/pages/khadamat_2.php root@94.183.244.62:/var/www/html/crm/application/views/pages/
