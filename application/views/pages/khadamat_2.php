@@ -203,13 +203,20 @@
         $lname = $_REQUEST['parvaz_lname'];
         $code_melli = $_REQUEST['parvaz_code_melli'];
         $khadamat_factor_id = $_REQUEST['khadamat_factor_id-1'];
-        $ticket_number = isset($_REQUEST['ticket_number'])?$_REQUEST['ticket_number']:'';
+        $ticket_number = isset($_REQUEST['ticket_number'])?$_REQUEST['ticket_number']:array();
         if($this->form_validation->run()==FALSE)
         {
             $valid = FALSE;
         }
         else
         {
+            if(count($ticket_number)==0)
+            {
+                for($i = 0;$i < count($mosafer_id);$i++)
+                {
+                    $ticket_number[] = '';
+                }
+            }
             foreach ($mosafer_id as $i=>$mosafer_id0)
             {
                 $tarikh_tavalod = $this->inc_model->jalaliToMiladi($_REQUEST['parvaz_tarikh_tavalod-sal'][$i].'/'.$_REQUEST['parvaz_tarikh_tavalod-mah'][$i].'/'.$_REQUEST['parvaz_tarikh_tavalod-rooz'][$i]);
