@@ -39,6 +39,7 @@
     $erjas = $lett_det->loadAllText($letter_id);
     if($p2=='normal')
         $lett_det->seen($letter_id,$user_id);
+    $sender_id = $lett->user_creator_id;
     $matns = '';
     foreach($erjas as $i=>$erja)
     {
@@ -72,7 +73,7 @@
         $menu_links .= "<li role='presentation'".(($active)?" class='active'":"")."><a href='$href'>$title</a></li>";
     }
     $type_i = new type_class($lett->type_id);
-    
+    $recs = array();
     if($this->input->post('matn')!==FALSE)
     {
         echo "1<br/>";
@@ -221,8 +222,18 @@
             </div>
             <div class="col-sm-9 hs-margin-up-down norm" >
                 <input type="hidden" id="is_erja" name="is_erja" value="1"/>
+                <?php
+                if($p2 != 'pishnevis')
+                {
+                ?>
+                <a class="btn hs-btn-default" onclick="reply();" >
+                   پاسخ(Reply)
+                </a>
+                <?php
+                }
+                ?>
                 <a class="btn hs-btn-default" onclick="erja();" >
-                   ارجاع
+                   ارجاع(Forward)
                 </a>
                 <a class="btn hs-btn-default arch" onclick="archive();" >
                    آرشیو
@@ -239,7 +250,7 @@
             </div>
             <div class="col-sm-5 norm" >
                 انتخاب دریافت کننده:
-                <select name="receivers[]" class="form-control" multiple="multiple"  >
+                <select name="receivers[]" class="form-control" multiple="multiple" id="receivers"  >
                     <?php
                         echo user_class::loadAll(TRUE,-1,$user_id,$recs);
                     ?>
@@ -274,6 +285,11 @@ $(document).ready(function(){
     //if(p2 === 'pishnevis')
         //$(".arch").hide();
 });
+function reply()
+{
+    $("#receivers").select2('val', <?php echo $sender_id; ?>);
+    erja();
+}
 function erja()
 {
     $("#is_erja").val("1");

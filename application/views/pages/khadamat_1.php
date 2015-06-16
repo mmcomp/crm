@@ -61,7 +61,7 @@
         $az_tar=  strtotime(hamed_jalalitomiladi(perToEn($this->input->post('az_tarikh'))));
         $ta_tar=strtotime(hamed_jalalitomiladi(perToEn($this->input->post('ta_tarikh'))));
         //$this->form_validation->set_rules('parvaz_lname[]', 'پرواز : ' . 'نام خانوادگی ', 'required|min_length[3]|max_length[500]');
-        if($this->form_validation->run()==FALSE)
+        if($this->form_validation->run()===FALSE)
         {
             $valid = FALSE;
         }
@@ -90,26 +90,29 @@
             $parvaz1['gohar_voucher_id'] = ($this->input->post('raft_check')!==FALSE?-1:$gohar_voucher_id);
             $parvaz1['parvaz_id'] =(int) $this->input->post('parvaz_id');
             parvaz_class::add($parvaz1);
-
-            $parvaz2['mabda_id']= (int)$this->input->post('city_to');
-            $parvaz2['maghsad_id']= (int)$this->input->post('city_from');
-            $parvaz2['adl']= (int)$this->input->post('adl');
-            $parvaz2['chd']= (int)$this->input->post('chd');
-            $parvaz2['inf']= (int)$this->input->post('inf');
-            $parvaz2['airline']= ($this->input->post('airline_b'));
-            $parvaz2['tarikh']=hamed_jalalitomiladi(perToEn($this->input->post('tarikh_parvaz_b')));// $this->inc_model->jalaliToMiladi($this->input->post('tarikh_parvaz_b'));
-            $parvaz2['airplain']= ($this->input->post('airplain_b'));
-            $parvaz2['saat']= (int)$this->input->post('hour_b').':'.(int)$this->input->post('minute_b');
-            $parvaz2['saat_vorood']= (int)$this->input->post('hour_v_b').':'.(int)$this->input->post('minute_v_b');
-            $parvaz2['shomare'] = ($this->input->post('shomare_b'));
-            $parvaz2['is_bargasht'] = 1;
-            $parvaz2['class_parvaz']= ($this->input->post('class_parvaz_b'));
-            $parvaz2['factor_id'] = (int)$p1;
-            $parvaz2['khadamat_factor_id'] = parvaz_class::loadKhadamat_factor_id((int)$p1);
-            $gohar_voucher_id_b=11111;
-            $parvaz2['gohar_voucher_id'] = ($this->input->post('bargasht_check')!==FALSE?-1:$gohar_voucher_id_b);
-            $parvaz2['parvaz_id'] =(int) $this->input->post('parvaz_id_b');
-            parvaz_class::add($parvaz2);
+            
+            if($this->input->post('two_way')!==FALSE)
+            {    
+                $parvaz2['mabda_id']= (int)$this->input->post('city_to');
+                $parvaz2['maghsad_id']= (int)$this->input->post('city_from');
+                $parvaz2['adl']= (int)$this->input->post('adl');
+                $parvaz2['chd']= (int)$this->input->post('chd');
+                $parvaz2['inf']= (int)$this->input->post('inf');
+                $parvaz2['airline']= ($this->input->post('airline_b'));
+                $parvaz2['tarikh']=hamed_jalalitomiladi(perToEn($this->input->post('tarikh_parvaz_b')));// $this->inc_model->jalaliToMiladi($this->input->post('tarikh_parvaz_b'));
+                $parvaz2['airplain']= ($this->input->post('airplain_b'));
+                $parvaz2['saat']= (int)$this->input->post('hour_b').':'.(int)$this->input->post('minute_b');
+                $parvaz2['saat_vorood']= (int)$this->input->post('hour_v_b').':'.(int)$this->input->post('minute_v_b');
+                $parvaz2['shomare'] = ($this->input->post('shomare_b'));
+                $parvaz2['is_bargasht'] = 1;
+                $parvaz2['class_parvaz']= ($this->input->post('class_parvaz_b'));
+                $parvaz2['factor_id'] = (int)$p1;
+                $parvaz2['khadamat_factor_id'] = parvaz_class::loadKhadamat_factor_id((int)$p1);
+                $gohar_voucher_id_b=11111;
+                $parvaz2['gohar_voucher_id'] = ($this->input->post('bargasht_check')!==FALSE?-1:$gohar_voucher_id_b);
+                $parvaz2['parvaz_id'] =(int) $this->input->post('parvaz_id_b');
+                parvaz_class::add($parvaz2);
+            }
             $next = TRUE;
         }
         //var_dump($parvaz2);

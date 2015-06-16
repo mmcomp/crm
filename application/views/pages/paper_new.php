@@ -7,6 +7,22 @@
     }
     $this->profile_model->loadUser($user_id);
     $men = $this->profile_model->loadMenu();
+    $group_id = $this->profile_model->user->group_id;
+    $ShomarePrefix = array(
+        1 => "M",
+        2 => "S",
+        4 => "F"
+    );
+    $ShomareNew = 0;
+    $SPre = isset($ShomarePrefix[$group_id])?$ShomarePrefix[$group_id]:'U';
+    $my = new mysql_class;
+    $my->ex_sql("SELECT MAX(shomare) lastshomare FROM `paper_letter` where shomare like '".$SPre."%'", $q);
+    if(isset($q[0]))
+    {
+        $ShomareNew = (int)  str_replace($SPre, '', $q[0]['lastshomare']);
+    }
+    $ShomareNew++;
+    $ShomareName = $SPre.$ShomareNew;
     $msg = '';
     $menu_links = '';
     $letter_id= $this->input->post('letter_id')!==FALSE?(int)$this->input->post('letter_id'):-1;
@@ -126,7 +142,8 @@
             </div>
             <div class="col-sm-3" >
                 <span>شماره:</span>
-                <input type="text" name="shomare" class="form-control" value="<?php echo isset($_REQUEST['shomare'])?$_REQUEST['shomare']:$lett->shomare; ?>" >
+                <input type="text" name="shomare" class="form-control" value="<?php echo $ShomareName; ?>" readonly="readonly">
+                <!--<input type="text" name="shomare" class="form-control" value="<?php //echo isset($_REQUEST['shomare'])?$_REQUEST['shomare']:$lett->shomare; ?>" >-->
             </div>
             <div class="col-sm-3" >
                 <span>نوع:</span>
