@@ -281,6 +281,7 @@
     }
     if(isset($_REQUEST['visamelli_mosafer_id']))
     {
+        var_dump($_REQUEST);
         $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
         $this->form_validation->set_rules('visamelli_fname[]','ویزا : ' . 'نام ', 'required|min_length[3]|max_length[200]');
         $this->form_validation->set_rules('visamelli_lname[]', 'ویزا : ' . 'نام خانوادگی ', 'required|min_length[3]|max_length[500]');
@@ -1640,21 +1641,21 @@ HOT2;
                     #pindex#\
                 </div>\
                 <div class="col-sm-1">\
-                    <select name="visamelli_sex[]" style="width: 80px;">\
+                    <select name="visapass_sex[]" style="width: 80px;">\
                         <option>جنسیت</option>\
                         <option value="0">مونث</option>\
                         <option value="1">مذکر</option>\
                     </select>\
                 </div>\
                 <div class="col-sm-3">\
-                    <input type="hidden" name="visamelli_mosafer_id[]" value="" />\
-                    <input name="visamelli_fname[]" class="form-control same same_fname#pindex#" placeholder="نام *" value="">\
+                    <input type="hidden" name="visapass_mosafer_id[]" value="" />\
+                    <input name="visapass_fname[]" class="form-control same same_fname#pindex#" placeholder="نام *" value="">\
                 </div>\
                 <div class="col-sm-5">\
-                    <input name="visamelli_name[]" class="form-control same same_lname#pindex#" placeholder="نام خانوادگی *" value="">\
+                    <input name="visapass_name[]" class="form-control same same_lname#pindex#" placeholder="نام خانوادگی *" value="">\
                 </div>\
                 <div class="col-sm-2">\
-                    <input name="visamelli_code_passport[]" class="form-control same same_passport#pindex#" placeholder="شماره پاسپورت *" value="">\
+                    <input name="visapass_code_passport[]" class="form-control same same_passport#pindex#" placeholder="شماره پاسپورت *" value="">\
                 </div>\
             </div>';
     function addVisap()
