@@ -61,7 +61,7 @@ class hotel_class
                 }    
             }
             $qu = "insert into hotel ($field) values ($values)";
-            //echo $qu.'<br/>';
+            echo $qu.'<br/>';
             $ln = $my->ex_sqlx($qu,FALSE);
             $out = $my->insert_id($ln);
             $my->close($ln);
@@ -76,9 +76,9 @@ class hotel_class
                 }
             }
             $qu = "update hotel set $field where id =".$hotel['hotel_id'];
-            //echo $qu.'<br/>';
+            echo $qu.'<br/>';
             $my->ex_sqlx($qu);
-            $out=TRUE;
+            $out=$hotel['hotel_id'];
         }    
         $my->ex_sqlx("update hotel_room set tmp=0 where factor_id = ".$hotel['factor_id']);
         foreach($hotel_room as $hotel_room_det)
@@ -92,6 +92,8 @@ class hotel_class
                     if($fi!='hotel_khadamat_id')
                     {    
                         $field.= ($field==''?'':',')."`$fi`";
+                        if($fi == 'hotel_id' )
+                            $val = $out;
                         $values.= ($values==''?'':',')."'$val'";
                     }
                 }
@@ -113,18 +115,19 @@ class hotel_class
         $my->ex_sqlx("delete from  hotel_room where tmp=0 and factor_id = ".$hotel['factor_id']);
         return($out);
     }
-    public function loadByFactor_id($factor_id)
+    public static function loadByFactor_id($factor_id)
     {
+        $out = array();
         $my = new mysql_class;
         $my->ex_sql("select * from hotel where factor_id=$factor_id", $q);
-        if(isset($q[0]))
+        foreach ($q as $r)
         {
-            $r = $q[0];
-            foreach($r as $k=>$v)
-            {    
-                $this->$k = $v;
-            }    
+            $out[] = array(
+                "hotel" => $r,
+                "hotel_room" => hotel_room_class::loadByFactorId($factor_id, $r['id'])
+            );
         }
+        return($out);
     }        
 }
 

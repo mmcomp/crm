@@ -82,6 +82,12 @@ class Inc_model extends CI_Model {
         $s=explode('/',$str);
         $out = "";
         if(count($s)==3){
+            if((int)$s[2]>(int)$s[0])
+            {
+                $t = $s[0];
+                $s[0] = $s[2];
+                $s[2] = $t;
+            }
             $miladi=jalali_to_jgregorian($s[0],$s[1],$s[2]);
             if((int)$miladi[1]<10)
                     $miladi[1] = "0".$miladi[1];

@@ -87,6 +87,7 @@ class parvaz_class
     {
         $my = new mysql_class;
         $my->ex_sql("select * from parvaz where factor_id=$factor_id", $q);
+        /*
         $out=array();
         foreach($q as $r)
         {
@@ -109,6 +110,9 @@ class parvaz_class
             }
         }
         return($out);
+         * 
+         */
+        return($q);
     }       
     public static function has_bargasht($factor_id,$khadamat_id)
     {

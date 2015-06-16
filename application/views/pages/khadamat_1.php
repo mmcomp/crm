@@ -6,12 +6,13 @@
         $out .= '<option '.(($selected==1)?'selected':'').' value="1">دوطرفه</option>';
         return($out);
     }
-    function smallValidateSelect($p,$name)
+    function smallValidateSelect($p,$name,$zero_ok=FALSE)
     {
         $mmsg = '';
+        $min = ($zero_ok)?-1:0;
         foreach($p as $mabda)
         {
-            if((int)$mabda<=0)
+            if((int)$mabda<=$min)
             {
                 $mmsg = '<div class="alert alert-danger">فیلد '.$name.' می بایست انتخاب شود</div>';
             }
@@ -33,7 +34,10 @@
         $red_url = 'khadamat_2/'.$p1;
     }
     factor_class::marhale((int)$p1,'khadamat_1');
+    $next_marhale = FALSE;
+    $otherError = FALSE;
     $p1=(int)$p1;
+    $factor_id = $p1;
     $msg = '';
     $include_types = factor_class::loadTypes($p1);
     if( !in_array('1', $include_types) && !in_array('2', $include_types) && !in_array('3', $include_types))
@@ -68,6 +72,7 @@ PHED;
             <div class="hs-border hs-padding row hs-margin-up-down parva_box">
                 <div>
                     <span class="glyphicon glyphicon-minus pointer" onclick="removePar(this);"></span>
+                    <input type="hidden" name="parvaz[parvaz_id][]" value="#parvaz_id#">
                 </div>
                 <div class="row">
                     <div class="col-sm-2 hs-padding">
@@ -124,7 +129,7 @@ PHED;
                         ورود :‌
                     </div>
                     <div class="col-sm-1 hs-padding" style="text-align:left;">
-                        <select name="parvaz[vorood_daghighe][]" >#khorooj_daghighe#</select>
+                        <select name="parvaz[vorood_daghighe][]" >#vorood_daghighe#</select>
                     </div>
                     <div class="col-sm-1 hs-padding" style="width:2px;">
                         :
@@ -137,6 +142,7 @@ PHED;
             </div>
 PTMP;
     $parvaz_det = array(
+        "parvaz_id" => -1,
         "mabda_id" => -1,
         "maghsad_id" => -1,
         "tarikh" => '',
@@ -156,6 +162,7 @@ PTMP;
     $parvaz = array();
     if(isset($_REQUEST['parvaz']))
     {
+        $next_marhale = TRUE;
         $p = $_REQUEST['parvaz'];
         for($i = 0;$i < count($p['mabda_id']);$i++)
         {
@@ -173,29 +180,84 @@ PTMP;
         $this->form_validation->set_rules('parvaz[tarikh][]','تاریخ','required|min_length[8]|max_length[10]');
         $this->form_validation->set_rules('parvaz[flight_number][]','شماره پرواز','required|min_length[3]');
         $this->form_validation->set_rules('parvaz[class][]','کلاس پرواز','required|min_length[1]');
-        $this->form_validation->set_rules('parvaz[class][]','هواپیما','required|min_length[3]');
-        $otherError = FALSE;
+        $this->form_validation->set_rules('parvaz[havapeima][]','هواپیما','required|min_length[3]');
         $msg .= smallValidateSelect($p['mabda_id'],'مبدا');
         $msg .= smallValidateSelect($p['maghsad_id'],'مقصد');
         $msg .= smallValidateSelect($p['airline'],'ایرلاین');
         $msg .= smallValidateSelect($p['adl'],'بزرگسال ');
-        $msg .= smallValidateSelect($p['adl'],'کودک ');
-        $msg .= smallValidateSelect($p['adl'],'نوزاد ');
+        $msg .= smallValidateSelect($p['chd'],'کودک ',TRUE);
+        $msg .= smallValidateSelect($p['inf'],'نوزاد ',TRUE);
         $otherError = (trim($msg)!=='');
         if($this->form_validation->run()==FALSE || $otherError)
         {
-            
+            $next_marhale = FALSE;
         }
         else
         {
-            //add to database
+            $my = new mysql_class;
+            $my->ex_sql("select khadamat_factor.id from khadamat_factor left join khadamat on (khadamat_id=khadamat.id) where factor_id = $factor_id and (typ = 1 or typ = 3)", $q);
+            if(isset($q[0]))
+            {
+                //$parvaz_db = $parvaz_det;
+                foreach($parvaz as $p_index=>$parvaz_db)
+                {
+                    $parvaz_db['tarikh'] = $this->inc_model->jalaliToMiladi($parvaz_db['tarikh']);
+                    $parvaz_db['saat'] = $parvaz_db['khorooj_saat'].':'.$parvaz_db['khorooj_daghighe'];
+                    $parvaz_db['saat_vorood'] = $parvaz_db['vorood_saat'].':'.$parvaz_db['vorood_daghighe'];
+                    unset($parvaz_db['khorooj_saat']);
+                    unset($parvaz_db['khorooj_daghighe']);
+                    unset($parvaz_db['vorood_saat']);
+                    unset($parvaz_db['vorood_daghighe']);
+                    $parvaz_db['is_bargasht'] = ($parvaz_db['dotarafe']==TRUE)?1:0;
+                    unset($parvaz_db['dotarafe']);
+                    $parvaz_db['class_parvaz'] = $parvaz_db['class'];
+                    unset($parvaz_db['class']);
+                    $parvaz_db['airplain'] = $parvaz_db['havapeima'];
+                    unset($parvaz_db['havapeima']);
+                    $parvaz_db['shomare'] = $parvaz_db['flight_number'];
+                    unset($parvaz_db['flight_number']);
+                    $parvaz_db['factor_id'] = $factor_id;
+                    $parvaz_db['khadamat_factor_id'] = $q[0]['id'];
+                    $par_id = parvaz_class::add($parvaz_db);
+                    if((int)$parvaz_db['parvaz_id']<=0)
+                    {
+                        $parvaz[$p_index]['parvaz_id'] = (int)$par_id;
+                    }
+                }
+            }
         }
     }
     else
     {
         if(in_array('1', $include_types) || in_array('3', $include_types))
         {
-            $parvaz = array($parvaz_det);
+            //$parvaz = array($parvaz_det);
+            $par_tmp = parvaz_class::loadByFactor_id($factor_id);
+            foreach($par_tmp as $p_tmp)
+            {
+                $parpar = $parvaz_det;
+                $parpar['parvaz_id'] = (int)$p_tmp['id'];
+                $parpar['mabda_id'] = (int)$p_tmp['mabda_id'];
+                $parpar['maghsad_id'] = (int)$p_tmp['maghsad_id'];
+                $parpar['tarikh'] = jdate("d/m/Y",strtotime($p_tmp['tarikh']));
+                $parpar['adl'] = (int)$p_tmp['adl'];
+                $parpar['chd'] = (int)$p_tmp['chd'];
+                $parpar['inf'] = (int)$p_tmp['inf'];
+                $parpar['dotarafe'] = ((int)$p_tmp['is_bargasht']==1);
+                $parpar['airline'] = (int)$p_tmp['airline'];
+                $parpar['class'] = $p_tmp['class_parvaz'];
+                $parpar['flight_number'] = $p_tmp['shomare'];
+                $parpar['havapeima'] = $p_tmp['airplain'];
+                $parpar['khorooj_saat'] = date("H",strtotime($p_tmp['saat']));
+                $parpar['khorooj_daghighe'] = date("i",strtotime($p_tmp['saat']));
+                $parpar['vorood_saat'] = date("H",strtotime($p_tmp['saat_vorood']));
+                $parpar['vorood_daghighe'] = date("i",strtotime($p_tmp['saat_vorood']));
+                $parvaz[] = $parpar;
+            }
+            if(count($parvaz)==0)
+            {
+                $parvaz = array($parvaz_det);
+            }
         }
     }
     $parvazs = '';
@@ -204,6 +266,7 @@ PTMP;
     {
         $parvazs = $parvaz_header;
         $parvaz_tmp1 = str_replace("#mabda_id#",city_class::loadAll(),$parvaz_temp);
+        $parvaz_tmp1 = str_replace("#parvaz_id#","-1",$parvaz_tmp1);
         $parvaz_tmp1 = str_replace("#maghsad_id#",city_class::loadAll(),$parvaz_tmp1);
         $parvaz_tmp1 = str_replace("#tarikh#",'',$parvaz_tmp1);
         $parvaz_tmp1 = str_replace("#adl#",$this->inc_model->generateOption(9,1,1),$parvaz_tmp1);
@@ -232,6 +295,7 @@ PTMP;
         for($i = 0;$i < count($parvaz);$i++)
         {
             $parvazak = str_replace("#mabda_id#",city_class::loadAll($parvaz[$i]['mabda_id']),$parvaz_temp);
+            $parvazak = str_replace("#parvaz_id#",$parvaz[$i]['parvaz_id'],$parvazak);
             $parvazak = str_replace("#maghsad_id#",city_class::loadAll($parvaz[$i]['maghsad_id']),$parvazak);
             $parvazak = str_replace("#tarikh#",$parvaz[$i]['tarikh'],$parvazak);
             $parvazak = str_replace("#adl#",$this->inc_model->generateOption(9,1,1,$parvaz[$i]['adl']),$parvazak);
@@ -263,6 +327,7 @@ HOTHED;
         <div class="hs-border hs-padding row hs-margin-up-down hotel_box index_#i#">
             <div>
                 <span class="glyphicon glyphicon-minus pointer" onclick="removeHot(this);"></span>
+                <input type="hidden" name="hotel[hotel_id][]" value="#hotel_id#" />
             </div>
             <div class="row">
                 <div class="col-sm-2 hs-padding">
@@ -281,6 +346,17 @@ HOTHED;
                     <select name="hotel[star][]"><option value="-1">ستاره</option>#star#</select>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-sm-2 hs-padding">
+                    <select name="hotel[adl][]" style="width:100px;"><option value="-1">بزرگسال</option>#adl#</select>
+                </div>
+                <div class="col-sm-2 hs-padding">
+                    <select name="hotel[chd][]" style="width:100px;"><option value="-1">کودک</option>#chd#</select>
+                </div>
+                <div class="col-sm-2 hs-padding">
+                    <select name="hotel[inf][]" style="width:100px;"><option value="-1">نوزاد</option>#inf#</select>
+                </div>
+            </div>
             <div>
                 <span class="glyphicon glyphicon-plus pointer" onclick="addHotRoom(this);"></span>
             </div>
@@ -288,6 +364,7 @@ HOTHED;
                 <div class="row1">
                     <div class="col-sm-4 hs-padding">
                         <input type="text" name="hotel[otagh][#i#][name][]" class="form-control" value="#otagh_name#" placeholder="نام اتاق" />
+                        <input type="hidden" name="hotel[otagh][#i#][hotel_room_id][]" value="#hotel_room_id#"/>
                     </div>
                     <div class="col-sm-2 hs-padding">
                         <select name="hotel[otagh][#i#][zarfiat][]" style="width:80px;"><option value="-1">ظرفیت</option>#otagh_zarfiat#</select>
@@ -320,13 +397,17 @@ HOTHED;
                     </div>
                 </div>
             </div>
-        </div>
+        
 HOTDET;
     $otagh_det = <<<OTGHD
         <div class="row otaghs">
             <div class="row1">
-                <div class="col-sm-4 hs-padding">
+                <div class="col-sm-1 hs-padding">
+                    <span class="glyphicon glyphicon-minus pointer" onclick="removeHotOtagh(this);"></span>
+                </div>
+                <div class="col-sm-3 hs-padding">
                     <input type="text" name="hotel[otagh][#i#][name][]" class="form-control" value="#otagh_name#" placeholder="نام اتاق" />
+                    <input type="hidden" name="hotel[otagh][#i#][hotel_room_id][]" value="#hotel_room_id#"/>
                 </div>
                 <div class="col-sm-2 hs-padding">
                     <select name="hotel[otagh][#i#][zarfiat][]" style="width:80px;"><option value="-1">ظرفیت</option>#otagh_zarfiat#</select>
@@ -361,18 +442,143 @@ HOTDET;
         </div>
 OTGHD;
     $hotels = '';
-    var_dump($_REQUEST);
+    $otagh_det1 = '';
+    $hotel_temp1 = '';
+    //var_dump($_REQUEST);
     if(in_array('2', $include_types) || in_array('3', $include_types))
     {
         $rhotel = isset($_REQUEST['hotel'])?$_REQUEST['hotel']:array();
+        if(isset($_REQUEST['hotel']))
+        {
+            if(!isset($_REQUEST['parvaz']))
+            {
+                $next_marhale = TRUE;
+            }
+            $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
+            $this->form_validation->set_rules('hotel[aztarikh][]','از تاریخ','required|min_length[8]|max_length[10]');
+            $this->form_validation->set_rules('hotel[tatarikh][]','تا تاریخ','required|min_length[8]|max_length[10]');
+            $this->form_validation->set_rules('hotel[name][]','نام هتل','required|min_length[3]|max_length[50]');
+            for($i = 0;$i < count($rhotel['aztarikh']);$i++)
+            {
+                $this->form_validation->set_rules('hotel[otagh]['.$i.'][name][]','نام اتاق در هتل '.($i+1).' ام','required|min_length[3]|max_length[50]');
+                $msg .= smallValidateSelect($rhotel['otagh'][$i]['zarfiat'],'ظرفیت در هتل '.($i+1).' ام');
+                $msg .= smallValidateSelect($rhotel['otagh'][$i]['service_adl'],'سرویس بزرگسال در هتل '.($i+1).' ام',TRUE);
+                $msg .= smallValidateSelect($rhotel['otagh'][$i]['service_chd'],'سرویس کودکان در هتل '.($i+1).' ام',TRUE);
+                $msg .= smallValidateSelect($rhotel['otagh'][$i]['gasht'],'گشت در هتل '.($i+1).' ام',TRUE);
+                $msg .= smallValidateSelect($rhotel['otagh'][$i]['traft'],'ت.رفت در هتل '.($i+1).' ام',TRUE);
+                $msg .= smallValidateSelect($rhotel['otagh'][$i]['tmiani'],'ت.میانی در هتل '.($i+1).' ام',TRUE);
+                $msg .= smallValidateSelect($rhotel['otagh'][$i]['tbargasht'],'ت.برگشت در هتل '.($i+1).' ام',TRUE);
+                $msg .= smallValidateSelect($rhotel['otagh'][$i]['paziraee'],'پذیرایی در هتل '.($i+1).' ام',TRUE);
+            }
+            $msg .= smallValidateSelect($rhotel['maghsad_id'],'مقصد');
+            $msg .= smallValidateSelect($rhotel['adl'],'بزرگسال');
+            $msg .= smallValidateSelect($rhotel['chd'],'کودک',TRUE);
+            $msg .= smallValidateSelect($rhotel['inf'],'نوزاد',TRUE);
+            $msg .= smallValidateSelect($rhotel['star'],'ستاره هتل');
+            $otherError = (trim($msg)!=='');
+            if($this->form_validation->run()==FALSE || $otherError)
+            {
+                $next_marhale = FALSE;
+            }
+            else
+            {
+                $my = new mysql_class;
+                $my->ex_sql("select khadamat_factor.id from khadamat_factor left join khadamat on (khadamat_id=khadamat.id) where factor_id = $factor_id and typ = 2", $q);
+                if(isset($q[0]))
+                {
+                    var_dump($rhotel);
+                    for($i = 0;$i < count($rhotel['aztarikh']);$i++)
+                    {
+                        $hotel_obj =array(
+                            "hotel_id" => $rhotel['hotel_id'][$i],
+                            "az_tarikh" => $this->inc_model->jalaliToMiladi($rhotel['aztarikh'][$i]),
+                            "ta_tarikh" => $this->inc_model->jalaliToMiladi($rhotel['tatarikh'][$i]),
+                            "maghsad_id" => $rhotel['maghsad_id'][$i],
+                            "khadamat_factor_id" => $q[0]['id'],
+                            "adl" => $rhotel['adl'][$i],
+                            "chd" => $rhotel['chd'][$i],
+                            "inf" => $rhotel['inf'][$i],
+                            "factor_id" => $factor_id,
+                            "name" => $rhotel['name'][$i],
+                            "star" => $rhotel['star'][$i],
+                            "room_count" => count($rhotel['otagh'][$i]['name'])
+
+                        );
+                        $hotel_room = array();
+                        $hroom = $rhotel['otagh'][$i];
+                        $hotel_id = (int)$hotel_obj['hotel_id'];
+                        for($j = 0;$j < count($hroom['name']);$j++)
+                        {
+                            $hotel_room[] = array(
+                                "hotel_khadamat_id" => $hroom['hotel_room_id'][$j],
+                                "name" => $hroom['name'][$j],
+                                "extra_service" => $hroom['service_adl'][$j],
+                                "extra_service_chd" => $hroom['service_chd'][$j],
+                                "gasht" => $hroom['gasht'][$j],
+                                "transfer_raft" => $hroom['traft'][$j],
+                                "transfer_vasat" => $hroom['tmiani'][$j],
+                                "transfer_bargasht" => $hroom['tbargasht'][$j],
+                                "paziraii" => $hroom['paziraee'][$j],
+                                "zarfiat" => $hroom['zarfiat'][$j],
+                                "factor_id" => $factor_id,
+                                "khadamat_factor_id" => $q[0]['id'],
+                                "hotel_id" => -1
+                            );
+                        }
+                        $ho_id = hotel_class::add($hotel_obj, $hotel_room);
+                        if($hotel_id<=0)
+                        {
+                            $rhotel['hotel_id'][$i] = (int)$ho_id;
+                        }
+                    }
+                }
+
+            }
+        }
+        else
+        {
+            $rhotel = array();
+            $hotel_dbs = hotel_class::loadByFactor_id($factor_id);
+            foreach($hotel_dbs as $andis=>$hotel_db)
+            {
+                $rhotel['aztarikh'][] = $this->inc_model->perToEnNums(jdate("d/m/Y",strtotime($hotel_db['hotel']['az_tarikh'])));
+                $rhotel['tatarikh'][] = $this->inc_model->perToEnNums(jdate("d/m/Y",strtotime($hotel_db['hotel']['ta_tarikh'])));
+                $rhotel['hotel_id'][] = $hotel_db['hotel']['id'];
+                $rhotel['maghsad_id'][] = $hotel_db['hotel']['maghsad_id'];
+                $rhotel['name'][] = $hotel_db['hotel']['name'];
+                $rhotel['star'][] = $hotel_db['hotel']['star'];
+                $rhotel['adl'][] = $hotel_db['hotel']['adl'];
+                $rhotel['chd'][] = $hotel_db['hotel']['chd'];
+                $rhotel['inf'][] = $hotel_db['hotel']['inf'];
+                foreach ($hotel_db['hotel_room'] as $hotel_db_room)
+                {
+                    $rhotel['otagh'][$andis]['name'][] = $hotel_db_room['name'];
+                    $rhotel['otagh'][$andis]['hotel_room_id'][] = $hotel_db_room['id'];
+                    $rhotel['otagh'][$andis]['zarfiat'][] = $hotel_db_room['zarfiat'];
+                    $rhotel['otagh'][$andis]['service_adl'][] = $hotel_db_room['extra_service'];
+                    $rhotel['otagh'][$andis]['service_chd'][] = $hotel_db_room['extra_service_chd'];
+                    $rhotel['otagh'][$andis]['gasht'][] = $hotel_db_room['gasht'];
+                    $rhotel['otagh'][$andis]['traft'][] = $hotel_db_room['transfer_raft'];
+                    $rhotel['otagh'][$andis]['tmiani'][] = $hotel_db_room['transfer_vasat'];
+                    $rhotel['otagh'][$andis]['tbargasht'][] = $hotel_db_room['transfer_bargasht'];
+                    $rhotel['otagh'][$andis]['paziraee'][] = $hotel_db_room['paziraii'];
+
+                }
+            }
+        }
         $hotels .= $hotel_header;
         $hotel_temp = str_replace("#i#", "0", $hotel_det);
         $hotel_temp = str_replace("#aztarikh#", ((isset($rhotel['aztarikh']))?$rhotel['aztarikh'][0]:''), $hotel_temp);
+        $hotel_temp = str_replace("#hotel_id#", ((isset($rhotel['hotel_id']))?$rhotel['hotel_id'][0]:-1), $hotel_temp);
         $hotel_temp = str_replace("#tatarikh#", ((isset($rhotel['tatarikh']))?$rhotel['tatarikh'][0]:''), $hotel_temp);
         $hotel_temp = str_replace("#maghsad_id#", city_class::loadAll(((isset($rhotel['maghsad_id']))?(int)$rhotel['maghsad_id'][0]:-1)), $hotel_temp);
         $hotel_temp = str_replace("#name#", ((isset($rhotel['name']))?$rhotel['name'][0]:''), $hotel_temp);
         $hotel_temp = str_replace("#star#", $this->inc_model->generateOption(5,0,1,((isset($rhotel['star']))?(int)$rhotel['star'][0]:-1)), $hotel_temp);
+        $hotel_temp = str_replace("#adl#",$this->inc_model->generateOption(9,1,1,((isset($rhotel['adl']))?(int)$rhotel['adl'][0]:-1)),$hotel_temp);
+        $hotel_temp = str_replace("#chd#",$this->inc_model->generateOption(9,0,1,((isset($rhotel['chd']))?(int)$rhotel['chd'][0]:-1)),$hotel_temp);
+        $hotel_temp = str_replace("#inf#",$this->inc_model->generateOption(9,0,1,((isset($rhotel['inf']))?(int)$rhotel['inf'][0]:-1)),$hotel_temp);
         $hotel_temp = str_replace("#otagh_name#", ((isset($rhotel['otagh']))?$rhotel['otagh'][0]['name'][0]:''), $hotel_temp);
+        $hotel_temp = str_replace("#hotel_room_id#", ((isset($rhotel['otagh']))?$rhotel['otagh'][0]['hotel_room_id'][0]:-1), $hotel_temp);
         $hotel_temp = str_replace("#otagh_zarfiat#", $this->inc_model->generateOption(5,0,1,((isset($rhotel['otagh']))?(int)$rhotel['otagh'][0]['zarfiat'][0]:-1)), $hotel_temp);
         $hotel_temp = str_replace("#otagh_serviecadl#", $this->inc_model->generateOption(5,0,1,((isset($rhotel['otagh']))?(int)$rhotel['otagh'][0]['service_adl'][0]:-1)), $hotel_temp);
         $hotel_temp = str_replace("#otagh_serviecchd#", $this->inc_model->generateOption(5,0,1,((isset($rhotel['otagh']))?(int)$rhotel['otagh'][0]['service_chd'][0]:-1)), $hotel_temp);
@@ -382,6 +588,7 @@ OTGHD;
         $hotel_temp = str_replace("#otagh_tbargasht#", loadSel('ت.برگشت',((isset($rhotel['otagh']))?(int)$rhotel['otagh'][0]['tbargasht'][0]:-1)), $hotel_temp);
         $hotel_temp = str_replace("#otagh_paziraee#", loadSel('پذیرایی',((isset($rhotel['otagh']))?(int)$rhotel['otagh'][0]['paziraee'][0]:-1)), $hotel_temp);
         $otagh_det1 = str_replace("#otagh_name#", '', $otagh_det);
+        $otagh_det1 = str_replace("#hotel_room_id#", -1, $otagh_det1);
         $otagh_det1 = str_replace("#otagh_zarfiat#", $this->inc_model->generateOption(5,0,1), $otagh_det1);
         $otagh_det1 = str_replace("#otagh_serviecadl#", $this->inc_model->generateOption(5,0,1), $otagh_det1);
         $otagh_det1 = str_replace("#otagh_serviecchd#", $this->inc_model->generateOption(5,0,1), $otagh_det1);
@@ -394,10 +601,15 @@ OTGHD;
         
         $hotel_temp1 = str_replace("#aztarikh#", '', $hotel_det);
         $hotel_temp1 = str_replace("#tatarikh#", '', $hotel_temp1);
+        $hotel_temp1 = str_replace("#hotel_id#", -1, $hotel_temp1);
         $hotel_temp1 = str_replace("#maghsad_id#", city_class::loadAll(), $hotel_temp1);
         $hotel_temp1 = str_replace("#name#", '', $hotel_temp1);
         $hotel_temp1 = str_replace("#star#", $this->inc_model->generateOption(5,0,1), $hotel_temp1);
+        $hotel_temp1 = str_replace("#adl#",$this->inc_model->generateOption(9,1,1),$hotel_temp1);
+        $hotel_temp1 = str_replace("#chd#",$this->inc_model->generateOption(9,0,1),$hotel_temp1);
+        $hotel_temp1 = str_replace("#inf#",$this->inc_model->generateOption(9,0,1),$hotel_temp1);
         $hotel_temp1 = str_replace("#otagh_name#", '', $hotel_temp1);
+        $hotel_temp1 = str_replace("#hotel_room_id#", -1, $hotel_temp1);
         $hotel_temp1 = str_replace("#otagh_zarfiat#", $this->inc_model->generateOption(5,0,1), $hotel_temp1);
         $hotel_temp1 = str_replace("#otagh_serviecadl#", $this->inc_model->generateOption(5,0,1), $hotel_temp1);
         $hotel_temp1 = str_replace("#otagh_serviecchd#", $this->inc_model->generateOption(5,0,1), $hotel_temp1);
@@ -406,18 +618,43 @@ OTGHD;
         $hotel_temp1 = str_replace("#otagh_tmiani#", loadSel('ت.میانی',-1), $hotel_temp1);
         $hotel_temp1 = str_replace("#otagh_tbargasht#", loadSel('ت.برگشت',-1), $hotel_temp1);
         $hotel_temp1 = str_replace("#otagh_paziraee#", loadSel('پذیرایی',-1), $hotel_temp1);
-        
+        $hotels .= $hotel_temp;
+        if(isset($rhotel['otagh']))
+        {
+            $i = 0;
+            for($j = 1;$j < count($rhotel['otagh'][$i]['name']);$j++)
+            {
+                $hotel_temp = str_replace("#otagh_name#", ((isset($rhotel['otagh']))?$rhotel['otagh'][$i]['name'][$j]:''), $otagh_det);
+                $hotel_temp = str_replace("#i#", "0", $hotel_temp);
+                $hotel_temp = str_replace("#hotel_room_id#", ((isset($rhotel['otagh']))?$rhotel['otagh'][$i]['hotel_room_id'][$j]:-1), $hotel_temp);
+                $hotel_temp = str_replace("#otagh_zarfiat#", $this->inc_model->generateOption(5,0,1,((isset($rhotel['otagh']))?(int)$rhotel['otagh'][$i]['zarfiat'][$j]:-1)), $hotel_temp);
+                $hotel_temp = str_replace("#otagh_serviecadl#", $this->inc_model->generateOption(5,0,1,((isset($rhotel['otagh']))?(int)$rhotel['otagh'][$i]['service_adl'][$j]:-1)), $hotel_temp);
+                $hotel_temp = str_replace("#otagh_serviecchd#", $this->inc_model->generateOption(5,0,1,((isset($rhotel['otagh']))?(int)$rhotel['otagh'][$i]['service_chd'][$j]:-1)), $hotel_temp);
+                $hotel_temp = str_replace("#otagh_gasht#", loadSel('گشت',((isset($rhotel['otagh']))?(int)$rhotel['otagh'][$i]['gasht'][$j]:-1)), $hotel_temp);
+                $hotel_temp = str_replace("#otagh_traft#", loadSel('ت.رفت',((isset($rhotel['otagh']))?(int)$rhotel['otagh'][$i]['traft'][$j]:-1)), $hotel_temp);
+                $hotel_temp = str_replace("#otagh_tmiani#", loadSel('ت.میانی',((isset($rhotel['otagh']))?(int)$rhotel['otagh'][$i]['tmiani'][$j]:-1)), $hotel_temp);
+                $hotel_temp = str_replace("#otagh_tbargasht#", loadSel('ت.برگشت',((isset($rhotel['otagh']))?(int)$rhotel['otagh'][$i]['tbargasht'][$j]:-1)), $hotel_temp);
+                $hotel_temp = str_replace("#otagh_paziraee#", loadSel('پذیرایی',((isset($rhotel['otagh']))?(int)$rhotel['otagh'][$i]['paziraee'][$j]:-1)), $hotel_temp);
+                $hotels .= $hotel_temp;
+            }
+        }
+        $hotels .= '</div>';
         if(isset($rhotel['aztarikh']))
         {
             for($i = 1;$i < count($rhotel['aztarikh']);$i++)
             {
                 $hotel_temp = str_replace("#i#", "$i", $hotel_det);
                 $hotel_temp = str_replace("#aztarikh#", ((isset($rhotel['aztarikh']))?$rhotel['aztarikh'][$i]:''), $hotel_temp);
+                $hotel_temp = str_replace("#hotel_id#", ((isset($rhotel['hotel_id']))?$rhotel['hotel_id'][$i]:-1), $hotel_temp);
                 $hotel_temp = str_replace("#tatarikh#", ((isset($rhotel['tatarikh']))?$rhotel['tatarikh'][$i]:''), $hotel_temp);
                 $hotel_temp = str_replace("#maghsad_id#", city_class::loadAll(((isset($rhotel['maghsad_id']))?(int)$rhotel['maghsad_id'][$i]:-1)), $hotel_temp);
                 $hotel_temp = str_replace("#name#", ((isset($rhotel['name']))?$rhotel['name'][$i]:''), $hotel_temp);
                 $hotel_temp = str_replace("#star#", $this->inc_model->generateOption(5,0,1,((isset($rhotel['star']))?(int)$rhotel['star'][$i]:-1)), $hotel_temp);
+                $hotel_temp = str_replace("#adl#",$this->inc_model->generateOption(9,1,1,((isset($rhotel['adl']))?(int)$rhotel['adl'][$i]:-1)),$hotel_temp);
+                $hotel_temp = str_replace("#chd#",$this->inc_model->generateOption(9,0,1,((isset($rhotel['chd']))?(int)$rhotel['chd'][$i]:-1)),$hotel_temp);
+                $hotel_temp = str_replace("#inf#",$this->inc_model->generateOption(9,0,1,((isset($rhotel['inf']))?(int)$rhotel['inf'][$i]:-1)),$hotel_temp);
                 $hotel_temp = str_replace("#otagh_name#", ((isset($rhotel['otagh']))?$rhotel['otagh'][$i]['name'][0]:''), $hotel_temp);
+                $hotel_temp = str_replace("#hotel_room_id#", ((isset($rhotel['otagh']))?$rhotel['otagh'][$i]['hotel_room_id'][$j]:-1), $hotel_temp);
                 $hotel_temp = str_replace("#otagh_zarfiat#", $this->inc_model->generateOption(5,0,1,((isset($rhotel['otagh']))?(int)$rhotel['otagh'][$i]['zarfiat'][0]:-1)), $hotel_temp);
                 $hotel_temp = str_replace("#otagh_serviecadl#", $this->inc_model->generateOption(5,0,1,((isset($rhotel['otagh']))?(int)$rhotel['otagh'][$i]['service_adl'][0]:-1)), $hotel_temp);
                 $hotel_temp = str_replace("#otagh_serviecchd#", $this->inc_model->generateOption(5,0,1,((isset($rhotel['otagh']))?(int)$rhotel['otagh'][$i]['service_chd'][0]:-1)), $hotel_temp);
@@ -427,6 +664,22 @@ OTGHD;
                 $hotel_temp = str_replace("#otagh_tbargasht#", loadSel('ت.برگشت',((isset($rhotel['otagh']))?(int)$rhotel['otagh'][$i]['tbargasht'][0]:-1)), $hotel_temp);
                 $hotel_temp = str_replace("#otagh_paziraee#", loadSel('پذیرایی',((isset($rhotel['otagh']))?(int)$rhotel['otagh'][$i]['paziraee'][0]:-1)), $hotel_temp);
                 $hotels .= $hotel_temp;
+                for($j = 1;$j < count($rhotel['otagh'][$i]['name']);$j++)
+                {
+                    $hotel_temp = str_replace("#otagh_name#", ((isset($rhotel['otagh']))?$rhotel['otagh'][$i]['name'][$j]:''), $otagh_det);
+                    $hotel_temp = str_replace("#i#", "$i", $hotel_temp);
+                    $hotel_temp = str_replace("#hotel_room_id#", ((isset($rhotel['otagh']))?$rhotel['otagh'][$i]['hotel_room_id'][$j]:-1), $hotel_temp);
+                    $hotel_temp = str_replace("#otagh_zarfiat#", $this->inc_model->generateOption(5,0,1,((isset($rhotel['otagh']))?(int)$rhotel['otagh'][$i]['zarfiat'][$j]:-1)), $hotel_temp);
+                    $hotel_temp = str_replace("#otagh_serviecadl#", $this->inc_model->generateOption(5,0,1,((isset($rhotel['otagh']))?(int)$rhotel['otagh'][$i]['service_adl'][$j]:-1)), $hotel_temp);
+                    $hotel_temp = str_replace("#otagh_serviecchd#", $this->inc_model->generateOption(5,0,1,((isset($rhotel['otagh']))?(int)$rhotel['otagh'][$i]['service_chd'][$j]:-1)), $hotel_temp);
+                    $hotel_temp = str_replace("#otagh_gasht#", loadSel('گشت',((isset($rhotel['otagh']))?(int)$rhotel['otagh'][$i]['gasht'][$j]:-1)), $hotel_temp);
+                    $hotel_temp = str_replace("#otagh_traft#", loadSel('ت.رفت',((isset($rhotel['otagh']))?(int)$rhotel['otagh'][$i]['traft'][$j]:-1)), $hotel_temp);
+                    $hotel_temp = str_replace("#otagh_tmiani#", loadSel('ت.میانی',((isset($rhotel['otagh']))?(int)$rhotel['otagh'][$i]['tmiani'][$j]:-1)), $hotel_temp);
+                    $hotel_temp = str_replace("#otagh_tbargasht#", loadSel('ت.برگشت',((isset($rhotel['otagh']))?(int)$rhotel['otagh'][$i]['tbargasht'][$j]:-1)), $hotel_temp);
+                    $hotel_temp = str_replace("#otagh_paziraee#", loadSel('پذیرایی',((isset($rhotel['otagh']))?(int)$rhotel['otagh'][$i]['paziraee'][$j]:-1)), $hotel_temp);
+                    $hotels .= $hotel_temp;
+                }
+                $hotels .= '</div>';
             }
         }
         
@@ -523,16 +776,18 @@ OTGHD;
         var hotbox = $(dobj).parent().parent();
         var cname = hotbox.prop('className');
         var cnames = cname.split(' ');
+        console.log(cnames);
         var sharp_i = 0;
         for(var i = 0;i < cnames.length;i++)
         {
             if($.trim(cnames[i]).indexOf('index_')===0)
             {
                 sharp_i = parseInt($.trim(cnames[i]).split('_')[1],10);
+                console.log('sharp found',sharp_i);
             }
         }
-        hot_room_tmp = hot_room_tmp.replace(/#i#/g,sharp_i);
-        $(dobj).parent().parent().append(hot_room_tmp);
+        var hot_room_tmp1 = hot_room_tmp.replace(/#i#/g,sharp_i);
+        $(dobj).parent().parent().append(hot_room_tmp1);
         $('select').select2({
             dir: "rtl"
         });
@@ -541,7 +796,21 @@ OTGHD;
     {
         if(confirm('آیا خط پروازی حذف شود؟'))
         {
-            $(dobj).parent().parent().remove(hot_room_tmp);
+            $(dobj).parent().parent().remove();
+        }
+    }
+    function removeHotOtagh(dobj)
+    {
+        if(confirm('آیا اتاق  حذف شود؟'))
+        {
+            $(dobj).parent().parent().parent().remove();
+        }
+    }
+    function removeHot(dobj)
+    {
+        if(confirm('آیا هتل  حذف شود؟'))
+        {
+            $(dobj).parent().parent().remove();
         }
     }
     var dis_dot = true;
