@@ -783,7 +783,14 @@ OTGHD;
     function addPar()
     {
         var ptmp = parvaz_temp;
-        $("#frm1_khadamat_1").append(ptmp);
+        if($("#hotel_header").length===0)
+        {
+            $("#frm1_khadamat_1").append(ptmp);
+        }
+        else
+        {
+            $("#hotel_header").before(ptmp);
+        }
         $('select').select2({
             dir: "rtl"
         });
