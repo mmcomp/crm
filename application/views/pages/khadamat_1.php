@@ -44,6 +44,19 @@
         $my->ex_sqlx("delete from parvaz where id = ".$_REQUEST['pid']);
         die('ok');
     }
+    else if(trim($p2)=='rmhot')
+    {
+        $my = new mysql_class;
+        $my->ex_sqlx("delete from hotel_room where hotel_id = ".$_REQUEST['hid']);
+        $my->ex_sqlx("delete from hotel where id = ".$_REQUEST['hid']);
+        die('ok');
+    }
+    else if(trim($p2)=='rmhoo')
+    {
+        $my = new mysql_class;
+        $my->ex_sqlx("delete from hotel_room where id = ".$_REQUEST['oid']);
+        die('ok');
+    }
     $msg = '';
     $include_types = factor_class::loadTypes($p1);
     if( !in_array('1', $include_types) && !in_array('2', $include_types) && !in_array('3', $include_types))
@@ -410,10 +423,10 @@ HOTDET;
             <div class="row1">
                 <div class="col-sm-1 hs-padding">
                     <span class="glyphicon glyphicon-minus pointer" onclick="removeHotOtagh(this);"></span>
+                    <input type="hidden" name="hotel[otagh][#i#][hotel_room_id][]" value="#hotel_room_id#"/>
                 </div>
                 <div class="col-sm-3 hs-padding">
                     <input type="text" name="hotel[otagh][#i#][name][]" class="form-control" value="#otagh_name#" placeholder="نام اتاق" />
-                    <input type="hidden" name="hotel[otagh][#i#][hotel_room_id][]" value="#hotel_room_id#"/>
                 </div>
                 <div class="col-sm-2 hs-padding">
                     <select name="hotel[otagh][#i#][zarfiat][]" style="width:80px;"><option value="-1">ظرفیت</option>#otagh_zarfiat#</select>
@@ -827,14 +840,20 @@ OTGHD;
     {
         if(confirm('آیا اتاق  حذف شود؟'))
         {
+            var hotel_room_id = $(dobj).next().val();
             $(dobj).parent().parent().parent().remove();
+            $.get("<?php echo site_url().'khadamat_1/'.$factor_id.'/rmhoo/?oid=';?>"+hotel_room_id,function(result){
+            });
         }
     }
     function removeHot(dobj)
     {
         if(confirm('آیا هتل  حذف شود؟'))
         {
+            var hotel_id = $(dobj).next().val();
             $(dobj).parent().parent().remove();
+            $.get("<?php echo site_url().'khadamat_1/'.$factor_id.'/rmhot/?hid=';?>"+hotel_id,function(result){
+            });
         }
     }
     var dis_dot = true;
