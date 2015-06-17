@@ -56,27 +56,6 @@
         //var_dump($array_vars);
         return($body1);
     }
-    function hamed_jalalitomiladi($str)
-    {
-            $s=explode('/',$str);
-            $out = "";
-            if(count($s)==3){
-                    $y = (int)$s[0];
-                    $m = (int)$s[1];
-                    $d = (int)$s[2];
-                    if($d > $y)
-                    {
-                            $tmp = $d;
-                            $d = $y;
-                            $y = $tmp;
-                    }
-                    $y = (($y<1000)?$y+1300:$y);
-                    $miladi=jalali_to_jgregorian($y,$m,$d);
-                    $out=$miladi[0]."-".$miladi[1]."-".$miladi[2];
-            }
-            return $out;
-            //jalali_to_gregorian()
-    }
     $factor_id = -1;
     if(trim($p1)!='')
         $factor_id = (int)$p1;
@@ -161,11 +140,12 @@ HAM;
         $user_creator = new user_class($f->user_creator);
         $body1 = str_replace("#fname1#", $fname1, $body);
         $body1 = str_replace("#user_sabti#", $user_creator->fname.' '.$user_creator->lname, $body1);
+        //$body1 = str_replace("#hamrahan#", $ham_out, $body1);
         $body1 = str_replace("#hamrahan#", $ham_out, $body1);
         $body1 = str_replace("#lname1#", $lname1, $body1);
         $body1 = str_replace("#pedar_name#", $u->pedar_name,$body1);
         $body1 = str_replace("#pedar_name#", $u->pedar_name,$body1);
-        $body1 = str_replace("#tarikh_tavalod#", jdate("d / m / Y", strtotime($u->tarikh_tavalod)) ,$body1);
+        $body1 = str_replace("#tarikh_tavalod#", jdate("d / m / Y", $u->tarikh_tavalod) ,$body1);
         $body1 = str_replace("#address#", $u->address,$body1);
         $body1 = str_replace("#tell#", $u->tell,$body1);
         $body1 = str_replace("#mob#", $u->mob,$body1);
@@ -222,36 +202,20 @@ HAM;
 
 </div>
 <script>
-    var can_save=true;
-    $(document).ready(function(){
-        $("input").keypress(function(){
-            can_save = false;
-        });
-        $("textarea").keypress(function(){
-            can_save = false;
-        });
-    });
     function prin()
     { 
-        if(can_save)
-        { 
-            var b = $(".visa_input").css("border");
-            $(".gasht_input").css("border","none");
-            $(".gasht_textarea").css("border","none");
-            $(".list_table input").css("width","100%");
-            $(".gasht_textarea").css("width","100%");
-            $(".gasht_textarea").css("height","50px");
-            var pageNo = 'چاپ';
-            var headElements =  '<meta charset="utf-8" >,<meta http-equiv="X-UA-Compatible" content="IE=edge" >' ;
-            var options = { mode : 'popup', popClose :true, extraCss : '', retainAttr : ["class", "id", "style", "on"], extraHead : headElements ,popHt: 500,popWd: 700,popTitle:pageNo};
-            //$("#ifr").css("width","21cm");
-            $("#ifr").printArea(options);
-            $(".gasht_input").css("border",b);
-            $(".gasht_textarea").css("border",b);
-        }
-        else
-        {
-            alert("قبل از چاپ فرم را ثبت نمایید");
-        }
+        var b = $(".visa_input").css("border");
+        $(".gasht_input").css("border","none");
+        $(".gasht_textarea").css("border","none");
+        $(".list_table input").css("width","100%");
+        $(".gasht_textarea").css("width","100%");
+        $(".gasht_textarea").css("height","50px");
+        var pageNo = 'چاپ';
+        var headElements =  '<meta charset="utf-8" >,<meta http-equiv="X-UA-Compatible" content="IE=edge" >' ;
+        var options = { mode : 'popup', popClose :true, extraCss : '', retainAttr : ["class", "id", "style", "on"], extraHead : headElements ,popHt: 500,popWd: 700,popTitle:pageNo};
+        //$("#ifr").css("width","21cm");
+        $("#ifr").printArea(options);
+        $(".gasht_input").css("border",b);
+        $(".gasht_textarea").css("border",b);
     }
 </script>
