@@ -256,6 +256,9 @@
                 <input id="input-1" type="file" class="file" name="pic">
             </div>
             <div class="col-sm-6 hs-margin-up-down" >
+               کد حساب :
+                <input type="text" class="form-control" name="code_hesab" id="code_hesab" placeholder="کد حساب" value="<?php echo $user_obj->code_hesab; ?>">
+            </div>            <div class="col-sm-6 hs-margin-up-down" >
                نام پدر :
                 <input type="text" class="form-control" name="pedar_name" id="pedar_name" placeholder="نام پدر" value="<?php echo $user_obj->pedar_name; ?>">
             </div>

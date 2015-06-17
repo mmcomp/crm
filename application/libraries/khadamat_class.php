@@ -46,7 +46,7 @@ class khadamat_class
     {
         $out = '';
         $my = new mysql_class;
-        $my->ex_sql("select khadamat_id,name,`mablagh`, `comission`, `jayeze_code` from khadamat_factor left join khadamat on (khadamat_id=khadamat.id) where factor_id=$factor_id ", $q);
+        $my->ex_sql("select khadamat_id,name,`khadamat_factor`.`mablagh`, `comission`, `jayeze_code`,`commision_girande` from khadamat_factor left join khadamat on (khadamat_id=khadamat.id) left join factor on (factor_id=factor.id) where factor_id=$factor_id ", $q);
         foreach($q as $r)
         {
             $out.='
@@ -74,6 +74,12 @@ class khadamat_class
                     </div>
                     <div class="col-sm-2 hs-margin-up-down" >
                         <input class="form-control" name="jayeze_code[]" value="'.$r['jayeze_code'].'">
+                    </div>
+                    <div class="col-sm-1 text-center hs-margin-up-down" >
+                        گیرنده کمیسیون:
+                    </div>
+                    <div class="col-sm-2 hs-margin-up-down" >
+                        <select name="comission_girande[]" ><option value="-1">کمیسیون گیرنده</option>'.user_class::loadAll(TRUE,-1,-1,array((int)$r['commision_girande'])).'</select>
                     </div>
                   ';
         }
