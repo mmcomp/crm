@@ -15,10 +15,10 @@ class hotel_room_class
             }
         }
     }  
-    public static function loadByFactorId($fid,$hotel_id)
+    public static function loadByFactorId($fid,$hotel_id=-1)
     {
         $mysql = new mysql_class;
-        $mysql->ex_sql("select * from `hotel_room` where `factor_id` = $fid and `hotel_id` = $hotel_id",$q);
+        $mysql->ex_sql("select * from `hotel_room` where `factor_id` = $fid".(((int)$hotel_id>0)?" and `hotel_id` = $hotel_id":''),$q);
         return($q);
     }
 }

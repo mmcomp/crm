@@ -531,7 +531,17 @@ OTGHD;
                                 "hotel_id" => $rhotel['hotel_id'][$i]
                             );
                         }
-                        $ho_id = hotel_class::add($hotel_obj, $hotel_room);
+                        //var_dump($hotel_obj);
+                        //var_dump($hotel_room);
+                        
+                        $ho_out = hotel_class::add($hotel_obj, $hotel_room);
+                        //var_dump($ho_out);
+                        $ho_id = (int)$ho_out['hotel_id'];
+                        $ho_rooms = $ho_out['hotel_room_ids'];
+                        foreach($ho_rooms as $ands => $ho_room)
+                        {
+                            $rhotel['otagh'][$i]['hotel_room_id'][$ands] = $ho_room;
+                        }
                         if($hotel_id<=0)
                         {
                             $rhotel['hotel_id'][$i] = (int)$ho_id;
@@ -693,8 +703,8 @@ OTGHD;
     }
     if($next_marhale)
     {
-        //redirect('khadamat_2/'.$factor_id);
-        echo "GOGO";
+        redirect('khadamat_2/'.$factor_id);
+        //echo "GOGO";
     }
 ?>
 <style>

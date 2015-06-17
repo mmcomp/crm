@@ -50,6 +50,7 @@ class hotel_class
         $my = new mysql_class;
         $field='';
         $values = '';
+        $hotel_id = -1;
         if($hotel['hotel_id']==-1)
         {    
             foreach($hotel as $fi=>$val)
@@ -63,7 +64,7 @@ class hotel_class
             $qu = "insert into hotel ($field) values ($values)";
             //echo $qu.'<br/>';
             $ln = $my->ex_sqlx($qu,FALSE);
-            $out = $my->insert_id($ln);
+            $hotel_id = $my->insert_id($ln);
             $my->close($ln);
         }
         else
@@ -78,9 +79,10 @@ class hotel_class
             $qu = "update hotel set $field where id =".$hotel['hotel_id'];
             //echo $qu.'<br/>';
             $my->ex_sqlx($qu);
-            $out=$hotel['hotel_id'];
+            $hotel_id=$hotel['hotel_id'];
         }    
-        $my->ex_sqlx("update hotel_room set tmp=0 where factor_id = ".$hotel['factor_id']);
+        //$my->ex_sqlx("update hotel_room set tmp=0 where factor_id = ".$hotel['factor_id']);
+        $hotel_room_ids = array();
         foreach($hotel_room as $hotel_room_det)
         {    
             $field='';
@@ -93,15 +95,18 @@ class hotel_class
                     {    
                         $field.= ($field==''?'':',')."`$fi`";
                         if($fi == 'hotel_id' )
-                            $val = $out;
+                            $val = $hotel_id;
                         $values.= ($values==''?'':',')."'$val'";
                     }
                 }
                 //echo "insert into hotel_room ($field) values ($values)".'<br/>';;
-                $my->ex_sqlx("insert into hotel_room ($field) values ($values)",FALSE);
+                $ln = $my->ex_sqlx("insert into hotel_room ($field) values ($values)",FALSE);
+                $hotel_room_ids[] = $my->insert_id($ln);
+                $my->close($ln);
             }
             else
             {
+                //$my->ex_sqlx("update hotel_room set tmp=0 where factor_id = ".$hotel['factor_id']);
                 foreach($hotel_room_det as $fi=>$val)
                 {
                     if($fi!='hotel_khadamat_id')
@@ -110,11 +115,12 @@ class hotel_class
                     }    
                 }
                 $my->ex_sqlx("update hotel_room set $field,tmp=1 where id =".$hotel_room_det['hotel_khadamat_id'],FALSE);
-                $my->ex_sqlx("delete from  hotel_room where tmp=0 and factor_id = ".$hotel['factor_id']." and hotel_id = $out");
+                //$my->ex_sqlx("delete from  hotel_room where tmp=0 and factor_id = ".$hotel['factor_id']);
+                $hotel_room_ids[] = $hotel_room_det['hotel_khadamat_id'];
             }    
         }    
         //$my->ex_sqlx("delete from  hotel_room where tmp=0 and factor_id = ".$hotel['factor_id']);
-        return($out);
+        return(array("hotel_id"=>$hotel_id,"hotel_room_ids"=>$hotel_room_ids));
     }
     public static function loadByFactor_id($factor_id)
     {

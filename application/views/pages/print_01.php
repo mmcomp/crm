@@ -111,9 +111,10 @@
         </div>
         <div class="col-sm-10">
         <div id="ifr">
-        <?php echo $body1; ?>
+            <?php echo $body1; ?>
         </div>
         <input type="hidden" name="save_form" value="<?php echo $form_id; ?>"/>
+
     </div>
     </form>
 </div>
