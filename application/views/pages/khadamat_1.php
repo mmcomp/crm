@@ -49,7 +49,10 @@
         $this->form_validation->set_rules('city_from','مبدأ ', 'required|is_natural_no_zero');
         $this->form_validation->set_rules('city_to','مقصد ', 'required|is_natural_no_zero');
         $this->form_validation->set_rules('az_tarikh','از تاریخ', 'required');
-        $this->form_validation->set_rules('ta_tarikh','تا تاریخ', 'required');
+        if($this->input->post('two_way')!==FALSE)
+        {    
+            $this->form_validation->set_rules('ta_tarikh','تا تاریخ', 'required');
+        }    
         $this->form_validation->set_rules('airline','ایرلاین ', 'required|is_natural_no_zero');
         $this->form_validation->set_rules('class_parvaz','کلاس پرواز', 'required');
         $this->form_validation->set_rules('shomare','شماره پرواز', 'required');
@@ -62,7 +65,7 @@
         {
             $valid = FALSE;
         }
-        else if($ta_tar<=$az_tar)
+        else if($ta_tar<=$az_tar && $this->input->post('two_way')!==FALSE)
         {
             $msg ='<div class="alert alert-danger" >'. 'تاریخ رفت از تاریخ برگشت بزرگتر است'.'</div>';
         }    
@@ -368,7 +371,11 @@
                 <input class="dateValue2 form-control" autocomplete="off" placeholder="از تاریخ" onblur="fillRaft(this)" name="az_tarikh" id="az_tarikh" value="<?php echo isset($parvaz['raft']->tarikh)?jdate("Y/m/d",strtotime($parvaz['raft']->tarikh)):'';?>" >
             </div>
             <div class="col-sm-6 hs-margin-up-down"  >
-                <input class="dateValue2 form-control" autocomplete="off" placeholder="تا تاریخ" onblur="fillBargasht(this)" name="ta_tarikh" id="ta_tarikh" value="<?php echo isset($parvaz['bargasht']->tarikh)?jdate("Y/m/d",strtotime($parvaz['bargasht']->tarikh)):'';?>" >
+                <input class="dateValue2 form-control" autocomplete="off" placeholder="تا تاریخ" onblur="fillBargasht(this)" name="ta_tarikh" id="ta_tarikh" value="<?php echo (isset($parvaz['bargasht']->tarikh) && $parvaz['bargasht']->tarikh!='0000-00-00 00:00:00')?jdate("Y/m/d",strtotime($parvaz['bargasht']->tarikh)):'';?>" >
+            </div>
+            <div class="col-sm-12 hs-margin-up-down"  >
+                دوطرفه:
+                <input type="checkbox" name="two_way" id="two_way" <?php echo (isset($parvaz['bargasht']->tarikh) && $parvaz['bargasht']->tarikh!='0000-00-00 00:00:00')?'checked':''; ?> >
             </div>
             <div class="col-sm-4 hs-margin-up-down" >
                 تعداد بزرگسال: 
