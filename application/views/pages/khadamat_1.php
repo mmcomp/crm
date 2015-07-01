@@ -38,6 +38,12 @@
     $otherError = FALSE;
     $p1=(int)$p1;
     $factor_id = $p1;
+    if(trim($p2)=='rmpar')
+    {
+        $my = new mysql_class;
+        $my->ex_sqlx("delete from parvaz where id = ".$_REQUEST['pid']);
+        die('ok');
+    }
     $msg = '';
     $include_types = factor_class::loadTypes($p1);
     if( !in_array('1', $include_types) && !in_array('2', $include_types) && !in_array('3', $include_types))
@@ -239,7 +245,7 @@ PTMP;
                 $parpar['parvaz_id'] = (int)$p_tmp['id'];
                 $parpar['mabda_id'] = (int)$p_tmp['mabda_id'];
                 $parpar['maghsad_id'] = (int)$p_tmp['maghsad_id'];
-                $parpar['tarikh'] = jdate("d/m/Y",strtotime($p_tmp['tarikh']));
+                $parpar['tarikh'] = $this->inc_model->perToEnNums(jdate("d/m/Y",strtotime($p_tmp['tarikh'])));
                 $parpar['adl'] = (int)$p_tmp['adl'];
                 $parpar['chd'] = (int)$p_tmp['chd'];
                 $parpar['inf'] = (int)$p_tmp['inf'];
@@ -483,10 +489,10 @@ OTGHD;
             else
             {
                 $my = new mysql_class;
-                $my->ex_sql("select khadamat_factor.id from khadamat_factor left join khadamat on (khadamat_id=khadamat.id) where factor_id = $factor_id and typ = 2", $q);
+                $my->ex_sql("select khadamat_factor.id from khadamat_factor left join khadamat on (khadamat_id=khadamat.id) where factor_id = $factor_id and (typ = 2 or typ=3)", $q);
                 if(isset($q[0]))
                 {
-                    var_dump($rhotel);
+                    //var_dump($rhotel);
                     for($i = 0;$i < count($rhotel['aztarikh']);$i++)
                     {
                         $hotel_obj =array(
@@ -522,7 +528,7 @@ OTGHD;
                                 "zarfiat" => $hroom['zarfiat'][$j],
                                 "factor_id" => $factor_id,
                                 "khadamat_factor_id" => $q[0]['id'],
-                                "hotel_id" => -1
+                                "hotel_id" => $rhotel['hotel_id'][$i]
                             );
                         }
                         $ho_id = hotel_class::add($hotel_obj, $hotel_room);
@@ -539,6 +545,7 @@ OTGHD;
         {
             $rhotel = array();
             $hotel_dbs = hotel_class::loadByFactor_id($factor_id);
+            //var_dump($hotel_dbs);
             foreach($hotel_dbs as $andis=>$hotel_db)
             {
                 $rhotel['aztarikh'][] = $this->inc_model->perToEnNums(jdate("d/m/Y",strtotime($hotel_db['hotel']['az_tarikh'])));
@@ -654,7 +661,7 @@ OTGHD;
                 $hotel_temp = str_replace("#chd#",$this->inc_model->generateOption(9,0,1,((isset($rhotel['chd']))?(int)$rhotel['chd'][$i]:-1)),$hotel_temp);
                 $hotel_temp = str_replace("#inf#",$this->inc_model->generateOption(9,0,1,((isset($rhotel['inf']))?(int)$rhotel['inf'][$i]:-1)),$hotel_temp);
                 $hotel_temp = str_replace("#otagh_name#", ((isset($rhotel['otagh']))?$rhotel['otagh'][$i]['name'][0]:''), $hotel_temp);
-                $hotel_temp = str_replace("#hotel_room_id#", ((isset($rhotel['otagh']))?$rhotel['otagh'][$i]['hotel_room_id'][$j]:-1), $hotel_temp);
+                $hotel_temp = str_replace("#hotel_room_id#", ((isset($rhotel['otagh']))?$rhotel['otagh'][$i]['hotel_room_id'][0]:-1), $hotel_temp);
                 $hotel_temp = str_replace("#otagh_zarfiat#", $this->inc_model->generateOption(5,0,1,((isset($rhotel['otagh']))?(int)$rhotel['otagh'][$i]['zarfiat'][0]:-1)), $hotel_temp);
                 $hotel_temp = str_replace("#otagh_serviecadl#", $this->inc_model->generateOption(5,0,1,((isset($rhotel['otagh']))?(int)$rhotel['otagh'][$i]['service_adl'][0]:-1)), $hotel_temp);
                 $hotel_temp = str_replace("#otagh_serviecchd#", $this->inc_model->generateOption(5,0,1,((isset($rhotel['otagh']))?(int)$rhotel['otagh'][$i]['service_chd'][0]:-1)), $hotel_temp);
@@ -684,7 +691,11 @@ OTGHD;
         }
         
     }
-    
+    if($next_marhale)
+    {
+        //redirect('khadamat_2/'.$factor_id);
+        echo "GOGO";
+    }
 ?>
 <style>
     .parva_box:nth-child(odd){
@@ -796,7 +807,10 @@ OTGHD;
     {
         if(confirm('آیا خط پروازی حذف شود؟'))
         {
+            var parvaz_id = $(dobj).next().val();
             $(dobj).parent().parent().remove();
+            $.get("<?php echo site_url().'khadamat_1/'.$factor_id.'/rmpar/?pid=';?>"+parvaz_id,function(result){
+            });
         }
     }
     function removeHotOtagh(dobj)

@@ -61,7 +61,7 @@ class hotel_class
                 }    
             }
             $qu = "insert into hotel ($field) values ($values)";
-            echo $qu.'<br/>';
+            //echo $qu.'<br/>';
             $ln = $my->ex_sqlx($qu,FALSE);
             $out = $my->insert_id($ln);
             $my->close($ln);
@@ -76,7 +76,7 @@ class hotel_class
                 }
             }
             $qu = "update hotel set $field where id =".$hotel['hotel_id'];
-            echo $qu.'<br/>';
+            //echo $qu.'<br/>';
             $my->ex_sqlx($qu);
             $out=$hotel['hotel_id'];
         }    
@@ -110,9 +110,10 @@ class hotel_class
                     }    
                 }
                 $my->ex_sqlx("update hotel_room set $field,tmp=1 where id =".$hotel_room_det['hotel_khadamat_id'],FALSE);
+                $my->ex_sqlx("delete from  hotel_room where tmp=0 and factor_id = ".$hotel['factor_id']." and hotel_id = $out");
             }    
         }    
-        $my->ex_sqlx("delete from  hotel_room where tmp=0 and factor_id = ".$hotel['factor_id']);
+        //$my->ex_sqlx("delete from  hotel_room where tmp=0 and factor_id = ".$hotel['factor_id']);
         return($out);
     }
     public static function loadByFactor_id($factor_id)
