@@ -1,5 +1,5 @@
 <?php
-    function dotarafeGen($selected=1)
+    function dotarafeGen($selected=0)
     {
         $selected = (int)$selected;
         $out = '<option '.(($selected==0)?'selected':'').' value="0">یکطرفه</option>';
@@ -17,6 +17,13 @@
             }
         }
         return($mmsg);
+    }
+    function loadSel($txt,$selected=0)
+    {
+        $selected = (int)$selected;
+        $out = '<option value="0" '.(($selected==0)?'selected':'').'>'.$txt.' ندارد</option>';
+        $out .= '<option value="1" '.(($selected==1)?'selected':'').'>'.$txt.' دارد</option>';
+        return($out);
     }
     if ( ! defined('BASEPATH')) exit('No direct script access allowed');
     $red_url = 'profile?factor_id='.$p1;
@@ -46,6 +53,17 @@
         $active = ($active & $active2);
         $menu_links .= "<li role='presentation'".(($active)?" class='active'":"")."><a href='$href'>$title</a></li>";
     }
+    
+    //-------------------------------------------PARVAZ------------------------------------
+    $parvaz_header = <<<PHED
+        <div class="row hs-border hs-margin-up-down" id="parvaz_header">
+            <div class="col-sm-12 hs-btn-default hs-padding hs-border">
+                اطلاعات مسیر پروازی
+                &nbsp;&nbsp;&nbsp;
+                <a class="btn btn-default" href="#" onclick="addPar();"><span class="glyphicon glyphicon-plus" style="color:#000000;font-size: 12px;"></span></a>
+            </div>
+        </div>
+PHED;
     $parvaz_temp = <<<PTMP
             <div class="hs-border hs-padding row hs-margin-up-down parva_box">
                 <div>
@@ -175,54 +193,251 @@ PTMP;
     }
     else
     {
-        $parvaz = array($parvaz_det);
+        if(in_array('1', $include_types) || in_array('3', $include_types))
+        {
+            $parvaz = array($parvaz_det);
+        }
     }
     $parvazs = '';
-    $parvaz_tmp1 = str_replace("#mabda_id#",city_class::loadAll(),$parvaz_temp);
-    $parvaz_tmp1 = str_replace("#maghsad_id#",city_class::loadAll(),$parvaz_tmp1);
-    $parvaz_tmp1 = str_replace("#tarikh#",'',$parvaz_tmp1);
-    $parvaz_tmp1 = str_replace("#adl#",$this->inc_model->generateOption(9,1,1),$parvaz_tmp1);
-    $parvaz_tmp1 = str_replace("#chd#",$this->inc_model->generateOption(9,0,1),$parvaz_tmp1);
-    $parvaz_tmp1 = str_replace("#inf#",$this->inc_model->generateOption(9,0,1),$parvaz_tmp1);
-    $parvaz_tmp1 = str_replace("#dotarafe#",dotarafeGen(),$parvaz_tmp1);
-    $parvaz_tmp1 = str_replace("#airline#",airline_class::loadAll(),$parvaz_tmp1);
-    $parvaz_tmp1 = str_replace("#class#",'',$parvaz_tmp1);
-    $parvaz_tmp1 = str_replace("#flight_number#",'',$parvaz_tmp1);
-    $parvaz_tmp1 = str_replace("#havapeima#",'',$parvaz_tmp1);
-    $parvaz_tmp1 = str_replace("#khorooj_saat#",$this->inc_model->generateOption(23,0,1),$parvaz_tmp1);
-    $parvaz_tmp1 = str_replace("#khorooj_daghighe#",$this->inc_model->generateOption(59,0,1),$parvaz_tmp1);
-    $parvaz_tmp1 = str_replace("#vorood_saat#",$this->inc_model->generateOption(23,0,1),$parvaz_tmp1);
-    $parvaz_tmp1 = str_replace("#vorood_daghighe#",$this->inc_model->generateOption(23,0,1),$parvaz_tmp1);
-    $parvaz_tmp2 = str_replace("#airline#",airline_class::loadAll(),$parvaz_temp);
-    $parvaz_tmp2 = str_replace("#class#",'',$parvaz_tmp2);
-    $parvaz_tmp2 = str_replace("#flight_number#",'',$parvaz_tmp2);
-    $parvaz_tmp2 = str_replace("#havapeima#",'',$parvaz_tmp2);
-    $parvaz_tmp2 = str_replace("#khorooj_saat#",$this->inc_model->generateOption(23,0,1),$parvaz_tmp2);
-    $parvaz_tmp2 = str_replace("#khorooj_daghighe#",$this->inc_model->generateOption(59,0,1),$parvaz_tmp2);
-    $parvaz_tmp2 = str_replace("#vorood_saat#",$this->inc_model->generateOption(23,0,1),$parvaz_tmp2);
-    $parvaz_tmp2 = str_replace("#vorood_daghighe#",$this->inc_model->generateOption(23,0,1),$parvaz_tmp2);
-    for($i = 0;$i < count($parvaz);$i++)
+    $parvaz_tmp1 = '';
+    if(in_array('1', $include_types) || in_array('3', $include_types))
     {
-        $parvazak = str_replace("#mabda_id#",city_class::loadAll($parvaz[$i]['mabda_id']),$parvaz_temp);
-        $parvazak = str_replace("#maghsad_id#",city_class::loadAll($parvaz[$i]['maghsad_id']),$parvazak);
-        $parvazak = str_replace("#tarikh#",$parvaz[$i]['tarikh'],$parvazak);
-        $parvazak = str_replace("#adl#",$this->inc_model->generateOption(9,1,1,$parvaz[$i]['adl']),$parvazak);
-        $parvazak = str_replace("#chd#",$this->inc_model->generateOption(9,0,1,$parvaz[$i]['chd']),$parvazak);
-        $parvazak = str_replace("#inf#",$this->inc_model->generateOption(9,0,1,$parvaz[$i]['inf']),$parvazak);
-        $parvazak = str_replace("#dotarafe#",dotarafeGen($parvaz[$i]['dotarafe']),$parvazak);
-        $parvazak = str_replace("#airline#",airline_class::loadAll($parvaz[$i]['airline']),$parvazak);
-        $parvazak = str_replace("#class#",$parvaz[$i]['class'],$parvazak);
-        $parvazak = str_replace("#flight_number#",$parvaz[$i]['flight_number'],$parvazak);
-        $parvazak = str_replace("#havapeima#",$parvaz[$i]['havapeima'],$parvazak);
-        $parvazak = str_replace("#khorooj_saat#",$this->inc_model->generateOption(23,0,1,$parvaz[$i]['khorooj_saat']),$parvazak);
-        $parvazak = str_replace("#khorooj_daghighe#",$this->inc_model->generateOption(59,0,1,$parvaz[$i]['khorooj_daghighe']),$parvazak);
-        $parvazak = str_replace("#vorood_saat#",$this->inc_model->generateOption(23,0,1,$parvaz[$i]['vorood_saat']),$parvazak);
-        $parvazak = str_replace("#vorood_daghighe#",$this->inc_model->generateOption(23,0,1,$parvaz[$i]['vorood_daghighe']),$parvazak);
-        $parvazs .= $parvazak;
+        $parvazs = $parvaz_header;
+        $parvaz_tmp1 = str_replace("#mabda_id#",city_class::loadAll(),$parvaz_temp);
+        $parvaz_tmp1 = str_replace("#maghsad_id#",city_class::loadAll(),$parvaz_tmp1);
+        $parvaz_tmp1 = str_replace("#tarikh#",'',$parvaz_tmp1);
+        $parvaz_tmp1 = str_replace("#adl#",$this->inc_model->generateOption(9,1,1),$parvaz_tmp1);
+        $parvaz_tmp1 = str_replace("#chd#",$this->inc_model->generateOption(9,0,1),$parvaz_tmp1);
+        $parvaz_tmp1 = str_replace("#inf#",$this->inc_model->generateOption(9,0,1),$parvaz_tmp1);
+        $parvaz_tmp1 = str_replace("#dotarafe#",dotarafeGen(),$parvaz_tmp1);
+        $parvaz_tmp1 = str_replace("#airline#",airline_class::loadAll(),$parvaz_tmp1);
+        $parvaz_tmp1 = str_replace("#class#",'',$parvaz_tmp1);
+        $parvaz_tmp1 = str_replace("#flight_number#",'',$parvaz_tmp1);
+        $parvaz_tmp1 = str_replace("#havapeima#",'',$parvaz_tmp1);
+        $parvaz_tmp1 = str_replace("#khorooj_saat#",$this->inc_model->generateOption(23,0,1),$parvaz_tmp1);
+        $parvaz_tmp1 = str_replace("#khorooj_daghighe#",$this->inc_model->generateOption(59,0,1),$parvaz_tmp1);
+        $parvaz_tmp1 = str_replace("#vorood_saat#",$this->inc_model->generateOption(23,0,1),$parvaz_tmp1);
+        $parvaz_tmp1 = str_replace("#vorood_daghighe#",$this->inc_model->generateOption(23,0,1),$parvaz_tmp1);
+        /*
+        $parvaz_tmp2 = str_replace("#airline#",airline_class::loadAll(),$parvaz_temp);
+        $parvaz_tmp2 = str_replace("#class#",'',$parvaz_tmp2);
+        $parvaz_tmp2 = str_replace("#flight_number#",'',$parvaz_tmp2);
+        $parvaz_tmp2 = str_replace("#havapeima#",'',$parvaz_tmp2);
+        $parvaz_tmp2 = str_replace("#khorooj_saat#",$this->inc_model->generateOption(23,0,1),$parvaz_tmp2);
+        $parvaz_tmp2 = str_replace("#khorooj_daghighe#",$this->inc_model->generateOption(59,0,1),$parvaz_tmp2);
+        $parvaz_tmp2 = str_replace("#vorood_saat#",$this->inc_model->generateOption(23,0,1),$parvaz_tmp2);
+        $parvaz_tmp2 = str_replace("#vorood_daghighe#",$this->inc_model->generateOption(23,0,1),$parvaz_tmp2);
+         * 
+         */
+        for($i = 0;$i < count($parvaz);$i++)
+        {
+            $parvazak = str_replace("#mabda_id#",city_class::loadAll($parvaz[$i]['mabda_id']),$parvaz_temp);
+            $parvazak = str_replace("#maghsad_id#",city_class::loadAll($parvaz[$i]['maghsad_id']),$parvazak);
+            $parvazak = str_replace("#tarikh#",$parvaz[$i]['tarikh'],$parvazak);
+            $parvazak = str_replace("#adl#",$this->inc_model->generateOption(9,1,1,$parvaz[$i]['adl']),$parvazak);
+            $parvazak = str_replace("#chd#",$this->inc_model->generateOption(9,0,1,$parvaz[$i]['chd']),$parvazak);
+            $parvazak = str_replace("#inf#",$this->inc_model->generateOption(9,0,1,$parvaz[$i]['inf']),$parvazak);
+            $parvazak = str_replace("#dotarafe#",dotarafeGen($parvaz[$i]['dotarafe']),$parvazak);
+            $parvazak = str_replace("#airline#",airline_class::loadAll($parvaz[$i]['airline']),$parvazak);
+            $parvazak = str_replace("#class#",$parvaz[$i]['class'],$parvazak);
+            $parvazak = str_replace("#flight_number#",$parvaz[$i]['flight_number'],$parvazak);
+            $parvazak = str_replace("#havapeima#",$parvaz[$i]['havapeima'],$parvazak);
+            $parvazak = str_replace("#khorooj_saat#",$this->inc_model->generateOption(23,0,1,$parvaz[$i]['khorooj_saat']),$parvazak);
+            $parvazak = str_replace("#khorooj_daghighe#",$this->inc_model->generateOption(59,0,1,$parvaz[$i]['khorooj_daghighe']),$parvazak);
+            $parvazak = str_replace("#vorood_saat#",$this->inc_model->generateOption(23,0,1,$parvaz[$i]['vorood_saat']),$parvazak);
+            $parvazak = str_replace("#vorood_daghighe#",$this->inc_model->generateOption(23,0,1,$parvaz[$i]['vorood_daghighe']),$parvazak);
+            $parvazs .= $parvazak;
+        }
     }
+    //--------------------------------------------------------------------------------------------------
+    $hotel_header = <<<HOTHED
+        <div class="row hs-border hs-margin-up-down" id="hotel_header">
+            <div class="col-sm-12 hs-btn-default hs-padding hs-border">
+                اطلاعات هتل
+                &nbsp;&nbsp;&nbsp;
+                <a class="btn btn-default" href="#" onclick="addHot();"><span class="glyphicon glyphicon-plus" style="color:#000000;font-size: 12px;"></span></a>
+            </div>
+        </div>
+HOTHED;
+    $hotel_det = <<<HOTDET
+        <div class="hs-border hs-padding row hs-margin-up-down hotel_box index_#i#">
+            <div>
+                <span class="glyphicon glyphicon-minus pointer" onclick="removeHot(this);"></span>
+            </div>
+            <div class="row">
+                <div class="col-sm-2 hs-padding">
+                    <input type="text" name="hotel[aztarikh][]" class="form-control dateValue2" value="#aztarikh#" placeholder="از تاریخ" />
+                </div>
+                <div class="col-sm-2 hs-padding">
+                    <input type="text" name="hotel[tatarikh][]" class="form-control dateValue2" value="#tatarikh#" placeholder="تا تاریخ" />
+                </div>
+                <div class="col-sm-3 hs-padding">
+                    <select name="hotel[maghsad_id][]" style="width:200px;"><option value="-1">مقصد</option>#maghsad_id#</select>
+                </div>
+                <div class="col-sm-3 hs-padding">
+                    <input type="text" name="hotel[name][]" class="form-control" value="#name#" placeholder="نام هتل" />
+                </div>
+                <div class="col-sm-2 hs-padding">
+                    <select name="hotel[star][]"><option value="-1">ستاره</option>#star#</select>
+                </div>
+            </div>
+            <div>
+                <span class="glyphicon glyphicon-plus pointer" onclick="addHotRoom(this);"></span>
+            </div>
+            <div class="row otaghs">
+                <div class="row1">
+                    <div class="col-sm-4 hs-padding">
+                        <input type="text" name="hotel[otagh][#i#][name][]" class="form-control" value="#otagh_name#" placeholder="نام اتاق" />
+                    </div>
+                    <div class="col-sm-2 hs-padding">
+                        <select name="hotel[otagh][#i#][zarfiat][]" style="width:80px;"><option value="-1">ظرفیت</option>#otagh_zarfiat#</select>
+                    </div>
+                    <div class="col-sm-3 hs-padding">
+                        <select name="hotel[otagh][#i#][service_adl][]" style="width:180px;"><option value="-1">سرویس بزرگسالان</option>#otagh_serviecadl#</select>
+                    </div>
+                    <div class="col-sm-3 hs-padding">
+                        <select name="hotel[otagh][#i#][service_chd][]" style="width:180px;"><option value="-1">سرویس کودکان</option>#otagh_serviecchd#</select>
+                    </div>
+                </div>
+                <div class="row1">
+                    <div class="col-sm-2 hs-padding">
+                        گشت و ترانسفر و پذیرایی
+                    </div>
+                    <div class="col-sm-2 hs-padding">
+                        <select name="hotel[otagh][#i#][gasht][]"><option value="-1">گشت</option>#otagh_gasht#</select>
+                    </div>
+                    <div class="col-sm-2 hs-padding">
+                        <select name="hotel[otagh][#i#][traft][]"><option value="-1">ت.رفت</option>#otagh_traft#</select>
+                    </div>
+                    <div class="col-sm-2 hs-padding">
+                        <select name="hotel[otagh][#i#][tmiani][]"><option value="-1">ت.میانی</option>#otagh_tmiani#</select>
+                    </div>
+                    <div class="col-sm-2 hs-padding">
+                        <select name="hotel[otagh][#i#][tbargasht][]"><option value="-1">ت.برگشت</option>#otagh_tbargasht#</select>
+                    </div>
+                    <div class="col-sm-2 hs-padding">
+                        <select name="hotel[otagh][#i#][paziraee][]"><option value="-1">پذیرایی</option>#otagh_paziraee#</select>
+                    </div>
+                </div>
+            </div>
+        </div>
+HOTDET;
+    $otagh_det = <<<OTGHD
+        <div class="row otaghs">
+            <div class="row1">
+                <div class="col-sm-4 hs-padding">
+                    <input type="text" name="hotel[otagh][#i#][name][]" class="form-control" value="#otagh_name#" placeholder="نام اتاق" />
+                </div>
+                <div class="col-sm-2 hs-padding">
+                    <select name="hotel[otagh][#i#][zarfiat][]" style="width:80px;"><option value="-1">ظرفیت</option>#otagh_zarfiat#</select>
+                </div>
+                <div class="col-sm-3 hs-padding">
+                    <select name="hotel[otagh][#i#][service_adl][]" style="width:180px;"><option value="-1">سرویس بزرگسالان</option>#otagh_serviecadl#</select>
+                </div>
+                <div class="col-sm-3 hs-padding">
+                    <select name="hotel[otagh][#i#][service_chd][]" style="width:180px;"><option value="-1">سرویس کودکان</option>#otagh_serviecchd#</select>
+                </div>
+            </div>
+            <div class="row1">
+                <div class="col-sm-2 hs-padding">
+                    گشت و ترانسفر و پذیرایی
+                </div>
+                <div class="col-sm-2 hs-padding">
+                    <select name="hotel[otagh][#i#][gasht][]"><option value="-1">گشت</option>#otagh_gasht#</select>
+                </div>
+                <div class="col-sm-2 hs-padding">
+                    <select name="hotel[otagh][#i#][traft][]"><option value="-1">ت.رفت</option>#otagh_traft#</select>
+                </div>
+                <div class="col-sm-2 hs-padding">
+                    <select name="hotel[otagh][#i#][tmiani][]"><option value="-1">ت.میانی</option>#otagh_tmiani#</select>
+                </div>
+                <div class="col-sm-2 hs-padding">
+                    <select name="hotel[otagh][#i#][tbargasht][]"><option value="-1">ت.برگشت</option>#otagh_tbargasht#</select>
+                </div>
+                <div class="col-sm-2 hs-padding">
+                    <select name="hotel[otagh][#i#][paziraee][]"><option value="-1">پذیرایی</option>#otagh_paziraee#</select>
+                </div>
+            </div>
+        </div>
+OTGHD;
+    $hotels = '';
+    var_dump($_REQUEST);
+    if(in_array('2', $include_types) || in_array('3', $include_types))
+    {
+        $rhotel = isset($_REQUEST['hotel'])?$_REQUEST['hotel']:array();
+        $hotels .= $hotel_header;
+        $hotel_temp = str_replace("#i#", "0", $hotel_det);
+        $hotel_temp = str_replace("#aztarikh#", ((isset($rhotel['aztarikh']))?$rhotel['aztarikh'][0]:''), $hotel_temp);
+        $hotel_temp = str_replace("#tatarikh#", ((isset($rhotel['tatarikh']))?$rhotel['tatarikh'][0]:''), $hotel_temp);
+        $hotel_temp = str_replace("#maghsad_id#", city_class::loadAll(((isset($rhotel['maghsad_id']))?(int)$rhotel['maghsad_id'][0]:-1)), $hotel_temp);
+        $hotel_temp = str_replace("#name#", ((isset($rhotel['name']))?$rhotel['name'][0]:''), $hotel_temp);
+        $hotel_temp = str_replace("#star#", $this->inc_model->generateOption(5,0,1,((isset($rhotel['star']))?(int)$rhotel['star'][0]:-1)), $hotel_temp);
+        $hotel_temp = str_replace("#otagh_name#", ((isset($rhotel['otagh']))?$rhotel['otagh'][0]['name'][0]:''), $hotel_temp);
+        $hotel_temp = str_replace("#otagh_zarfiat#", $this->inc_model->generateOption(5,0,1,((isset($rhotel['otagh']))?(int)$rhotel['otagh'][0]['zarfiat'][0]:-1)), $hotel_temp);
+        $hotel_temp = str_replace("#otagh_serviecadl#", $this->inc_model->generateOption(5,0,1,((isset($rhotel['otagh']))?(int)$rhotel['otagh'][0]['service_adl'][0]:-1)), $hotel_temp);
+        $hotel_temp = str_replace("#otagh_serviecchd#", $this->inc_model->generateOption(5,0,1,((isset($rhotel['otagh']))?(int)$rhotel['otagh'][0]['service_chd'][0]:-1)), $hotel_temp);
+        $hotel_temp = str_replace("#otagh_gasht#", loadSel('گشت',((isset($rhotel['otagh']))?(int)$rhotel['otagh'][0]['gasht'][0]:-1)), $hotel_temp);
+        $hotel_temp = str_replace("#otagh_traft#", loadSel('ت.رفت',((isset($rhotel['otagh']))?(int)$rhotel['otagh'][0]['traft'][0]:-1)), $hotel_temp);
+        $hotel_temp = str_replace("#otagh_tmiani#", loadSel('ت.میانی',((isset($rhotel['otagh']))?(int)$rhotel['otagh'][0]['tmiani'][0]:-1)), $hotel_temp);
+        $hotel_temp = str_replace("#otagh_tbargasht#", loadSel('ت.برگشت',((isset($rhotel['otagh']))?(int)$rhotel['otagh'][0]['tbargasht'][0]:-1)), $hotel_temp);
+        $hotel_temp = str_replace("#otagh_paziraee#", loadSel('پذیرایی',((isset($rhotel['otagh']))?(int)$rhotel['otagh'][0]['paziraee'][0]:-1)), $hotel_temp);
+        $otagh_det1 = str_replace("#otagh_name#", '', $otagh_det);
+        $otagh_det1 = str_replace("#otagh_zarfiat#", $this->inc_model->generateOption(5,0,1), $otagh_det1);
+        $otagh_det1 = str_replace("#otagh_serviecadl#", $this->inc_model->generateOption(5,0,1), $otagh_det1);
+        $otagh_det1 = str_replace("#otagh_serviecchd#", $this->inc_model->generateOption(5,0,1), $otagh_det1);
+        $otagh_det1 = str_replace("#otagh_gasht#", loadSel('گشت',-1), $otagh_det1);
+        $otagh_det1 = str_replace("#otagh_traft#", loadSel('ت.رفت',-1), $otagh_det1);
+        $otagh_det1 = str_replace("#otagh_tmiani#", loadSel('ت.میانی',-1), $otagh_det1);
+        $otagh_det1 = str_replace("#otagh_tbargasht#", loadSel('ت.برگشت',-1), $otagh_det1);
+        $otagh_det1 = str_replace("#otagh_paziraee#", loadSel('پذیرایی',-1), $otagh_det1);
+
+        
+        $hotel_temp1 = str_replace("#aztarikh#", '', $hotel_det);
+        $hotel_temp1 = str_replace("#tatarikh#", '', $hotel_temp1);
+        $hotel_temp1 = str_replace("#maghsad_id#", city_class::loadAll(), $hotel_temp1);
+        $hotel_temp1 = str_replace("#name#", '', $hotel_temp1);
+        $hotel_temp1 = str_replace("#star#", $this->inc_model->generateOption(5,0,1), $hotel_temp1);
+        $hotel_temp1 = str_replace("#otagh_name#", '', $hotel_temp1);
+        $hotel_temp1 = str_replace("#otagh_zarfiat#", $this->inc_model->generateOption(5,0,1), $hotel_temp1);
+        $hotel_temp1 = str_replace("#otagh_serviecadl#", $this->inc_model->generateOption(5,0,1), $hotel_temp1);
+        $hotel_temp1 = str_replace("#otagh_serviecchd#", $this->inc_model->generateOption(5,0,1), $hotel_temp1);
+        $hotel_temp1 = str_replace("#otagh_gasht#", loadSel('گشت',-1), $hotel_temp1);
+        $hotel_temp1 = str_replace("#otagh_traft#", loadSel('ت.رفت',-1), $hotel_temp1);
+        $hotel_temp1 = str_replace("#otagh_tmiani#", loadSel('ت.میانی',-1), $hotel_temp1);
+        $hotel_temp1 = str_replace("#otagh_tbargasht#", loadSel('ت.برگشت',-1), $hotel_temp1);
+        $hotel_temp1 = str_replace("#otagh_paziraee#", loadSel('پذیرایی',-1), $hotel_temp1);
+        
+        if(isset($rhotel['aztarikh']))
+        {
+            for($i = 1;$i < count($rhotel['aztarikh']);$i++)
+            {
+                $hotel_temp = str_replace("#i#", "$i", $hotel_det);
+                $hotel_temp = str_replace("#aztarikh#", ((isset($rhotel['aztarikh']))?$rhotel['aztarikh'][$i]:''), $hotel_temp);
+                $hotel_temp = str_replace("#tatarikh#", ((isset($rhotel['tatarikh']))?$rhotel['tatarikh'][$i]:''), $hotel_temp);
+                $hotel_temp = str_replace("#maghsad_id#", city_class::loadAll(((isset($rhotel['maghsad_id']))?(int)$rhotel['maghsad_id'][$i]:-1)), $hotel_temp);
+                $hotel_temp = str_replace("#name#", ((isset($rhotel['name']))?$rhotel['name'][$i]:''), $hotel_temp);
+                $hotel_temp = str_replace("#star#", $this->inc_model->generateOption(5,0,1,((isset($rhotel['star']))?(int)$rhotel['star'][$i]:-1)), $hotel_temp);
+                $hotel_temp = str_replace("#otagh_name#", ((isset($rhotel['otagh']))?$rhotel['otagh'][$i]['name'][0]:''), $hotel_temp);
+                $hotel_temp = str_replace("#otagh_zarfiat#", $this->inc_model->generateOption(5,0,1,((isset($rhotel['otagh']))?(int)$rhotel['otagh'][$i]['zarfiat'][0]:-1)), $hotel_temp);
+                $hotel_temp = str_replace("#otagh_serviecadl#", $this->inc_model->generateOption(5,0,1,((isset($rhotel['otagh']))?(int)$rhotel['otagh'][$i]['service_adl'][0]:-1)), $hotel_temp);
+                $hotel_temp = str_replace("#otagh_serviecchd#", $this->inc_model->generateOption(5,0,1,((isset($rhotel['otagh']))?(int)$rhotel['otagh'][$i]['service_chd'][0]:-1)), $hotel_temp);
+                $hotel_temp = str_replace("#otagh_gasht#", loadSel('گشت',((isset($rhotel['otagh']))?(int)$rhotel['otagh'][$i]['gasht'][0]:-1)), $hotel_temp);
+                $hotel_temp = str_replace("#otagh_traft#", loadSel('ت.رفت',((isset($rhotel['otagh']))?(int)$rhotel['otagh'][$i]['traft'][0]:-1)), $hotel_temp);
+                $hotel_temp = str_replace("#otagh_tmiani#", loadSel('ت.میانی',((isset($rhotel['otagh']))?(int)$rhotel['otagh'][$i]['tmiani'][0]:-1)), $hotel_temp);
+                $hotel_temp = str_replace("#otagh_tbargasht#", loadSel('ت.برگشت',((isset($rhotel['otagh']))?(int)$rhotel['otagh'][$i]['tbargasht'][0]:-1)), $hotel_temp);
+                $hotel_temp = str_replace("#otagh_paziraee#", loadSel('پذیرایی',((isset($rhotel['otagh']))?(int)$rhotel['otagh'][$i]['paziraee'][0]:-1)), $hotel_temp);
+                $hotels .= $hotel_temp;
+            }
+        }
+        
+    }
+    
 ?>
 <style>
-    .parva_box:nth-child(even){
+    .parva_box:nth-child(odd){
+        background: #cccccc;
+    }
+    .hotel_box:nth-child(odd){
         background: #cccccc;
     }
 </style>
@@ -249,17 +464,9 @@ PTMP;
             echo validation_errors().$msg;
             echo "<div class='text-center hs-margin-up-down' ><div class='label label-danger' style='font-size:100%' >شماره فاکتور: $p1</div></div>"; 
         ?>
-        
-        <div class="row hs-border hs-margin-up-down" id="parvaz_header">
-            <div class="col-sm-12 hs-btn-default hs-padding hs-border">
-                اطلاعات مسیر پروازی
-                &nbsp;&nbsp;&nbsp;
-                <button class="btn" onclick="addPar();"><span class="glyphicon glyphicon-plus" style="color:#000000;font-size: 12px;"></span></button>
-            </div>
-        </div>
-            <form id="frm1_khadamat_1" action="<?php echo site_url().'khadamat_1/'.$p1;  ?>" method="POST">
-            <?php echo $parvazs; ?>
-            </form>
+        <form id="frm1_khadamat_1" action="<?php echo site_url().'khadamat_1/'.$p1;  ?>" method="POST">
+            <?php echo $parvazs.$hotels; ?>
+        </form>
     </div>
         <div class="hs-float-left hs-margin-up-down">
             <a class="btn hs-btn-default btn-lg" onclick="contin()" >
@@ -280,7 +487,8 @@ PTMP;
 </div>
 <script>
     var parvaz_temp = '<?php echo str_replace("\n", "\\\n", $parvaz_tmp1); ?>';
-    var parvaz_temp_dotarafe = '<?php echo str_replace("\n", "\\\n", $parvaz_tmp2); ?>';
+    var hot_room_tmp = '<?php echo str_replace("\n", "\\\n", $otagh_det1); ?>';
+    var hot_tmp = '<?php echo str_replace("\n", "\\\n", $hotel_temp1); ?>';
     function contin()
     {
         $("#frm1_khadamat_1").submit();
@@ -297,24 +505,85 @@ PTMP;
             showButtonPanel: true
         });
     }
+    function addHot()
+    {
+        var sharp_i = $(".hotel_box").length;
+        var ptmp = hot_tmp.replace(/#i#/g,sharp_i);;
+        $("#frm1_khadamat_1").append(ptmp);
+        $('select').select2({
+            dir: "rtl"
+        });
+        $(".dateValue2").datepicker({
+            numberOfMonths: 2,
+            showButtonPanel: true
+        });
+    }
+    function addHotRoom(dobj)
+    {
+        var hotbox = $(dobj).parent().parent();
+        var cname = hotbox.prop('className');
+        var cnames = cname.split(' ');
+        var sharp_i = 0;
+        for(var i = 0;i < cnames.length;i++)
+        {
+            if($.trim(cnames[i]).indexOf('index_')===0)
+            {
+                sharp_i = parseInt($.trim(cnames[i]).split('_')[1],10);
+            }
+        }
+        hot_room_tmp = hot_room_tmp.replace(/#i#/g,sharp_i);
+        $(dobj).parent().parent().append(hot_room_tmp);
+        $('select').select2({
+            dir: "rtl"
+        });
+    }
     function removePar(dobj)
     {
-        $(dobj).parent().parent().remove();
+        if(confirm('آیا خط پروازی حذف شود؟'))
+        {
+            $(dobj).parent().parent().remove(hot_room_tmp);
+        }
     }
+    var dis_dot = true;
     function dotarafeChange(dobj)
     {
         var obj = $(dobj);
-        if(obj.val()===1)
+        if(obj.val()==='1' && dis_dot === true)
         {
-            var ptmp = parvaz_temp_dotarafe;
-            $("#frm1_khadamat_1").append(ptmp);
-            $('select').select2({
-                dir: "rtl"
-            });
-            $(".dateValue2").datepicker({
-                numberOfMonths: 2,
-                showButtonPanel: true
-            });
+            var ptmp = parvaz_temp;
+            
+            //$("#frm1_khadamat_1").append(ptmp);
+            var mabda = $(obj.parent().parent().find("select")[0]);
+            var maghsad = $(obj.parent().parent().find("select")[1]);
+            var dotara = $(obj.parent().parent().find("select")[2]);
+            var adl = $(obj.parent().parent().find("select")[3]);
+            var chd = $(obj.parent().parent().find("select")[4]);
+            var inf = $(obj.parent().parent().find("select")[5]);
+            if(!isNaN(parseInt(mabda.val(),10)) && parseInt(mabda.val(),10)>0 && !isNaN(parseInt(maghsad.val(),10)) && parseInt(maghsad.val(),10)>0 && !isNaN(parseInt(adl.val(),10)) && parseInt(adl.val(),10)>0 && !isNaN(parseInt(chd.val(),10)) && parseInt(chd.val(),10)>=0 && !isNaN(parseInt(inf.val(),10)) && parseInt(inf.val(),10)>=0)
+            {
+                obj.parent().parent().parent().after(ptmp);
+                newobj = obj.parent().parent().parent().next();
+                $('select').select2({
+                    dir: "rtl"
+                });
+                $(".dateValue2").datepicker({
+                    numberOfMonths: 2,
+                    showButtonPanel: true
+                });
+                $(newobj.find("div.row select")[0]).select2("val",maghsad.val());
+                $(newobj.find("div.row select")[1]).select2("val",mabda.val());
+                dis_dot = false;
+                $(newobj.find("div.row select")[2]).select2("val",dotara.val());
+                dis_dot = true;
+                $(newobj.find("div.row select")[3]).select2("val",adl.val());
+                $(newobj.find("div.row select")[4]).select2("val",chd.val());
+                $(newobj.find("div.row select")[5]).select2("val",inf.val());
+            }
+            else
+            {
+                dotara.select2('val',0);
+                alert('لطفا اطلاعات سطر اول را برای ایجاد پرواز برگشت کامل کنید');
+            }
         }
     }
 </script>
