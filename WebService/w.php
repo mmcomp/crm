@@ -14,12 +14,16 @@
         }
     }
     class MyClass{
-        function getFactors($string) { 
+        function getFactors() { 
             $out = array();
             $m = new mysqli('localhost','root','3068145','crm');
             if($this->m->connect_errno!==FALSE)
             {
-                $dt = $m->query("select * from factor where date(tarikh) > '$string'");
+                $takhfif_hesab = '65456456';
+                $maliat_hesab = '879797';
+                $system_code = "45";
+                $afzoode = "0.9";
+                $dt = $m->query("SELECT tarikh IssueDate,'هتل' ServiceType,'رزور هتل' ServiceDetails,date_format(az_tarikh,'%Y%m%d') `Time 1st`,date_format(ta_tarikh,'%Y%m%d') `Time 2nd`,factor.id `Contract Number`, '$takhfif_hesab' `Discount Accounting ID`,takhfif `Discount Amount`,'$maliat_hesab' `VAT Accounting ID`,mablagh*$afzoode `VAT Amount`, 'گوهر' `Datasource System Code Type`,'$system_code' `Datesource System Code`, mablagh `Factor Amount` FROM `hotel` left join `factor` on (factor_id=factor.id) WHERE is_tasfieh = 1");
                 while($obj = $dt->fetch_object()){ 
                     $out[] = $obj;
                 }
