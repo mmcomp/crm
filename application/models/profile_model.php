@@ -124,7 +124,8 @@ class Profile_model extends CI_Model {
                 "پروفایل" => site_url()."profile",
                 "گزارش فروش" => site_url()."sale_report",
                 "چاپ فرم" => site_url()."print_form",
-                "مدیریت کاربران"=> site_url()."user_edit"
+                "مدیریت کاربران"=> site_url()."user_edit",
+                "مدیریت خدمات"=> site_url()."khadamat"
             ),
             2 => array(
                 "صفحه اصلی" => site_url()."home",
@@ -164,7 +165,8 @@ class Profile_model extends CI_Model {
                 "پروفایل" => site_url()."profile",
                 "گزارش فروش" => "sale_report",
                 "چاپ فرم" => site_url()."print_form",
-                "مدیریت کاربران"=> site_url()."user_edit"
+                "مدیریت کاربران"=> site_url()."user_edit",
+                "مدیریت خدمات"=> site_url()."khadamat"
             ),
             2 => array(
                 "صفحه اصلی" => site_url()."home",
