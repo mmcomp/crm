@@ -115,6 +115,62 @@
             });
             $($("[name='s_code_melli']")[0]).focus();
         });
+        function openDialog(header,content,okbtn,cancelbtn,fn)
+        {
+            $("#myModalLabel").html(header);
+            if(content)
+                $("#myModalBody").html(content);
+            $("#myModalOk").html(okbtn);
+            $("#myModalOk").prop('onclick',null).off('click');
+            if(typeof fn === 'function')
+            {
+                $("#myModalOk").click(function(){
+                    fn();
+                    $("#myModal").modal("hide");
+                });
+            }
+            else
+            {
+                $("#myModal").modal("hide");
+            }
+            $("#myModalCancel").html(cancelbtn);
+            $("#myModal").modal("show");
+        }
+        var search_flight_data;
+        function searchParvaz()
+        {
+            var aztarikh = $("#s_aztarikh").val().trim();
+            var tatarikh = $("#s_tatarikh").val().trim();
+            var mabda_id = $("#s_mabda_id").val();
+            var maghsad_id = $("#s_maghsad_id").val();
+            var p = {
+                "aztarikh" : aztarikh,
+                "tatarikh" : tatarikh,
+                "mabda_id" : mabda_id,
+                "maghsad_id" : maghsad_id
+            };
+            if(aztarikh!=='' && tatarikh !== '' && mabda_id!=='' && maghsad_id !=='')
+            {
+                $("#stat").show();
+                $.getJSON("<?php echo site_url() ?>http_service",p,function(res){
+                    $("#stat").hide();
+                    $("#parvaz_res").html(res.html);
+                    search_flight_data = res.obj;
+                    console.log(res);
+                }).fail(function(){
+                    alert("خطا در دسترسی به سرور");
+                    $("#stat").hide();
+                });
+            }
+            else
+            {
+                alert('اطلاعات را کامل کنید');
+            }
+        }
+        function selectParvaz(i)
+        {
+            console.log(search_flight_data[i]);
+        }
      </script>
 </body>
 </html>

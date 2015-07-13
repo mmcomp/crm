@@ -15,6 +15,18 @@ class city_class
             }
         }
     }
+    public static function loadAllIata()
+    {
+        $out='';
+        $my = new mysql_class;
+        //$wer = $country_id==0?'':" where country_id=$country_id";
+        $my->ex_sql("select iata,name from city order by name", $q);
+        foreach($q as $r)
+        {
+            $out.='<option value="'.$r['iata'].'" >'.$r['name'].'</option>';
+        }
+        return ($out);
+    }  
     public static function loadAll($selected=0)
     {
         $out='';

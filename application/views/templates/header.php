@@ -126,5 +126,70 @@
             </div>   
         </nav>
         </div>
-        
+        <!-- Modal -->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+              </div>
+              <div class="modal-body" id="myModalBody">
+                  <div class="row">
+                      <div class="col-sm-3">
+                          <input class="form-control dateValue2" name="s_aztarikh" id="s_aztarikh" placeholder="از تاریخ"/>
+                      </div>
+                      <div class="col-sm-3">
+                          <input class="form-control dateValue2" name="s_tatarikh" id="s_tatarikh" placeholder="تا تاریخ"/>
+                      </div>
+                      <div class="col-sm-2">
+                          <select name="s_mabda_id" id="s_mabda_id" style="width:70px" >
+                              <option value="-1">مبدا</option>
+                              <?php echo city_class::loadAllIata() ?>
+                          </select>
+                      </div>                  
+                      <div class="col-sm-2">
+                          <select name="s_maghsad_id" id="s_maghsad_id" style="width:70px" >
+                              <option value="-1">مقصد</option>
+                              <?php echo city_class::loadAllIata() ?>
+                          </select>
+                      </div>
+                      <div class="col-sm-2">
+                          <button type="button" id="searchBtn" onclick="searchParvaz();" class="btn btn-primary">جستجو</button>
+                      </div>
+                  </div>
+                  <div style="display: none;" id="stat">
+                    <img src="<?php echo asset_url(); ?>img/loading.gif" />
+                  </div>
+                    <div class="row hs-margin-up-down hs-padding hs-border" style="margin-right: 2px;margin-left: 2px;">
+                        <div class="col-sm-2">
+                            مبدا
+                        </div>
+                        <div class="col-sm-2">
+                            مقصد
+                        </div>
+                        <div class="col-sm-2">
+                            تاریخ
+                        </div>
+                        <div class="col-sm-2">
+                            ساعت
+                        </div>
+                        <div class="col-sm-2">
+                            ایرلاین
+                        </div>
+                        <div class="col-sm-2">
+                            شماره‌پرواز
+                        </div>
+                    </div>
+                    <div  id="parvaz_res">
+
+                    </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" id="myModalCancel" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" id="myModalOk" class="btn btn-primary">Save changes</button>
+              </div>
+            </div>
+          </div>
+        </div>
     

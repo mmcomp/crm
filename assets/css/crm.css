@@ -329,3 +329,13 @@ hr.custom1 {
     background : #ab0535;
     color:#ffffff;
 }
+.mm-selcted{
+    background : #ab0535;
+    color:#ffffff;
+}
+.ps-box{
+  cursor: pointer;
+}
+.ps-box:nth-child(odd){
+  background: #cccccc;
+}

@@ -84,6 +84,7 @@
                 اطلاعات مسیر پروازی
                 &nbsp;&nbsp;&nbsp;
                 <a class="btn btn-default" href="#" onclick="addPar();"><span class="glyphicon glyphicon-plus" style="color:#000000;font-size: 12px;"></span></a>
+                <a class="btn btn-default" href="#" onclick="loadSearch();"><span class="glyphicon glyphicon-search" style="color:#000000;font-size: 12px;"></span></a>
             </div>
         </div>
 PHED;
@@ -728,6 +729,7 @@ OTGHD;
         background: #cccccc;
     }
 </style>
+
 <div class="row" >
     <div class="col-sm-2" >
         <div class="hs-margin-up-down hs-gray hs-padding hs-border" >
@@ -904,5 +906,9 @@ OTGHD;
                 alert('لطفا اطلاعات سطر اول را برای ایجاد پرواز برگشت کامل کنید');
             }
         }
+    }
+    function loadSearch()
+    {
+        openDialog('جستجوی پرواز',null,'انتخاب','انصراف',function(){});
     }
 </script>
