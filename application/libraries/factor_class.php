@@ -38,7 +38,7 @@
         public static function loadByUser($user_id,$all = FALSE)
         {
             $my= new mysql_class;
-            $my->ex_sql("select * from `factor` where `user_id` = $user_id ".(($all===FALSE)?' and `is_tasfieh` = 0':''),$q);
+            $my->ex_sql("select * from `factor` where `user_id` = $user_id ".(($all===FALSE)?' and `is_tasfieh` = 0':'')." order by tarikh desc",$q);
             return($q);
         }
         public static function marhale($factor_id,$name)

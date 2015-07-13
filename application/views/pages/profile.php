@@ -118,6 +118,10 @@
                 ادامه
                 <span class="glyphicon glyphicon-chevron-left"></span>
                 </a>
+                <a class="btn btn-lg hs-btn-default" href="<?php echo site_url().'timeline/'.$user_id1; ?>" >
+                TimeLine
+                <span class="glyphicon glyphicon-chevron-left"></span>
+                </a>
             </form>
         </div>
     <?php echo form_open_multipart('',array('id'=>'frm_profile'))  ?>

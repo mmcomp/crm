@@ -92,7 +92,7 @@ PHED;
             <div class="hs-border hs-padding row hs-margin-up-down parva_box">
                 <div>
                     <span class="glyphicon glyphicon-minus pointer" onclick="removePar(this);"></span>
-                    <span class="glyphicon glyphicon-plane is_gohar_icon"></span>
+                    <span class="glyphicon glyphicon-plane is_gohar_icon" style="display:none;"></span>
                     <input type="hidden" name="parvaz[parvaz_id][]" value="#parvaz_id#">
                 </div>
                 <div class="row">
