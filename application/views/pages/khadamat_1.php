@@ -157,7 +157,7 @@ PHED;
                     <div class="col-sm-1 hs-padding">
                         <select name="parvaz[vorood_saat][]">#vorood_saat#</select>
                     </div>                
-
+                    <input type="hidden" name="parvaz[gohar_id][]" value="#gohar_id#"/>
                 </div>
             </div>
 PTMP;
@@ -236,6 +236,8 @@ PTMP;
                     unset($parvaz_db['havapeima']);
                     $parvaz_db['shomare'] = $parvaz_db['flight_number'];
                     unset($parvaz_db['flight_number']);
+                    $parvaz_db['gohar_voucher_id'] = $parvaz_db['gohar_id'];
+                    unset($parvaz_db['gohar_id']);
                     $parvaz_db['factor_id'] = $factor_id;
                     $parvaz_db['khadamat_factor_id'] = $q[0]['id'];
                     $par_id = parvaz_class::add($parvaz_db);
@@ -272,6 +274,7 @@ PTMP;
                 $parpar['khorooj_daghighe'] = date("i",strtotime($p_tmp['saat']));
                 $parpar['vorood_saat'] = date("H",strtotime($p_tmp['saat_vorood']));
                 $parpar['vorood_daghighe'] = date("i",strtotime($p_tmp['saat_vorood']));
+                $parpar['gohar_id'] = date("i",strtotime($p_tmp['gohar_voucher_id']));
                 $parvaz[] = $parpar;
             }
             if(count($parvaz)==0)
@@ -300,7 +303,8 @@ PTMP;
         $parvaz_tmp1 = str_replace("#khorooj_saat#",$this->inc_model->generateOption(23,0,1),$parvaz_tmp1);
         $parvaz_tmp1 = str_replace("#khorooj_daghighe#",$this->inc_model->generateOption(59,0,1),$parvaz_tmp1);
         $parvaz_tmp1 = str_replace("#vorood_saat#",$this->inc_model->generateOption(23,0,1),$parvaz_tmp1);
-        $parvaz_tmp1 = str_replace("#vorood_daghighe#",$this->inc_model->generateOption(23,0,1),$parvaz_tmp1);
+        $parvaz_tmp1 = str_replace("#vorood_daghighe#",$this->inc_model->generateOption(59,0,1),$parvaz_tmp1);
+        $parvaz_tmp1 = str_replace("#gohar_id#",-1,$parvaz_tmp1);
         /*
         $parvaz_tmp2 = str_replace("#airline#",airline_class::loadAll(),$parvaz_temp);
         $parvaz_tmp2 = str_replace("#class#",'',$parvaz_tmp2);
@@ -329,7 +333,8 @@ PTMP;
             $parvazak = str_replace("#khorooj_saat#",$this->inc_model->generateOption(23,0,1,$parvaz[$i]['khorooj_saat']),$parvazak);
             $parvazak = str_replace("#khorooj_daghighe#",$this->inc_model->generateOption(59,0,1,$parvaz[$i]['khorooj_daghighe']),$parvazak);
             $parvazak = str_replace("#vorood_saat#",$this->inc_model->generateOption(23,0,1,$parvaz[$i]['vorood_saat']),$parvazak);
-            $parvazak = str_replace("#vorood_daghighe#",$this->inc_model->generateOption(23,0,1,$parvaz[$i]['vorood_daghighe']),$parvazak);
+            $parvazak = str_replace("#vorood_daghighe#",$this->inc_model->generateOption(59,0,1,$parvaz[$i]['vorood_daghighe']),$parvazak);
+            $parvaz_tmp1 = str_replace("#gohar_id#",$parvaz[$i]['gohar_id'],$parvaz_tmp1);
             $parvazs .= $parvazak;
         }
     }
@@ -800,6 +805,11 @@ OTGHD;
             numberOfMonths: 2,
             showButtonPanel: true
         });
+        $(".parva_box input").click(function(){
+
+            parvaz_obj = $(this).parent().parent().parent();
+
+        }); 
     }
     function addHot()
     {
@@ -899,6 +909,11 @@ OTGHD;
                 $(newobj.find("div.row select")[3]).select2("val",adl.val());
                 $(newobj.find("div.row select")[4]).select2("val",chd.val());
                 $(newobj.find("div.row select")[5]).select2("val",inf.val());
+                $(".parva_box input").click(function(){
+
+                    parvaz_obj = $(this).parent().parent().parent();
+
+                }); 
             }
             else
             {

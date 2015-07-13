@@ -79,8 +79,13 @@
         }  
     ?>
     <script>
+        var parvaz_obj;
         $(document).ready(function(){
-            $('[data-toggle="tooltip"]').tooltip();
+            $(".parva_box input").click(function(){
+
+                parvaz_obj = $(this).parent().parent().parent();
+
+            });            $('[data-toggle="tooltip"]').tooltip();
             $('[data-toggle="popover"]').popover();
             $('select').select2({
                 dir: "rtl"
@@ -156,7 +161,7 @@
                     $("#stat").hide();
                     $("#parvaz_res").html(res.html);
                     search_flight_data = res.obj;
-                    console.log(res);
+                    //console.log(res);
                 }).fail(function(){
                     alert("خطا در دسترسی به سرور");
                     $("#stat").hide();
@@ -167,9 +172,31 @@
                 alert('اطلاعات را کامل کنید');
             }
         }
+        function fixDate(inp)
+        {
+            var tmp = inp.split('-');            
+            return(tmp[2]+'/'+tmp[1]+'/'+tmp[0]);
+        }
         function selectParvaz(i)
         {
             console.log(search_flight_data[i]);
+            if(typeof parvaz_obj==='undefined')
+            {
+                parvaz_obj = $($(".parva_box")[0]);
+            }
+            parvaz_obj.find("input[name='parvaz[tarikh][]']").val(fixDate(search_flight_data[i].fdate));
+            parvaz_obj.find("input[name='parvaz[class][]']").val(search_flight_data[i].class_ghimat);
+            parvaz_obj.find("input[name='parvaz[flight_number][]']").val(search_flight_data[i].flight_number);
+            parvaz_obj.find("input[name='parvaz[havapeima][]']").val(search_flight_data[i].airplane);
+            parvaz_obj.find("select[name='parvaz[mabda_id][]']").select2("val",search_flight_data[i].from_city);
+            parvaz_obj.find("select[name='parvaz[maghsad_id][]']").select2("val",search_flight_data[i].to_city);
+            parvaz_obj.find("select[name='parvaz[airline][]']").select2("val",search_flight_data[i].airline);
+            parvaz_obj.find("select[name='parvaz[khorooj_saat][]']").select2("val",parseInt(search_flight_data[i].ftime.split(':')[0],10));
+            parvaz_obj.find("select[name='parvaz[khorooj_daghighe][]']").select2("val",parseInt(search_flight_data[i].ftime.split(':')[1],10));
+            parvaz_obj.find("select[name='parvaz[vorood_saat][]']").select2("val",parseInt(search_flight_data[i].ftime.split(':')[0],10));
+            parvaz_obj.find("select[name='parvaz[vorood_daghighe][]']").select2("val",parseInt(search_flight_data[i].ftime.split(':')[1],10));
+            parvaz_obj.find("select[name='parvaz[gohar_id][]']").select2("val",search_flight_data[i].agency_id);
+            $("#myModal").modal("hide");
         }
      </script>
 </body>

@@ -80,6 +80,9 @@ TT;
             $tflight = str_replace("#fnumber#", $flight->flight_number, $tflight);
             $tflight = str_replace("#i#", $i, $tflight);
             $out .= $tflight;
+            $data[$i]->from_city = city_class::loadByIata($flight->from_city);
+            $data[$i]->to_city = city_class::loadByIata($flight->to_city);
+            $data[$i]->airline = airline_class::loadByName($flight->airline);
         }
         $output['obj'] = $data;
     }

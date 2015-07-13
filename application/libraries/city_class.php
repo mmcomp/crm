@@ -15,6 +15,21 @@ class city_class
             }
         }
     }
+    public static function loadByIata($iata)
+    {
+        $out = -1;
+        if(trim($iata) != '')
+        {
+            $mysql = new mysql_class;
+            $mysql->ex_sql("select id from `city` where `iata` = '$iata'",$q);
+            if(isset($q[0]))
+            {
+                $r = $q[0];
+                $out = (int)$r['id'];
+            }
+        }
+        return($out);
+    }
     public static function loadAllIata()
     {
         $out='';
