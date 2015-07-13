@@ -53,4 +53,18 @@
             $my = new mysql_class;
             $my->ex_sqlx("update `factor` set `is_tasfieh`=1,`tarikh_tasfieh`='$date' where id=$factor_id");
         }
+        public static function isParvazOk($factor_id)
+        {
+            $out = TRUE;
+            $my = new mysql_class;
+            $my->ex_sql("select mosafer.id,ticket_number from mosafer left join parvaz on (parvaz.khadamat_factor_id=mosafer.khadamat_factor_id) where gohar_voucher_id>0 and factor_id = $factor_id", $q);
+            foreach($q as $r)
+            {
+                if(trim($r['ticket_number'])=='')
+                {
+                    $out = FALSE;
+                }
+            }
+            return($out);
+        }
     }

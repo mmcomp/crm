@@ -118,8 +118,61 @@
                         $(".same_"+frase).val(str);
                 });
             });
+            $("input[type='button']").click(function(){
+                $(this).parent().parent().find("input[name='parvaz[is_gohar][]']").prop('checked',false);
+                refreshParvazCheck();
+            });
+            $( window ).resize(function() {
+                refreshParvazCheck();
+            });
+            refreshParvazCheck();
             $($("[name='s_code_melli']")[0]).focus();
         });
+        function refreshParvazCheck()
+        {
+            $("input[name='parvaz[is_gohar][]']").each(function(id,field){
+                //console.log($(field).prop('checked'));
+                if($(field).prop('checked'))
+                {
+                    var p = $(field).parent().parent().position();
+                    /*
+                    $(field).parent().parent().find('input,select').prop('readonly',true);
+                    //$(field).parent().parent().find('select').enable(false);
+                    //$(field).parent().parent().find('select,input').prop('disabled',true);
+                    //$(field).parent().parent().find("input[type='button']").prop('disabled',false);
+                    $(field).parent().parent().find("input[type='button']").prop('readonly',false);
+                    $(field).parent().parent().find("input[type='button']").show();
+                    */
+                    $(field).parent().parent().append('<div  data-trigger="hover" data-container="body" data-toggle="popover" data-placement="bottom" data-content="پرواز دستی نمی باشد" class="hide_div" style="position: absolute;top:'+p.top+'px;left:0;width: '+($(field).parent().parent().width()+20)+'px;height:'+($(field).parent().parent().height()+20)+'px;z-index:2;opacity:0.4;filter: alpha(opacity = 50)"></div>');
+                    $(field).parent().parent().find("span.is_gohar_icon").show();
+                }
+                else
+                {
+                    /*
+                    $(field).parent().parent().find('input,select').prop('readonly',false);
+                    //$(field).parent().parent().find('select').enable(true);
+                    //$(field).parent().parent().find('select,input').prop('disabled',false);
+                    //$(field).parent().parent().find("input[name='parvaz[gohar_id][]']").prop('disabled',false);
+                    
+                    $(field).parent().parent().find("input[type='button']").prop('disabled',true);
+                    $(field).parent().parent().find("input[type='button']").prop('readonly',true);
+                    
+                    $(field).parent().parent().find("input[type='button']").hide();
+                    */
+                    $(field).parent().parent().find("span.is_gohar_icon").hide();
+                    $(field).parent().parent().find("input[name='parvaz[gohar_id][]']").val(-1);
+                    $(field).parent().parent().find(".hide_div").remove();
+                    console.log($(field).parent().parent().find(".hide_div"));
+                }
+            });
+            $("div.hide_div").click(function(){
+                if(confirm("آیا این پرواز دستی وارد شود؟"))
+                {
+                    $(this).parent().find("input[name='parvaz[is_gohar][]']").prop('checked',false);
+                    refreshParvazCheck();
+                }
+            });
+        }
         function openDialog(header,content,okbtn,cancelbtn,fn)
         {
             $("#myModalLabel").html(header);
@@ -195,7 +248,10 @@
             parvaz_obj.find("select[name='parvaz[khorooj_daghighe][]']").select2("val",parseInt(search_flight_data[i].ftime.split(':')[1],10));
             parvaz_obj.find("select[name='parvaz[vorood_saat][]']").select2("val",parseInt(search_flight_data[i].ftime.split(':')[0],10));
             parvaz_obj.find("select[name='parvaz[vorood_daghighe][]']").select2("val",parseInt(search_flight_data[i].ftime.split(':')[1],10));
-            parvaz_obj.find("select[name='parvaz[gohar_id][]']").select2("val",search_flight_data[i].agency_id);
+            parvaz_obj.find("input[name='parvaz[gohar_id][]']").val(search_flight_data[i].agency_id);
+            parvaz_obj.find("input[name='parvaz[is_gohar][]']").prop("checked",true);
+            parvaz_obj.find("span.is_gohar_icon").show();
+            refreshParvazCheck();
             $("#myModal").modal("hide");
         }
      </script>

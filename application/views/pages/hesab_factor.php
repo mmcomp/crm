@@ -127,7 +127,14 @@ TMP;
         {
             $tmp2 = str_replace("#tick#", '', $tmp2);
             $tmp2 = str_replace("#pointer#", ' pointer', $tmp2);
-            $tmp2 = str_replace("#click#",'onclick="tasfieh(#factor_id#);', $tmp2);
+            if(factor_class::isParvazOk($f['id']))
+            {
+                $tmp2 = str_replace("#click#",'onclick="tasfieh(#factor_id#);', $tmp2);
+            }
+            else
+            {
+                $tmp2 = str_replace("#click#",'onclick="alert(\'اطلاعات بلیت برای این خرید وارد نشده است\');', $tmp2);
+            }
         }
         $tmp2 = str_replace("#factor_id#", $f['id'], $tmp2);
         $facs .= $tmp2;

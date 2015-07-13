@@ -47,11 +47,11 @@ TT;
     $maghsad_id = $_REQUEST['maghsad_id'];
     
     
-    $URL = 'http://85.17.22.14/se/SEWB.php';
+    $URL = 'http://thtcenter.ir/se/SEWB.php';
 
     $client = new SoapClient(null, array(
         'location' => $URL,
-        'uri'      => "http://85.17.22.14/se/",
+        'uri'      => "http://thtcenter.ir/se/",
         'trace'    => 1,
     ));
     $arguments = array(

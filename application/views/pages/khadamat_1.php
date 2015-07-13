@@ -92,6 +92,7 @@ PHED;
             <div class="hs-border hs-padding row hs-margin-up-down parva_box">
                 <div>
                     <span class="glyphicon glyphicon-minus pointer" onclick="removePar(this);"></span>
+                    <span class="glyphicon glyphicon-plane is_gohar_icon"></span>
                     <input type="hidden" name="parvaz[parvaz_id][]" value="#parvaz_id#">
                 </div>
                 <div class="row">
@@ -158,6 +159,8 @@ PHED;
                         <select name="parvaz[vorood_saat][]">#vorood_saat#</select>
                     </div>                
                     <input type="hidden" name="parvaz[gohar_id][]" value="#gohar_id#"/>
+                    <input type="checkbox" style="display:none;" name="parvaz[is_gohar][]" #is_gohar#/>
+                    
                 </div>
             </div>
 PTMP;
@@ -177,7 +180,8 @@ PTMP;
         "khorooj_saat" => '00',
         "khorooj_daghighe" => '00',
         "vorood_saat" => '00',
-        "vorood_daghighe" => '00'
+        "vorood_daghighe" => '00',
+        "gohar_id" => -1
     );
     $parvaz = array();
     if(isset($_REQUEST['parvaz']))
@@ -238,6 +242,7 @@ PTMP;
                     unset($parvaz_db['flight_number']);
                     $parvaz_db['gohar_voucher_id'] = $parvaz_db['gohar_id'];
                     unset($parvaz_db['gohar_id']);
+                    unset($parvaz_db['is_gohar']);
                     $parvaz_db['factor_id'] = $factor_id;
                     $parvaz_db['khadamat_factor_id'] = $q[0]['id'];
                     $par_id = parvaz_class::add($parvaz_db);
@@ -274,7 +279,7 @@ PTMP;
                 $parpar['khorooj_daghighe'] = date("i",strtotime($p_tmp['saat']));
                 $parpar['vorood_saat'] = date("H",strtotime($p_tmp['saat_vorood']));
                 $parpar['vorood_daghighe'] = date("i",strtotime($p_tmp['saat_vorood']));
-                $parpar['gohar_id'] = date("i",strtotime($p_tmp['gohar_voucher_id']));
+                $parpar['gohar_id'] = $p_tmp['gohar_voucher_id'];
                 $parvaz[] = $parpar;
             }
             if(count($parvaz)==0)
@@ -305,6 +310,7 @@ PTMP;
         $parvaz_tmp1 = str_replace("#vorood_saat#",$this->inc_model->generateOption(23,0,1),$parvaz_tmp1);
         $parvaz_tmp1 = str_replace("#vorood_daghighe#",$this->inc_model->generateOption(59,0,1),$parvaz_tmp1);
         $parvaz_tmp1 = str_replace("#gohar_id#",-1,$parvaz_tmp1);
+        $parvaz_tmp1 = str_replace("#is_gohar#",'',$parvaz_tmp1);
         /*
         $parvaz_tmp2 = str_replace("#airline#",airline_class::loadAll(),$parvaz_temp);
         $parvaz_tmp2 = str_replace("#class#",'',$parvaz_tmp2);
@@ -334,7 +340,8 @@ PTMP;
             $parvazak = str_replace("#khorooj_daghighe#",$this->inc_model->generateOption(59,0,1,$parvaz[$i]['khorooj_daghighe']),$parvazak);
             $parvazak = str_replace("#vorood_saat#",$this->inc_model->generateOption(23,0,1,$parvaz[$i]['vorood_saat']),$parvazak);
             $parvazak = str_replace("#vorood_daghighe#",$this->inc_model->generateOption(59,0,1,$parvaz[$i]['vorood_daghighe']),$parvazak);
-            $parvaz_tmp1 = str_replace("#gohar_id#",$parvaz[$i]['gohar_id'],$parvaz_tmp1);
+            $parvazak = str_replace("#gohar_id#",$parvaz[$i]['gohar_id'],$parvazak);
+            $parvazak = str_replace("#is_gohar#",((int)$parvaz[$i]['gohar_id']>0?'checked':''),$parvazak);
             $parvazs .= $parvazak;
         }
     }
@@ -722,7 +729,7 @@ OTGHD;
     }
     if($next_marhale)
     {
-        redirect('khadamat_2/'.$factor_id);
+        //redirect('khadamat_2/'.$factor_id);
         //echo "GOGO";
     }
 ?>

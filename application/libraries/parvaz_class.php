@@ -56,7 +56,7 @@ class parvaz_class
                 }
             }
             $qu = "insert into parvaz ($field) values ($values)";
-            //echo $qu;
+            echo $qu;
             $ln = $my->ex_sqlx($qu,FALSE);
             $out = $my->insert_id($ln);
             $my->close($ln);
@@ -71,7 +71,7 @@ class parvaz_class
                 }
             }
             $qu = "update parvaz set $field where id=".$parvaz['parvaz_id'];
-            //echo $qu;
+            echo $qu;
             $out = $my->ex_sqlx($qu);
         }
         //$out='';
