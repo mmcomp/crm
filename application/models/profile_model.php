@@ -157,6 +157,16 @@ class Profile_model extends CI_Model {
                 "پیشنویس ها" => site_url()."paper_cartable/pishnevis",
                 "پروفایل" => site_url()."profile"        
             ),
+            5 => array(
+                "صفحه اصلی" => site_url()."home",
+                "تایید پیش‌فاکتور" => site_url()."hesab_factor",
+                "کارتابل" => site_url()."paper_cartable/normal",
+                "ثبت نامه جدید" => site_url()."paper_new",
+                "نامه های ارسالی" => site_url()."paper_cartable/sent",
+                "بایگانی" => site_url()."paper_cartable/archive",
+                "پیشنویس ها" => site_url()."paper_cartable/pishnevis",
+                "پروفایل" => site_url()."profile"        
+            )
         );
         $menu_no_paper = array(
             1 => array(
@@ -183,6 +193,11 @@ class Profile_model extends CI_Model {
                 "تایید پیش‌فاکتور" => site_url()."hesab_factor",
                 "پروفایل" => site_url()."profile"        
             ),
+            5 => array(
+                "صفحه اصلی" => site_url()."home",
+                "تایید پیش‌فاکتور" => site_url()."hesab_factor",
+                "پروفایل" => site_url()."profile"        
+            )
         );
         $conf = new conf();
         if($conf->hasPaper===TRUE)

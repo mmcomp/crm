@@ -110,6 +110,8 @@ class khadamat_class
         for($i=0;$i<count($request['khadamat_id']);$i++)
         {
             $kh = new khadamat_class((int)$request['khadamat_id'][$i]);
+            $fac = new factor_class($factor_id);
+            $user = new user_class($fac->user_id);
             $kh_ghimat = 0;
             $my->ex_sql("select sum(mablagh) as mab from tamin_khadamat where factor_id=$factor_id and khadamat_id = ".$kh->id, $q);
             if(isset($q[0]))
@@ -119,7 +121,11 @@ class khadamat_class
             $sood = (int)$request['mablagh'][$i]-$kh_ghimat-(int)$request['comission'][$i];
             $sum+= $request['mablagh'][$i];
             $sum_comission += $request['comission'][$i];
-            $jayeze = (int)($sood*$kh->jayze/100);
+            $jayeze = 0;
+            if($user->group_id==5)
+            {
+                $jayeze = (int)($sood*$kh->jayze/100);
+            }
             //$qu = "update khadamat_factor set mablagh='".$request['mablagh'][$i]."',comission='".$request['comission'][$i]."',jayeze_code='".$request['jayeze_code'][$i]."' where factor_id=$factor_id and khadamat_id=".$request['khadamat_id'][$i];
             $qu = "update khadamat_factor set mablagh='".$request['mablagh'][$i]."',comission='".$request['comission'][$i]."',sood=$sood,jayeze=$jayeze where factor_id=$factor_id and khadamat_id=".$request['khadamat_id'][$i];
             $my->ex_sqlx($qu);
