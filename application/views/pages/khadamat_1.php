@@ -27,6 +27,22 @@
         return($out);
     }
     if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+    
+    if(isset($_REQUEST['new_city']))
+    {
+        $out = '0';
+        if(isset($_REQUEST['new_country']))
+        {
+            $new_country_id = country_class::add($_REQUEST['new_country']);
+        }
+        else
+        {
+            $new_country_id = (int)$_REQUEST['new_country_id'];
+        }
+        $out = city_class::add($_REQUEST['new_city'], $_REQUEST['new_iata'], $new_country_id);
+        die("$out");
+    }
+    
     $red_url = 'profile?factor_id='.$p1;
     $refer = isset($_SERVER['HTTP_REFERER'])?$_SERVER['HTTP_REFERER']:'';
     if(strpos($refer,'profile')!==FALSE)
@@ -97,7 +113,7 @@ PHED;
                 </div>
                 <div class="row">
                     <div class="col-sm-2 hs-padding">
-                        <select name="parvaz[mabda_id][]"><option value="-1">مبدا</option>#mabda_id#</select>
+                        <select name="parvaz[mabda_id][]"><option value="-1">مبدا</option>#mabda_id#</select> <span onclick="addCity(this);" class="glyphicon glyphicon-plus pointer" style="color:#000000;font-size: 12px;"></span>
                     </div>
                     <div class="col-sm-2 hs-padding">
                         <select name="parvaz[maghsad_id][]"><option value="-1">مقصد</option>#maghsad_id#</select>
@@ -931,6 +947,104 @@ OTGHD;
     }
     function loadSearch()
     {
+        $("#parvaz_res").html('');
         openDialog('جستجوی پرواز',null,'انتخاب','انصراف',function(){});
     }
+    var add_city_obj;
+    function addCity(dobj)
+    {
+        add_city_obj = $(dobj).prev().prev();
+        $("#cityModal").modal("show");
+    }
+    function addCountry()
+    {
+        $('#new_country').toggle();
+        if($("#new_country").is(":visible"))
+        {
+            $("#new_country_id").select2("val",-1);
+        }
+    }
+    function saveCity()
+    {
+        var new_country = $("#new_country").val().trim();
+        var new_country_id = $("#new_country_id").select2("val");
+        var new_city = $("#new_city").val().trim();
+        var new_iata = $("#new_iata").val().trim();
+        var p = {
+            "new_city" : new_city,
+            "new_iata" : new_iata
+        };
+        if(new_city!=='' && (new_country_id>0 || (new_country_id<=0 && new_country!=='')) && new_iata.length===3)
+        {
+            if(new_country_id<=0 && new_country!=='')
+            {
+                $("#new_country_id option").each(function(id,feild){
+                    if(id>0 && $(feild).html().trim()===new_country)
+                    {
+                        new_country_id = parseInt($(feild).val(),10);
+                    }
+                });
+                if(new_country_id>0)
+                {
+                    new_country = '';
+                }
+            }
+            if(new_country_id<=0)
+            {
+                p['new_country'] = new_country;
+            }
+            else
+            {
+                p['new_country_id'] = new_country_id;
+            }
+            $.get("<?php echo site_url() ?>khadamat_1",p,function(res){
+                var city_id = parseInt(res,10);
+                if(!isNaN(city_id) && city_id>0)
+                {
+                    add_city_obj.select2('destroy');
+                    add_city_obj.append("<option value='"+city_id+"'>"+new_city+"</option>");
+                    add_city_obj.select2({
+                        dir : "rtl"
+                    });
+                    add_city_obj.select2("val",city_id);
+                    contin();
+                    $("#cityModal").modal("hide");
+                }
+                else
+                {
+                    alert('خطا در ثبت');
+                }
+            }).fail(function(){
+                alert('خطا در دسترسی به سرور');
+            });
+        }
+        else
+        {
+            alert('لطفا اطلاعات را به درستی وارد کنید');
+        }
+    }
 </script>
+
+        <!-- Modal -->
+        <div class="modal fade" id="cityModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="cityModalLabel">ثبت شهر</h4>
+              </div>
+              <div class="modal-body" id="cityModalBody">
+                  <input class="form-control" id="new_city" placeholder="نام شهر" /><input class="form-control" id="new_iata" placeholder="IATA" />
+                  <div>
+                      <select id="new_country_id" style="width:100px;"><option val="-1">کشور</option><?php echo country_class::loadAll(-1); ?></select>
+                      <span onclick="addCountry();" class="glyphicon glyphicon-plus pointer" style="color:#000000;font-size: 12px;"></span>
+                      <input class="form-control" id="new_country" style="display: none;" placeholder="کشور جدید" />
+                  </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" id="cityModalCancel" class="btn btn-default" data-dismiss="modal">انصراف</button>
+                <button type="button" id="cityModalOk" onclick="saveCity();" class="btn btn-primary">ذخیره</button>
+              </div>
+            </div>
+          </div>
+        </div>

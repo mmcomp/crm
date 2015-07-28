@@ -65,7 +65,14 @@ class city_class
             $out.='<option value="'.$r['id'].'" '.(($selected==(int)$r['id'])?'selected':'').'>'.$r['name'].'</option>';
         }
         return ($out);
-    }       
+    }
+    public static function add($name,$iata,$country_id)
+    {
+        $my = new mysql_class;
+        $ln = $my->ex_sqlx("insert into city (name,iata,country_id) values ('$name','$iata',$country_id)");
+        $out = $my->insert_id($ln);
+        return($out);
+    }
 }
 
 

@@ -133,7 +133,7 @@ class Inc_model extends CI_Model {
             ),
             array(
                 "link" => "khadamat_3",
-                "name" => "تأمین کننده ها"
+                "name" => "فرم ها"
             ),
             array(
                 "link" => "khadamat_4",
@@ -141,7 +141,7 @@ class Inc_model extends CI_Model {
             ),
             array(
                 "link" => "khadamat_5",
-                "name" => "فرم ها"
+                "name" => "تأمین کننده ها"
             )
         );
         $out = '<div class="row hs-margin-up-down">';

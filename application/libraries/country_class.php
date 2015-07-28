@@ -25,7 +25,13 @@ class country_class
             $out.='<option '.($r['id']==$selected ?'selected="selected"':'').' value="'.$r['id'].'" >'.$r['name'].'</option>';
         }
         return ($out);
-    }        
+    }  
+    public static function add($name)
+    {
+        $my = new mysql_class;
+        $ln = $my->ex_sqlx("insert into country (name) values ('$name')");
+        return($my->insert_id($ln));
+    }
 }
 
 /* 
