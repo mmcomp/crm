@@ -745,7 +745,7 @@ OTGHD;
     }
     if($next_marhale)
     {
-        //redirect('khadamat_2/'.$factor_id);
+        redirect('khadamat_2/'.$factor_id);
         //echo "GOGO";
     }
 ?>
