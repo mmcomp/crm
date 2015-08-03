@@ -19,12 +19,18 @@ class khadamat_class
     {
         $out='';
         $my = new mysql_class;
-        $my->ex_sql("select id,name from khadamat order by ordering desc", $q);
+        $my->ex_sql("select id,name,typ from khadamat order by ordering desc", $q);
         foreach($q as $r)
         {
             $out.='<option '.(in_array($r['id'],$inp)?'selected="selected"':'').'  value="'.$r['id'].'" >'.$r['name'].'</option>';
         }
         return ($out);
+    }
+    public static function loadAll2()
+    {
+        $my = new mysql_class;
+        $my->ex_sql("select id,name,typ from khadamat order by ordering desc", $q);
+        return ($q);
     }
     public static function loadTypes($inp)
     {
