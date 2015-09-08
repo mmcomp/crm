@@ -43,7 +43,7 @@
     {
         $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
         $this->form_validation->set_rules('mozoo', 'موضوع ', 'required|min_length[3]|max_length[200]');
-        $this->form_validation->set_rules('shomare', 'شماره ', 'required|min_length[4]|max_length[20]');
+        //$this->form_validation->set_rules('shomare', 'شماره ', 'required|min_length[4]|max_length[20]');
         $this->form_validation->set_rules('type_id', 'نوع', 'required|is_natural_no_zero');
         $this->form_validation->set_rules('matn', 'متن', 'required|min_length[3]');
         //$this->form_validation->set_rules('receivers', 'دریافت کننده', 'required|greater_than[0]');

@@ -40,6 +40,7 @@ class Pages extends CI_Controller {
         $this->load->library('vahed_mablagh_class');
         $this->load->library('khadamat_tamin_class');
         $this->load->library('group_class');
+        $this->load->library('fibo_class');        
         
         $this->load->library('xgrid');
         $this->load->view('modir/libs/jdf');

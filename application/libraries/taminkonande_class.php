@@ -50,12 +50,13 @@ class taminkonande_class extends CI_Model {
                     </span>\
                 </div>\
                 <div class="col-sm-2 hs-padding" >\
-                    <select class="sel_2" style="width: 100%;" name="taminkonande_id[]" >\
+                    <select class="sel_2" style="width: 90%;" name="taminkonande_id[]" >\
                         <option value="-1" >انتخاب تأمین کننده</option>\
                         '.taminkonande_class::loadAll().'\
                     </select>\
+                    <span onclick="addTamin(this);" class="glyphicon glyphicon-plus pointer" style="color:#000000;font-size: 12px;"></span>\
                 </div>\
-                <div class="col-sm-4 hs-padding" >\
+                <div class="col-sm-2 hs-padding" >\
                     <input value="" class="form-control" type="text" name="mablagh[]" placeholder="قیمت خرید"  >\
                 </div>\
                 <div class="col-sm-2 hs-padding" >\
@@ -65,6 +66,9 @@ class taminkonande_class extends CI_Model {
                             '.(vahed_mablagh_class::loadAll()).'\
                         </select>\
                     </span>\
+                </div>\
+                <div class="col-sm-2 hs-padding" >\
+                    <input value="" class="form-control" type="text" name="code_hesab[]" placeholder="کد حساب کارگزار"  >\
                 </div>\
                 <div class="col-sm-12 hs-padding" >\
                     <input type="text" placeholder="توضیحات" name="toz[]" class="form-control" value="" >\
@@ -81,11 +85,11 @@ class taminkonande_class extends CI_Model {
         {
             if((int)$params['tamin_khadamat_id'][$i]==-1)
             {    
-                $sql = "insert into tamin_khadamat (factor_id,taminkonande_id,mablagh,vahed_mablagh_id,khadamat_tamin_id,khadamat_id,toz,en) values ('".$factor_id."','".$params['taminkonande_id'][$i]."','".$params['mablagh'][$i]."','".$params['vahed_mablagh_id'][$i]."','".$params['khadamat_tamin_id'][$i]."','".$params['khadamat_id'][$i]."','".$params['toz'][$i]."',1)";
+                $sql = "insert into tamin_khadamat (factor_id,taminkonande_id,mablagh,vahed_mablagh_id,khadamat_tamin_id,khadamat_id,toz,en,code_hesab) values ('".$factor_id."','".$params['taminkonande_id'][$i]."','".$params['mablagh'][$i]."','".$params['vahed_mablagh_id'][$i]."','".$params['khadamat_tamin_id'][$i]."','".$params['khadamat_id'][$i]."','".$params['toz'][$i]."',1,'".$params['code_hesab'][$i]."')";
             }
             else
             {
-                $sql = "update tamin_khadamat set en=1,taminkonande_id='".$params['taminkonande_id'][$i]."',mablagh='".$params['mablagh'][$i]."',vahed_mablagh_id='".$params['vahed_mablagh_id'][$i]."',khadamat_tamin_id='".$params['khadamat_tamin_id'][$i]."',khadamat_id='".$params['khadamat_id'][$i]."',toz='".$params['toz'][$i]."' where id=".$params['tamin_khadamat_id'][$i];
+                $sql = "update tamin_khadamat set en=1,taminkonande_id='".$params['taminkonande_id'][$i]."',mablagh='".$params['mablagh'][$i]."',vahed_mablagh_id='".$params['vahed_mablagh_id'][$i]."',khadamat_tamin_id='".$params['khadamat_tamin_id'][$i]."',khadamat_id='".$params['khadamat_id'][$i]."',toz='".$params['toz'][$i]."',code_hesab='".$params['code_hesab'][$i]."' where id=".$params['tamin_khadamat_id'][$i];
             }
             $my->ex_sqlx($sql);
         }
@@ -121,13 +125,14 @@ class taminkonande_class extends CI_Model {
                         </select>
                     </span>
                 </div>
-                <div class="col-sm-2 hs-padding" >
-                    <select class="sel_2" style="width: 100%;" name="taminkonande_id[]" >
+                <div class="col-sm-2 hs-padding">
+                    <select class="sel_2" style="width: 90%;" name="taminkonande_id[]" >
                         <option value="-1" >انتخاب تأمین کننده</option>
                         '.taminkonande_class::loadAll($r['taminkonande_id']).'
                     </select>
+                    <span onclick="addTamin(this);" class="glyphicon glyphicon-plus pointer" style="color:#000000;font-size: 12px;"></span>
                 </div>
-                <div class="col-sm-4 hs-padding" >
+                <div class="col-sm-2 hs-padding" >
                     <input value="'.$r['mablagh'].'" class="form-control" type="text" name="mablagh[]" placeholder="قیمت خرید"  >
                 </div>
                 <div class="col-sm-2 hs-padding" >
@@ -137,6 +142,9 @@ class taminkonande_class extends CI_Model {
                             '.(vahed_mablagh_class::loadAll($r['vahed_mablagh_id'])).'
                         </select>
                     </span>
+                </div>
+                <div class="col-sm-2 hs-padding" >
+                    <input value="'.$r['code_hesab'].'" class="form-control" type="text" name="code_hesab[]" placeholder="کد حساب کارگزار"  >
                 </div>
                 <div class="col-sm-12 hs-padding" >
                     <input type="text" placeholder="توضیحات" name="toz[]" class="form-control" value="'.$r['toz'].'" >

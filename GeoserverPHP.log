@@ -1,0 +1,52 @@
+* About to connect() to products.proavos.com port 9191 (#0)
+*   Trying 220.247.244.43... * connected
+* Connected to products.proavos.com (220.247.244.43) port 9191 (#0)
+> POST /wsbe/rest HTTP/1.1
+Host: products.proavos.com:9191
+Accept: */*
+Content-type: application/xml
+authorization : JUOCCQSfBKn3JWyO9MBr1ihpvl9KPHTR
+Content-Length: 1601
+Expect: 100-continue
+
+#POST DATA:
+<OTA_AirLowFareSearchRQ xmlns="http://www.opentravel.org/OTA/2003/05" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opentravel.org/OTA/2003/05 OTA_AirLowFareSearchRQ.xsd" EchoToken="50987" TimeStamp="2015-04-28T10:44:10+05:30" Target="Test" Version="2.001" SequenceNmbr="1" PrimaryLangID="En-us">
+      <POS>
+              <Source AirlineVendorID="JI" ISOCountry="IR" ISOCurrency="IRR">
+                      <RequestorID Type="5" ID="HGASHT"/>
+              </Source>
+      </POS>
+      <OriginDestinationInformation>
+              <DepartureDateTime>2015-05-19</DepartureDateTime>
+              <OriginLocation LocationCode="THR"/>
+              <DestinationLocation LocationCode="MHD"/>
+      </OriginDestinationInformation>
+
+   <TravelPreferences >
+      <CabinPref  Cabin="Economy"/>
+   </TravelPreferences>
+
+      <TravelerInfoSummary>
+              <AirTravelerAvail>				
+                      <PassengerTypeQuantity Code="ADT" Quantity="1"/>			
+              </AirTravelerAvail>
+      </TravelerInfoSummary>
+      <ProcessingInfo SearchType="NEGO"/>
+</OTA_AirLowFareSearchRQ>
+############
+
+
+
+< HTTP/1.1 404 Not Found
+< Connection: keep-alive
+< Vary: Accept-Encoding
+< X-Powered-By: Undertow/1
+< Server: WildFly/8
+< Content-Type: text/html;charset=UTF-8
+< Content-Length: 68
+< Date: Thu, 20 Aug 2015 05:15:48 GMT
+< 
+* Connection #0 to host products.proavos.com left intact
+# Unsuccessful cURL request to http://products.proavos.com:9191/wsbe/rest [404]
+<html><head><title>Error</title></head><body>Not Found</body></html>
+* Closing connection #0

@@ -49,7 +49,7 @@
      <!--<link rel="stylesheet" href="<?php echo asset_url(); ?>css/bootstrap.min.css" />-->
      <link rel="stylesheet" href="<?php echo asset_url(); ?>css/bootstrap-datepicker.min.css" />
      <script src=" <?php echo asset_url().'js/jquery-1.11.1.min.js' ?>" ></script>
-     <script src=" <?php echo asset_url().'js/grid.min.js' ?>" ></script>
+     <script src=" <?php echo asset_url().'js/grid.js' ?>" ></script>
      <script src=" <?php echo asset_url().'js/bootstrap-datepicker.min.js' ?>"></script>
      <script src=" <?php echo asset_url().'js/bootstrap-datepicker.fa.min.js' ?>"></script>
      <script src=" <?php echo asset_url().'js/fileinput.min.js' ?>"></script>

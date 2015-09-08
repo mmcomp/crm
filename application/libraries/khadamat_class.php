@@ -29,7 +29,13 @@ class khadamat_class
     public static function loadAll2()
     {
         $my = new mysql_class;
-        $my->ex_sql("select id,name,typ from khadamat order by ordering desc", $q);
+        $my->ex_sql("select id,name,typ,typ_det from khadamat order by ordering desc", $q);
+        return ($q);
+    }    
+    public static function loadAll3()
+    {
+        $my = new mysql_class;
+        $my->ex_sql("select id,name,typ from khadamat_det", $q);
         return ($q);
     }
     public static function loadTypes($inp)
@@ -55,11 +61,14 @@ class khadamat_class
         $my->ex_sql("select khadamat_id,name,`khadamat_factor`.`mablagh`, `comission`,`sood` from khadamat_factor left join khadamat on (khadamat_id=khadamat.id) left join factor on (factor_id=factor.id) where factor_id=$factor_id ", $q);
         foreach($q as $r)
         {
-            $kh_ghimat = 0;
-            $my->ex_sql("select sum(mablagh) as mab from tamin_khadamat where factor_id=$factor_id and khadamat_id = ".$r['khadamat_id'], $q);
+            $kh_ghimat = '----';
+            $my->ex_sql("select sum(mablagh) as mab,count(id) as cid from tamin_khadamat where factor_id=$factor_id and khadamat_id = ".$r['khadamat_id'], $q);
             if(isset($q[0]))
             {
-                $kh_ghimat = (int)$q[0]['mab'];
+                if($q[0]['cid']>0)
+                {
+                    $kh_ghimat = (int)$q[0]['mab'];
+                }
             }
             
 /*
@@ -78,6 +87,7 @@ class khadamat_class
                         <select name="comission_girande[]" ><option value="-1">کمیسیون گیرنده</option>'.user_class::loadAll(TRUE,-1,-1,array((int)$r['commision_girande'])).'</select>
                     </div>
  */
+            /*
             $out.='
                     <div class="col-sm-1 text-center hs-margin-up-down" >
                         نام:
@@ -104,6 +114,34 @@ class khadamat_class
                     <div class="col-sm-2 text-center hs-margin-up-down" >
                         سود:'.$r['sood'].'
                     </div>
+                  ';
+             * 
+             */
+            $out.='
+                <div class="row">
+                    <div class="col-sm-1 text-center hs-margin-up-down" >
+                        نام:
+                    </div>
+                    <div class="col-sm-2 hs-margin-up-down" >
+                        <span>'.$r['name'].'</span>
+                        <input type="hidden" name="khadamat_id[]" value="'.$r['khadamat_id'].'" >
+                    </div>
+                    <div class="col-sm-1 text-center hs-margin-up-down" >
+                        قیمت:
+                    </div>
+                    <div class="col-sm-2" >
+                        <input class="form-control hs-margin-up-down" name="mablagh[]" value="'.$r['mablagh'].'" >
+                    </div>
+                    <div class="col-sm-1 text-center hs-margin-up-down" >
+                        کمیسیون/تخفیف:
+                    </div>
+                    <div class="col-sm-1 hs-margin-up-down" >
+                        <input class="form-control" name="comission[]" value="'.$r['comission'].'" >
+                    </div>
+                    <div class="col-sm-2 hs-margin-up-down" >
+                        هزینه : '.$kh_ghimat.'
+                    </div>
+                </div>
                   ';
         }
         return($out);

@@ -4,6 +4,46 @@
     {
         return("<a href='".  site_url()."khadamat_tamin?khadamat_id=$id&'>ادامه</a>");
     }
+    function loadKhadamatDet()
+    {
+        $typ = array(
+            1=>'پرواز',
+            2=>'هتل',
+            3=>'تور',
+            4=>'ویزا با کد ملی',
+            5=>'ویزا با پاسپورت'
+        );
+        $out = array(0=>'');
+        $my = new mysql_class;
+        $my->ex_sql("select id,name,typ from khadamat_det order by typ,name", $q);
+        foreach ($q as $r)
+        {
+            $out[(int)$r['id']] = $r['name'].'['.$typ[(int)$r['typ']].']';
+        }
+        return($out);
+    }
+    function editFn($table,$id,$field,$val,$fn,$gname)
+    {
+        $out = TRUE;
+        $my = new mysql_class;
+        if($field!='typ_det')
+        {
+            $my->ex_sqlx("update $table set $field = '$val' where id = $id");
+        }
+        else
+        {
+            $my->ex_sql("select typ from khadamat_det where id = $val", $q);
+            if(isset($q[0]))
+            {
+                $my->ex_sqlx("update $table set $field = '$val',typ = ".$q[0]['typ']." where id = $id");
+            }
+            else
+            {
+                $out = FALSE;
+            }
+        }
+        return($out);
+    }
     $this->profile_model->loadUser($user_id);
     $men = $this->profile_model->loadMenu();
     $msg = '';
@@ -36,16 +76,20 @@
     $xgrid1->column[$gname1][0]['name']= '';
     $xgrid1->column[$gname1][1]['name'] = 'نام';
     $xgrid1->column[$gname1][2]['name'] = 'توضیحات';
-    $xgrid1->column[$gname1][3]['name'] = 'نوع';
+    $xgrid1->column[$gname1][3]['name'] = '';
     $xgrid1->column[$gname1][3]['clist'] = array(
         "نوع خدمات","پرواز","هتل","تور","ویزایی با شماره ملی","ویزایی با شماره پاسپورت"
     );
     $xgrid1->column[$gname1][4] = $xgrid1->column[$gname1][5];
     $xgrid1->column[$gname1][4]['name'] = 'درصد جایزه';
-    $xgrid1->column[$gname1][5] = $xgrid1->column[$gname1][0];
-    $xgrid1->column[$gname1][5]['name'] = 'خدمات-تامین';
-    $xgrid1->column[$gname1][5]['access'] = 1;
-    $xgrid1->column[$gname1][5]['cfunction'] = array('goTamin');
+    $xgrid1->column[$gname1][5]['name'] = '';
+    $xgrid1->column[$gname1][6]['name'] = 'نوع';
+    $xgrid1->column[$gname1][6]['clist'] = loadKhadamatDet();
+    $xgrid1->column[$gname1][7]['name'] = 'کد حساب';
+    $xgrid1->column[$gname1][8] = $xgrid1->column[$gname1][0];
+    $xgrid1->column[$gname1][8]['name'] = 'خدمات-تامین';
+    $xgrid1->column[$gname1][8]['access'] = 1;
+    $xgrid1->column[$gname1][8]['cfunction'] = array('goTamin');
 /*
     //$xgrid1->whereClause[$gname1] = " (browser<>'Mozilla' and platform<>'Unknown Platform' and robot='') order by tarikh desc";
     for($i=1;$i< count($xgrid1->column[$gname1]);$i++)
@@ -58,6 +102,7 @@
     //$xgrid1->column[$gname1][12]['name'] = 'رمز عبور';
     //$xgrid1->column[$gname1][3]['cfunction'] = array('urldecode'); 
 */
+    $xgrid1->editFunction[$gname1] = 'editFn';
     $xgrid1->canEdit[$gname1]=TRUE;
     $xgrid1->canAdd[$gname1]=TRUE;
     $xgrid1->canDelete[$gname1]=TRUE;

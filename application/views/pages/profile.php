@@ -75,9 +75,9 @@ $khadamats = khadamat_class::loadAll($khadamat_back);
         </div>
         <div class="hs-margin-up-down hs-padding hs-border" >
             <ul class="nav nav-pills nav-stacked">
-<?php
-echo $menu_links;
-?>
+                <?php
+                echo $menu_links;
+                ?>
             </ul>
         </div>
     </div>
@@ -89,9 +89,9 @@ echo $menu_links;
     </div>
     -->
     <div class="col-sm-10" >
-                <?php
-                echo $this->inc_model->loadProgress(0, $factor_id);
-                ?>
+        <?php
+        echo $this->inc_model->loadProgress(0, $factor_id);
+        ?>
         <div class="row hs-margin-up-down">
             <form id="kh_frm_1" method="post">
                 <div class="col-sm-1">
@@ -119,8 +119,15 @@ echo $menu_links;
                         </option>
                     </select>
                 </div>
+                <div class="col-sm-2">
+                    <select  id="khadamat321" class="form-control" onchange="loadKhadamatDet2(this);">
+                        <option value="-1">
+                            نوع خدمات
+                        </option>
+                    </select>
+                </div>
                 <div class="col-sm-4">
-                    <select name="khadamat[]" id="khadamat123" multiple="multiple" width="100px" >
+                    <select name="khadamat[]"  class="form-control" id="khadamat123" multiple="multiple" >
                         <?php //echo $khadamats; ?>
                     </select>
                 </div>
@@ -138,19 +145,19 @@ echo $menu_links;
                 </div>
             </form>
         </div>
-<?php echo form_open_multipart('', array('id' => 'frm_profile')) ?>
+        <?php echo form_open_multipart('', array('id' => 'frm_profile')) ?>
 
         <div  class="hs-margin-up-down hs-gray hs-padding hs-border mm-negative-margin pointer" onclick="toggle_profile();" >
             کاربر: 
-<?php echo $user_obj->fname . ' ' . $user_obj->lname; ?>
+            <?php echo $user_obj->fname . ' ' . $user_obj->lname; ?>
             شماره ملی:
-<?php echo $user_obj->code_melli; ?>
+            <?php echo $user_obj->code_melli; ?>
             <div class="hs-float-left" id="arrow_div" >
                 <span class="glyphicon glyphicon-chevron-down" ></span>
             </div>
         </div>
         <div id="profile_div" style="display: none;" >
-<?php echo $msg . validation_errors(); ?>
+            <?php echo $msg . validation_errors(); ?>
             <div class="col-sm-6  hs-margin-up-down" >
                 نام:
                 <input class="form-control" name="fname" id="fname" placeholder="نام" value="<?php echo $user_obj->fname; ?>" >
@@ -172,31 +179,35 @@ echo $menu_links;
                     <option value="0" >
                         روز
                     </option>
-<?php
-echo $this->inc_model->genOption(1, 31, $user_obj->rooz);
-?>
+                    <?php
+                    echo $this->inc_model->genOption(1, 31, $user_obj->rooz);
+                    ?>
                 </select>
                 /
                 <select class="form-inline hs-little-select" name="mah" id="mah" >
                     <option value="0" >
                         ماه
                     </option>
-<?php
-echo $this->inc_model->genOption(1, 12, $user_obj->mah);
-?>
+                    <?php
+                    echo $this->inc_model->genOption(1, 12, $user_obj->mah);
+                    ?>
                 </select>
                 /
                 <select class="form-inline hs-little-select" name="sal" id="sal" style="width:62px">
                     <option value="0" >
                         سال
                     </option>
-<?php
-echo $this->inc_model->genOption(1300, 95, $user_obj->sal);
-?>
+                    <?php
+                    echo $this->inc_model->genOption(1300, 95, $user_obj->sal);
+                    ?>
                 </select>
             </div>
             <div class="hs-margin-up-down" style="margin-right:15px;" >
                 درصورت خالی گذاشتن ، رمز عبور بدون تغییر باقی خواهد ماند
+            </div>
+            <div class="col-sm-12 hs-margin-up-down" >
+                کد کاربر در سیستم فرانگر:
+                <input type="text" class="form-control" name="fid" id="pass" placeholder="کد کاربر در فرانگر" value="<?php echo $user_obj->fid; ?>">
             </div>
             <div class="col-sm-6 hs-margin-up-down" >
                 رمز عبور:
@@ -223,9 +234,9 @@ echo $this->inc_model->genOption(1300, 95, $user_obj->sal);
                     <option value="0" >
                         انتخاب شغل
                     </option>
-<?php
-echo shoghl_class::loadAll(TRUE, $user_obj->shoghl_id);
-?>
+                    <?php
+                    echo shoghl_class::loadAll(TRUE, $user_obj->shoghl_id);
+                    ?>
                 </select>
             </div>
             <div class="col-sm-6  hs-margin-up-down datetime" >
@@ -234,9 +245,9 @@ echo shoghl_class::loadAll(TRUE, $user_obj->shoghl_id);
                     <option value="0" >
                         انتخاب تحصیلات
                     </option>
-<?php
-echo tahsilat_class::loadAll(TRUE, $user_obj->tahsilat_id);
-?>
+                    <?php
+                    echo tahsilat_class::loadAll(TRUE, $user_obj->tahsilat_id);
+                    ?>
                 </select>    
             </div>
             <div class="col-sm-6  hs-margin-up-down" >
@@ -245,9 +256,9 @@ echo tahsilat_class::loadAll(TRUE, $user_obj->tahsilat_id);
                     <option value="0" >
                         گروه خونی
                     </option>
-<?php
-echo grooh_khooni_class::loadAll(TRUE, $user_obj->grooh_khooni_id);
-?>
+                    <?php
+                    echo grooh_khooni_class::loadAll(TRUE, $user_obj->grooh_khooni_id);
+                    ?>
                 </select>
             </div>
             <div class="col-sm-6  hs-margin-up-down" >
@@ -268,7 +279,7 @@ echo grooh_khooni_class::loadAll(TRUE, $user_obj->grooh_khooni_id);
             </div>
             <div class="col-sm-6 hs-margin-up-down pointer" onclick="editPic(<?php echo $user_obj->id; ?>);">
                 <span class="glyphicon glyphicon-pencil"></span>
-<?php echo ((trim($user_obj->pic) != '')) ? "<img width='100px' src='" . site_url() . "upload/" . $user_obj->pic . "' />" : ''; ?>
+                <?php echo ((trim($user_obj->pic) != '')) ? "<img width='100px' src='" . site_url() . "upload/" . $user_obj->pic . "' />" : ''; ?>
             </div>
             <div class="col-sm-12 pic_upload">
                 <input id="input-1" type="file" class="file" name="pic">
@@ -276,7 +287,8 @@ echo grooh_khooni_class::loadAll(TRUE, $user_obj->grooh_khooni_id);
             <div class="col-sm-6 hs-margin-up-down" >
                 کد حساب :
                 <input type="text" class="form-control" name="code_hesab" id="code_hesab" placeholder="کد حساب" value="<?php echo $user_obj->code_hesab; ?>">
-            </div>            <div class="col-sm-6 hs-margin-up-down" >
+            </div>            
+            <div class="col-sm-6 hs-margin-up-down" >
                 نام پدر :
                 <input type="text" class="form-control" name="pedar_name" id="pedar_name" placeholder="نام پدر" value="<?php echo $user_obj->pedar_name; ?>">
             </div>
@@ -289,24 +301,49 @@ echo grooh_khooni_class::loadAll(TRUE, $user_obj->grooh_khooni_id);
             </div>
         </div>        
     </div>
-<?php echo form_close(); ?>
+    <?php echo form_close(); ?>
 </div>
 <script>
+    var khad_dets = <?php echo json_encode(khadamat_class::loadAll3()); ?>;
     var khads = <?php echo json_encode(khadamat_class::loadAll2()); ?>;
     function loadKhadamatDet(dobj)
+    {
+        var obj = $(dobj);
+        var target = $("#khadamat321");
+        var typ;
+        var out = '<option value="-1">نوع خدمات</option>';
+        if (obj.length === 1)
+        {
+            typ = parseInt(obj.val(), 10);
+            for (var i = 0; i < khad_dets.length; i++)
+            {
+                if (parseInt(khad_dets[i].typ, 10) === typ)
+                {
+                    out += '<option value="' + khad_dets[i].id + '">' + khad_dets[i].name + '</option>';
+                }
+            }
+            target.html(out);
+            target.select2({
+                placeholder: " انتخاب نوع خدمات",
+                dir: 'rtl'
+            });
+        }
+
+    }
+    function loadKhadamatDet2(dobj)
     {
         var obj = $(dobj);
         var target = $("#khadamat123");
         var typ;
         var out = '';
-        if(obj.length===1)
+        if (obj.length === 1)
         {
-            typ = parseInt(obj.val(),10);
-            for(var i = 0;i < khads.length;i++)
+            typ = parseInt(obj.val(), 10);
+            for (var i = 0; i < khads.length; i++)
             {
-                if(parseInt(khads[i].typ,10)===typ)
+                if (parseInt(khads[i].typ_det, 10) === typ)
                 {
-                    out += '<option value="'+khads[i].id+'">'+khads[i].name+'</option>';
+                    out += '<option value="' + khads[i].id + '">' + khads[i].name + '</option>';
                 }
             }
             target.html(out);
@@ -315,7 +352,7 @@ echo grooh_khooni_class::loadAll(TRUE, $user_obj->grooh_khooni_id);
                 dir: 'rtl'
             });
         }
-        
+
     }
     function editPic(uid)
     {

@@ -304,8 +304,8 @@ class xgrid
 			{
 				if(isset($column['clist']))
 					$this->column[$gname][$indx]['clist'] = $this->arrayToObject($column['clist']);
-				if(isset($column['searchDetails']))
-					$this->column[$gname][$indx]['searchDetails'] = $this->arrayToObject($column['searchDetails']);
+				//if(isset($column['searchDetails']))
+					//$this->column[$gname][$indx]['searchDetails'] = $this->arrayToObject($column['searchDetails']);
 			}
 			$grid = array('column'=>$this->column[$gname],'rows'=>$row,'cssClass'=>$this->css[$gname],'tableProperty'=>$this->tableProperty[$gname],'css'=>'','buttonTitles'=>$this->buttonTitles[$gname],'eRequest'=>$this->eRequest[$gname],'pageCount'=>$this->pageCount[$gname],'alert'=>$this->alert,'scrollDown'=>$this->scrollDown[$gname],'xls'=>$this->xls[$gname],'pageRows'=>$this->pageRows[$gname],'rowCount'=>$rowCount);
 			if(!$isCsv)

@@ -2,7 +2,7 @@
 date_default_timezone_set('Asia/Tehran');
 require_once "lib/nusoap.php";
  
-$client = new nusoap_client("http://192.168.3.80/crm/WebService/server.php?wsdl", true);
+$client = new nusoap_client("http://192.168.1.80/crm/WebService/server.php?wsdl", true);
 $error  = $client->getError();
  
 if ($error) {
@@ -21,7 +21,8 @@ if ($client->fault) {
         echo "<h2>Error</h2><pre>" . $error . "</pre>";
     } else {
         echo "<h2>Main</h2>";
-        var_dump(json_decode($result));
+        echo $result;
+        //var_dump(json_decode($result));
     }
 }
  

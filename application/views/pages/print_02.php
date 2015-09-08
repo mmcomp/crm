@@ -131,7 +131,14 @@ HAM;
             $ham_tmp1 = str_replace("#pedar#", '', $ham_tmp1);
             $ham_tmp1 = str_replace("#passport#", $mo['passport'], $ham_tmp1);
             $ham_tmp1 = str_replace("#code_melli#", $mo['code_melli'], $ham_tmp1);
-            $ham_tmp1 = str_replace("#tarikh_tavalod#",  jdate("d / m / Y",strtotime($mo['tarikh_tavalod'])), $ham_tmp1);
+            if($mo['tarikh_tavalod']!='0000-00-00 00:00:00')
+            {
+                $ham_tmp1 = str_replace("#tarikh_tavalod#",  jdate("Y-m-d",strtotime($mo['tarikh_tavalod'])), $ham_tmp1);
+            }
+            else
+            {
+                $ham_tmp1 = str_replace("#tarikh_tavalod#",  '', $ham_tmp1);
+            }
             $ham_out .= $ham_tmp1;
         }
         $u = new user_class($f->user_id);
@@ -145,7 +152,7 @@ HAM;
         $body1 = str_replace("#lname1#", $lname1, $body1);
         $body1 = str_replace("#pedar_name#", $u->pedar_name,$body1);
         $body1 = str_replace("#pedar_name#", $u->pedar_name,$body1);
-        $body1 = str_replace("#tarikh_tavalod#", jdate("d / m / Y", $u->tarikh_tavalod) ,$body1);
+        $body1 = str_replace("#tarikh_tavalod#", (($u->tarikh_tavalod!='0000-00-00 00:00:00')?jdate("d / m / Y", strtotime($u->tarikh_tavalod)):'----') ,$body1);
         $body1 = str_replace("#address#", $u->address,$body1);
         $body1 = str_replace("#tell#", $u->tell,$body1);
         $body1 = str_replace("#mob#", $u->mob,$body1);
@@ -156,6 +163,7 @@ HAM;
 <style>
     .gasht_input{
         border : none;
+        text-align: center;
     }
     .gasht_textarea{
         width: 100%;
@@ -166,6 +174,9 @@ HAM;
     }
     .gasht_input:hover{
         border : red 1px dashed;
+    }
+    td{
+        text-align: center;
     }
     
 </style>

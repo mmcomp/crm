@@ -15,6 +15,19 @@ class airline_class
             }
         }
     }
+    public static function add($name)
+    {
+        $out = -1;
+        $name = trim($name);
+        if($name != '')
+        {
+            $mysql = new mysql_class;
+            $ln = $mysql->ex_sqlx("insert into  `airline` (`name`) values ('$name')",FALSE);
+            $out = $mysql->insert_id($ln);
+            $mysql->close($ln);
+        }
+        return($out);
+    }
     public static function loadByName($name)
     {
         $out = -1;

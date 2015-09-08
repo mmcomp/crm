@@ -428,7 +428,9 @@ function jshowGrid(indata,gname,targetFile)
 					tagend = '"><option value="-1">'+cols[i-1].name+'</option>';
 					var columns = cols[i-1].searchDetails;
 					for(j in columns)
-						tagend += '<option value="'+j+'" >'+columns[j]+'</option>';
+                                        {
+						tagend += '<option value="'+columns[j].id+'" >'+columns[j].val+'</option>';
+                                        }
 					tagend += '</select>';
 				}
 				/*out += '<td>'+cols[i-1].name+'</td>';*/

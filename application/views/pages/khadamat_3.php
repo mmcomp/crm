@@ -18,18 +18,7 @@
         $menu_links .= "<li role='presentation'".(($active)?" class='active'":"")."><a href='$href'>$title</a></li>";
     }
     $my = new mysql_class;
-    $jam_khadamat = 0;
-    $jam_commision = 0;
-    $jam_jayeze = 0;
-    $my->ex_sql("select sum(mablagh) as mab,sum(comission) comm,sum(jayeze)  `jayz` from `khadamat_factor` where factor_id=$factor_id", $q);
-    if(isset($q[0]))
-    {
-        $jam_khadamat = (int)$q[0]['mab'];
-        $jam_commision = (int)$q[0]['comm'];
-        $jam_jayeze = (int)$q[0]['jayz'];
-    }
-    $jam_pardakht = $jam_khadamat - ($jam_commision+$jam_jayeze);
-  
+
     $forms = '';
     $my->ex_sql("select * from  print_theme order by name", $q);
     foreach($q as $r)
@@ -58,26 +47,26 @@
             echo "<div class='text-center hs-margin-up-down' ><div class='label label-danger' style='font-size:100%' >شماره فاکتور: $p1</div></div>"; 
 
         ?>
-        <div class="row hs-margin-up-down hs-gray hs-padding hs-border">
-            قابل پرداخت
-        </div>
-        <div class="row" >
-            <div class="col-sm-2">جمع خدمات</div>
-            <div class="col-sm-2"><?php echo $this->inc_model->monize($jam_khadamat); ?></div>
-            <div class="col-sm-2">جمع کمیسیون/تخفیف</div>
-            <div class="col-sm-2"><?php echo $this->inc_model->monize($jam_commision); ?></div>
-            <div class="col-sm-2">جمع جایزه ها</div>
-            <div class="col-sm-2"><?php echo $this->inc_model->monize($jam_jayeze); ?></div>
-        </div>
-        <div class="row" >         
-            <div class="col-sm-2 col-sm-offset-8"> قابل پرداخت</div>
-            <div class="col-sm-2"><?php echo $this->inc_model->monize($jam_pardakht); ?></div>
-        </div>
+
         <div class="row hs-margin-up-down hs-gray hs-padding hs-border">
             فرم ها
         </div>
         <div class="row" >
             <?php echo $forms; ?>
+        </div>
+        <div class="hs-float-left hs-margin-up-down">
+            <a class="btn hs-btn-default btn-lg" href="<?php echo site_url().'khadamat_4/'.$p1; ?>" >
+                ادامه
+                <span class="glyphicon glyphicon-chevron-left"></span>
+            </a>
+        </div>
+       
+        </form>
+        <div class="hs-float-right hs-margin-up-down">
+            <a href="<?php echo site_url().'khadamat_2/'.$p1; ?>" class="btn hs-btn-default btn-lg" >
+                <span class="glyphicon glyphicon-chevron-right"></span>
+                مرحله قبلی
+            </a>
         </div>
     </div>    
 </div>

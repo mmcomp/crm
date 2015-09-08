@@ -42,7 +42,12 @@
         $out = city_class::add($_REQUEST['new_city'], $_REQUEST['new_iata'], $new_country_id);
         die("$out");
     }
-    
+    if(isset($_REQUEST['new_airline']))
+    {
+        $out = '0';
+        $out = airline_class::add($_REQUEST['new_airline']);
+        die("$out");
+    }
     $red_url = 'profile?factor_id='.$p1;
     $refer = isset($_SERVER['HTTP_REFERER'])?$_SERVER['HTTP_REFERER']:'';
     if(strpos($refer,'profile')!==FALSE)
@@ -116,7 +121,7 @@ PHED;
                         <select name="parvaz[mabda_id][]"><option value="-1">مبدا</option>#mabda_id#</select> <span onclick="addCity(this);" class="glyphicon glyphicon-plus pointer" style="color:#000000;font-size: 12px;"></span>
                     </div>
                     <div class="col-sm-2 hs-padding">
-                        <select name="parvaz[maghsad_id][]"><option value="-1">مقصد</option>#maghsad_id#</select>
+                        <select name="parvaz[maghsad_id][]"><option value="-1">مقصد</option>#maghsad_id#</select> <span onclick="addCity(this);" class="glyphicon glyphicon-plus pointer" style="color:#000000;font-size: 12px;"></span>
                     </div>
                     <div class="col-sm-2 hs-padding">
                         <select name="parvaz[dotarafe][]" style="width:100px;" onchange="dotarafeChange(this);">#dotarafe#</select>
@@ -136,7 +141,7 @@ PHED;
                         <input type="text" name="parvaz[tarikh][]" class="form-control dateValue2" value="#tarikh#" placeholder="تاریخ" />
                     </div>
                     <div class="col-sm-2 hs-padding">
-                        <select name="parvaz[airline][]" class="form-control"><option value="-1">ایرلاین</option>#airline#</select>
+                        <select name="parvaz[airline][]" ><option value="-1">ایرلاین</option>#airline#</select> <span onclick="addAirline(this);" class="glyphicon glyphicon-plus pointer" style="color:#000000;font-size: 12px;"></span>
                     </div>
                     <div class="col-sm-2 hs-padding">
                         <input type="text" name="parvaz[class][]" class="form-control" value="#class#"  placeholder="کلاس پروازی" />
@@ -218,15 +223,15 @@ PTMP;
         }
         $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
         $this->form_validation->set_rules('parvaz[tarikh][]','تاریخ','required|min_length[8]|max_length[10]');
-        $this->form_validation->set_rules('parvaz[flight_number][]','شماره پرواز','required|min_length[3]');
-        $this->form_validation->set_rules('parvaz[class][]','کلاس پرواز','required|min_length[1]');
-        $this->form_validation->set_rules('parvaz[havapeima][]','هواپیما','required|min_length[3]');
+        //$this->form_validation->set_rules('parvaz[flight_number][]','شماره پرواز','required|min_length[3]');
+        //$this->form_validation->set_rules('parvaz[class][]','کلاس پرواز','required|min_length[1]');
+        //$this->form_validation->set_rules('parvaz[havapeima][]','هواپیما','required|min_length[3]');
         $msg .= smallValidateSelect($p['mabda_id'],'مبدا');
         $msg .= smallValidateSelect($p['maghsad_id'],'مقصد');
-        $msg .= smallValidateSelect($p['airline'],'ایرلاین');
-        $msg .= smallValidateSelect($p['adl'],'بزرگسال ');
-        $msg .= smallValidateSelect($p['chd'],'کودک ',TRUE);
-        $msg .= smallValidateSelect($p['inf'],'نوزاد ',TRUE);
+        //$msg .= smallValidateSelect($p['airline'],'ایرلاین');
+        //$msg .= smallValidateSelect($p['adl'],'بزرگسال ');
+        //$msg .= smallValidateSelect($p['chd'],'کودک ',TRUE);
+        //$msg .= smallValidateSelect($p['inf'],'نوزاد ',TRUE);
         $otherError = (trim($msg)!=='');
         if($this->form_validation->run()==FALSE || $otherError)
         {
@@ -385,7 +390,7 @@ HOTHED;
                     <input type="text" name="hotel[tatarikh][]" class="form-control dateValue2" value="#tatarikh#" placeholder="تا تاریخ" />
                 </div>
                 <div class="col-sm-3 hs-padding">
-                    <select name="hotel[maghsad_id][]" style="width:200px;"><option value="-1">مقصد</option>#maghsad_id#</select>
+                    <select name="hotel[maghsad_id][]" style="width:200px;"><option value="-1">مقصد</option>#maghsad_id#</select> <span onclick="addCity(this);" class="glyphicon glyphicon-plus pointer" style="color:#000000;font-size: 12px;"></span>
                 </div>
                 <div class="col-sm-3 hs-padding">
                     <input type="text" name="hotel[name][]" class="form-control" value="#name#" placeholder="نام هتل" />
@@ -509,20 +514,20 @@ OTGHD;
             for($i = 0;$i < count($rhotel['aztarikh']);$i++)
             {
                 $this->form_validation->set_rules('hotel[otagh]['.$i.'][name][]','نام اتاق در هتل '.($i+1).' ام','required|min_length[3]|max_length[50]');
-                $msg .= smallValidateSelect($rhotel['otagh'][$i]['zarfiat'],'ظرفیت در هتل '.($i+1).' ام');
-                $msg .= smallValidateSelect($rhotel['otagh'][$i]['service_adl'],'سرویس بزرگسال در هتل '.($i+1).' ام',TRUE);
-                $msg .= smallValidateSelect($rhotel['otagh'][$i]['service_chd'],'سرویس کودکان در هتل '.($i+1).' ام',TRUE);
-                $msg .= smallValidateSelect($rhotel['otagh'][$i]['gasht'],'گشت در هتل '.($i+1).' ام',TRUE);
-                $msg .= smallValidateSelect($rhotel['otagh'][$i]['traft'],'ت.رفت در هتل '.($i+1).' ام',TRUE);
-                $msg .= smallValidateSelect($rhotel['otagh'][$i]['tmiani'],'ت.میانی در هتل '.($i+1).' ام',TRUE);
-                $msg .= smallValidateSelect($rhotel['otagh'][$i]['tbargasht'],'ت.برگشت در هتل '.($i+1).' ام',TRUE);
-                $msg .= smallValidateSelect($rhotel['otagh'][$i]['paziraee'],'پذیرایی در هتل '.($i+1).' ام',TRUE);
+                //$msg .= smallValidateSelect($rhotel['otagh'][$i]['zarfiat'],'ظرفیت در هتل '.($i+1).' ام');
+                //$msg .= smallValidateSelect($rhotel['otagh'][$i]['service_adl'],'سرویس بزرگسال در هتل '.($i+1).' ام',TRUE);
+                //$msg .= smallValidateSelect($rhotel['otagh'][$i]['service_chd'],'سرویس کودکان در هتل '.($i+1).' ام',TRUE);
+                //$msg .= smallValidateSelect($rhotel['otagh'][$i]['gasht'],'گشت در هتل '.($i+1).' ام',TRUE);
+                //$msg .= smallValidateSelect($rhotel['otagh'][$i]['traft'],'ت.رفت در هتل '.($i+1).' ام',TRUE);
+                //$msg .= smallValidateSelect($rhotel['otagh'][$i]['tmiani'],'ت.میانی در هتل '.($i+1).' ام',TRUE);
+                //$msg .= smallValidateSelect($rhotel['otagh'][$i]['tbargasht'],'ت.برگشت در هتل '.($i+1).' ام',TRUE);
+                //$msg .= smallValidateSelect($rhotel['otagh'][$i]['paziraee'],'پذیرایی در هتل '.($i+1).' ام',TRUE);
             }
             $msg .= smallValidateSelect($rhotel['maghsad_id'],'مقصد');
-            $msg .= smallValidateSelect($rhotel['adl'],'بزرگسال');
-            $msg .= smallValidateSelect($rhotel['chd'],'کودک',TRUE);
-            $msg .= smallValidateSelect($rhotel['inf'],'نوزاد',TRUE);
-            $msg .= smallValidateSelect($rhotel['star'],'ستاره هتل');
+            //$msg .= smallValidateSelect($rhotel['adl'],'بزرگسال');
+            //$msg .= smallValidateSelect($rhotel['chd'],'کودک',TRUE);
+            //$msg .= smallValidateSelect($rhotel['inf'],'نوزاد',TRUE);
+            //$msg .= smallValidateSelect($rhotel['star'],'ستاره هتل');
             $otherError = (trim($msg)!=='');
             if($this->form_validation->run()==FALSE || $otherError)
             {
@@ -951,10 +956,16 @@ OTGHD;
         openDialog('جستجوی پرواز',null,'انتخاب','انصراف',function(){});
     }
     var add_city_obj;
+    var add_airline_obj;
     function addCity(dobj)
     {
         add_city_obj = $(dobj).prev().prev();
         $("#cityModal").modal("show");
+    }
+    function addAirline(dobj)
+    {
+        add_airline_obj = $(dobj).prev().prev();
+        $("#airlineModal").modal("show");
     }
     function addCountry()
     {
@@ -962,6 +973,34 @@ OTGHD;
         if($("#new_country").is(":visible"))
         {
             $("#new_country_id").select2("val",-1);
+        }
+    }
+    function saveAirline()
+    {
+        var new_airline = $("#new_airline").val().trim();
+        var p = {
+            "new_airline" : new_airline
+        };
+        if(new_airline!=='')
+        {
+            $.get("<?php echo site_url() ?>khadamat_1",p,function(res){
+                var airline_id = parseInt(res,10);
+                if(!isNaN(airline_id) && airline_id>0)
+                {
+                    add_airline_obj.select2('destroy');
+                    add_airline_obj.append("<option value='"+airline_id+"'>"+new_airline+"</option>");
+                    add_airline_obj.select2({
+                        dir : "rtl"
+                    });
+                    add_airline_obj.select2("val",airline_id);
+                    contin();
+                    $("#cityModal").modal("hide");
+                }
+            });
+        }
+        else
+        {
+            alert('لطفا نام ایرلاین را وارد کنید');
         }
     }
     function saveCity()
@@ -1044,6 +1083,25 @@ OTGHD;
               <div class="modal-footer">
                 <button type="button" id="cityModalCancel" class="btn btn-default" data-dismiss="modal">انصراف</button>
                 <button type="button" id="cityModalOk" onclick="saveCity();" class="btn btn-primary">ذخیره</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Modal -->
+        <div class="modal fade" id="airlineModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="airlineModalLabel">ثبت ایرلاین</h4>
+              </div>
+              <div class="modal-body" id="airlineModalBody">
+                  <input class="form-control" id="new_airline" placeholder="نام ایرلاین" />
+              </div>
+              <div class="modal-footer">
+                <button type="button" id="airlineModalCancel" class="btn btn-default" data-dismiss="modal">انصراف</button>
+                <button type="button" id="airlineModalOk" onclick="saveAirline();" class="btn btn-primary">ذخیره</button>
               </div>
             </div>
           </div>

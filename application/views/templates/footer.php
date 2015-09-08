@@ -5,7 +5,7 @@
                 <div class="row hs-footer_menu" >
                     <div class='col-sm-4' >
                         <img src="<?php echo asset_url() ?>img/footer_logo.png" >
-                        <ul class="hs-horizontal" >
+<!--                        <ul class="hs-horizontal" >
                             <li>
                                 <span class="glyphicon glyphicon-check" ></span>
                                 <a href="<?php echo site_url(); ?>aboutus" >
@@ -18,7 +18,7 @@
                                  ارتباط با ما
                                 </a>
                             </li>
-                        </ul>
+                        </ul>-->
                     </div>
                     <div class='col-sm-4' >
                         <div class="text-center">
@@ -85,11 +85,22 @@
 
                 parvaz_obj = $(this).parent().parent().parent();
 
-            });            $('[data-toggle="tooltip"]').tooltip();
+            });            
+            $('[data-toggle="tooltip"]').tooltip();
             $('[data-toggle="popover"]').popover();
+            $('select').each(function(id,feild){
+                if(!$(feild).data('select2'))
+                {
+                    $(feild).select2({
+                        dir: "rtl"
+                    });
+                }
+            });
+            /*
             $('select').select2({
                 dir: "rtl"
             });
+            */
             if(typeof $('.selectpicker').selectpicker !=='undefined')
             {    
                 $('.selectpicker').selectpicker({

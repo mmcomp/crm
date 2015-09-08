@@ -26,7 +26,12 @@
         $f = new factor_class((int)$_REQUEST['s_factor_id']);
         if(isset($f->marhale))
         {
-            redirect($f->marhale."/".(int)$_REQUEST['s_factor_id']);
+            $url = $f->marhale."/".(int)$_REQUEST['s_factor_id'];
+            if($f->marhale=='profile')
+            {
+                $url = 'profile?factor_id='.(int)$_REQUEST['s_factor_id'];
+            }
+            redirect($url);
         }
     }
     $this->profile_model->loadUser($user_id);

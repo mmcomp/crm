@@ -8,9 +8,9 @@
         $this->form_validation->set_rules('fname', 'نام ', 'required|min_length[3]|max_length[30]');
         $this->form_validation->set_rules('lname', 'نام خانوادگی', 'required|min_length[4]|max_length[30]');
         $this->form_validation->set_rules('code_melli', 'کدملی', 'required|min_length[10]');
-        $this->form_validation->set_rules('rooz', 'روز', 'required|is_natural_no_zero');
-        $this->form_validation->set_rules('mah', 'ماه', 'required|is_natural_no_zero');
-        $this->form_validation->set_rules('sal', 'سال', 'required|is_natural_no_zero');
+//        $this->form_validation->set_rules('rooz', 'روز', 'required|is_natural_no_zero');
+//        $this->form_validation->set_rules('mah', 'ماه', 'required|is_natural_no_zero');
+//        $this->form_validation->set_rules('sal', 'سال', 'required|is_natural_no_zero');
         $this->form_validation->set_rules('pass', 'رمزعبور ', 'required|min_length[3]|max_length[30]');
         $this->form_validation->set_rules('pass2', 'تکراررمز عبور ', 'required|min_length[3]|max_length[30]');
         $this->form_validation->set_rules('shoghl_id', 'شغل', 'required|is_natural_no_zero');

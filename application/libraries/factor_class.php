@@ -15,6 +15,17 @@
                 }
             }
         }
+        public static function loadAll()
+        {
+            $out = array();
+            $mysql = new mysql_class;
+            $mysql->ex_sql("select * from `factor` order by `tarikh`",$q);
+            foreach($q as $r)
+            {    
+                $out[] = array("id"=>(int)$r['id'],"val"=>$r['id']);
+            }    
+            return($out);
+        }
         public function add($user_id,$user_creator_id,$tarikh)
         {
             $mysql = new mysql_class;
@@ -52,6 +63,7 @@
             $date = date("Y-m-d H:i:s");
             $my = new mysql_class;
             $my->ex_sqlx("update `factor` set `is_tasfieh`=1,`tarikh_tasfieh`='$date' where id=$factor_id");
+            fibo_class::add($factor_id);            
         }
         public static function isParvazOk($factor_id)
         {

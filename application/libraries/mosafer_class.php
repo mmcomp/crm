@@ -22,10 +22,12 @@
             if($mos_id>0)
             {
                 $id = $mos_id;
+                echo "update `mosafer` set `fname` = '$fname' , `lname` = '$lname', `code_melli` = '$code_melli', `passport` = '$passport', `passport_engheza` = '$passport_engheza', `gender` =  $gender, `age` = '$age', `tarikh_tavalod` = '$tarikh_tavalod', `khadamat_factor_id` = '$khadamat_factor_id',`ticket_number`='$ticket_number' where `id` = $mos_id";
                 $mysql->ex_sqlx("update `mosafer` set `fname` = '$fname' , `lname` = '$lname', `code_melli` = '$code_melli', `passport` = '$passport', `passport_engheza` = '$passport_engheza', `gender` =  $gender, `age` = '$age', `tarikh_tavalod` = '$tarikh_tavalod', `khadamat_factor_id` = '$khadamat_factor_id',`ticket_number`='$ticket_number' where `id` = $mos_id");
             }
             else
             {
+                echo "insert into `mosafer` (`fname`, `lname`, `code_melli`, `passport`, `passport_engheza`, `gender`, `age`, `tarikh_tavalod`, `khadamat_factor_id`,`ticket_number`) values ('$fname','$lname','$code_melli','$passport', '$passport_engheza', $gender, '$age', '$tarikh_tavalod', $khadamat_factor_id,'$ticket_number')";
                 $ln = $mysql->ex_sqlx("insert into `mosafer` (`fname`, `lname`, `code_melli`, `passport`, `passport_engheza`, `gender`, `age`, `tarikh_tavalod`, `khadamat_factor_id`,`ticket_number`) values ('$fname','$lname','$code_melli','$passport', '$passport_engheza', $gender, '$age', '$tarikh_tavalod', $khadamat_factor_id,'$ticket_number')",FALSE);
                 $id = $mysql->insert_id($ln);
                 $mysql->close($ln);
