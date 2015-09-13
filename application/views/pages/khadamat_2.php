@@ -331,10 +331,12 @@ if (isset($_REQUEST['hotel_room_id'])) {
             $qq[$idx] .=(($qq[$idx] != '') ? ',' : '') . " `vasat_city` = " . (int) $rc . " , `vasat_airline` = " . (int) $vasat_airline[$idx] . " , `vasat_shomare` = '" . $vasat_shomare[$idx] . "' , `vasat_saat_vorood` = '" . $vasat_vorood[$idx] . "', `vasat_saat_khorooj` = '" . $vasat_khorooj[$idx] . "'";
     }
     foreach ($hotel_room_id as $indx => $hrid) {
-        $my->ex_sqlx("update `hotel_room` set " . $qq[$indx] . " where `id` = $hrid");
+        if (trim($qq[$indx]) != '') {
+            $my->ex_sqlx("update `hotel_room` set " . $qq[$indx] . " where `id` = $hrid");
+        }
     }
 }
-if (isset($_REQUEST['mob'])) {
+if (isset($_REQUEST['mob']) || isset($_REQUEST['hotel_mob'])) {
     /*
       $this->form_validation->set_error_delimiters('<div class="alert alert-danger">', '</div>');
       $this->form_validation->set_rules('hotel_fname[]', 'تلفن همراه ', 'required|min_length[10]|max_length[15]');
@@ -347,6 +349,7 @@ if (isset($_REQUEST['mob'])) {
       {
      * /
      */
+    $mob = isset($_REQUEST['mob'])?$_REQUEST['mob']:$_REQUEST['hotel_mob'];$_REQUEST['hotel_mob'];
     $m = new mysql_class;
     $m->ex_sqlx("update `factor` set `mob` = '" . $_REQUEST['mob'] . "' , `email` = '" . $_REQUEST['email'] . "' where id = $factor_id");
     //}
@@ -1410,17 +1413,17 @@ HOT2;
         </div>
         <div class="hs-margin-up-down hs-padding hs-border" >
             <ul class="nav nav-pills nav-stacked">
-<?php
-echo $menu_links;
-?>
+                <?php
+                echo $menu_links;
+                ?>
             </ul>
         </div>
     </div>
     <form method="post">
         <div class="col-sm-10" >
-<?php
-echo $this->inc_model->loadProgress(2, $factor_id);
-?>
+            <?php
+            echo $this->inc_model->loadProgress(2, $factor_id);
+            ?>
             <?php
             echo validation_errors();
             echo "<div class='text-center hs-margin-up-down' ><div class='label label-danger' style='font-size:100%' >شماره فاکتور: $p1</div></div>";
